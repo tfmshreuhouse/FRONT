@@ -7,7 +7,7 @@ import { Menu } from 'primereact/menu';
 import { MX, US, FR } from 'country-flag-icons/react/3x2'
 import { HiOutlineHome } from "react-icons/hi";
 import { BiSolidDashboard } from "react-icons/bi";
-import { BsJournalBookmark, BsSortDownAlt, BsFillCalendar2WeekFill, BsBellFill } from "react-icons/bs"
+import { BsJournalBookmark, BsSortDownAlt, BsFillCalendar2WeekFill, BsBellFill, BsFillPersonFill, BsPersonLinesFill, BsBagCheck, BsLayoutTextWindowReverse } from "react-icons/bs"
 import { FaScaleBalanced, FaMagnifyingGlass, FaChair, FaToggleOn } from "react-icons/fa6";
 import { TbPlayerTrackNextFilled, TbPlayerTrackPrevFilled } from "react-icons/tb"
 
@@ -139,12 +139,40 @@ const Navbar = (props: any) => {
             ]
         },
         {
-            label: t('navbarText2'),
-            icon: 'pi pi-fw pi-power-off',
-            command: () => {
-                logoutHandler();
-            }
+            label: ' Pepito',
+            icon: <BsFillPersonFill />,
+            items: [
+                {
+                    label:' Mi perfil',
+                    icon: <BsPersonLinesFill />,
+                    command: () => {
+                        navigate('/perfil');
+                    }
+                },
+                {
+                    label:' Mis reservas',
+                    icon: <BsBagCheck />,
+                    command: () => {
+                        navigate('/reservas');
+                    }
+                },
+                {
+                    label:' Mis publicaciones',
+                    icon: <BsLayoutTextWindowReverse />,
+                    command: () => {
+                        navigate('/publicaciones');
+                    }
+                },
+                {
+                    label: t('navbarText2'),
+                    icon: 'pi pi-fw pi-power-off',
+                    command: () => {
+                        logoutHandler();
+                    }
+                }
+            ]
         }
+        
     ];
 
     const menuRight: any = useRef(null);

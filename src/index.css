@@ -8,3 +8,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color:whitesmoke;
 }
+
+.box {
+  margin-top: 30px;
+  margin-inline: 60px;
+}
+
+.button-blue {
+  background-color: #152f4e !important;
+}
+
+.p-selectbutton .p-button.p-highlight {
+  background-color: #152f4e !important;
+  border-color: #152f4e !important;
+  color: #fff !important;
+}
