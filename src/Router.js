@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Auth from './Pages/Auth'
 import Dashboard from "./Pages/Dashboard";
 import NuevaReserva from "./Pages/NuevaReserva";
+import InfoInmueble from "./Pages/infoInmueble";
 import Layout from "./Pages/Layout";
 import AppRouteDirectory from "./Pages/AppRouteDirectory";
 
@@ -24,6 +25,11 @@ import AppRouteDirectory from "./Pages/AppRouteDirectory";
         {
           path: "/funcsBasicas/nuevaReserva",
           element: <Layout validarPrograma={true} nombrePrograma="Programa1" componentToRender={<NuevaReserva />}></Layout>,
+          exact: true,
+        },
+        {
+          path: "/funcsBasicas/infoInmueble",
+          element: <Layout validarPrograma={false} nombrePrograma="infoInmueble" componentToRender={<InfoInmueble />}></Layout>,
           exact: true,
         },
       ]);
