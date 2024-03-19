@@ -1,76 +1,139 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import Carousel from '../Components/Shared/Carousel';
+import { useParams } from 'react-router-dom';
+// import Carousel from '../Components/Shared/Carousel';
 import datosInmueble from '../../src/assets/inmueble.json'; 
-import './inmuebles.css';
+import '../index.css';
+import { Button } from 'primereact/button';
+import { Galleria } from 'primereact/galleria';
+import { data } from '../assets/data';
+import { Fieldset } from 'primereact/fieldset';
 
 function InfoInmueble() {
     // Supongamos que recibes la información del inmueble como un objeto JSON
     const [inmuebleInfo, setInmuebleInfo] = useState<any>(null);
-    
+    const { tipo, id } = useParams();
+      interface GalleryItem {
+        id: number;
+        imgUrl: string;
+      }
+      const itemTemplate = (item: GalleryItem) => {
+        return (
+          <div className="custom-item">
+            <img src={item.imgUrl} alt={item.id.toString()} />
+          </div>
+        );
+      };
     useEffect(() => {
-        /*async function fetchInmuebleInfo() {
-            try {
-                
-                const response = await fetch('url');
-                const data = await response.json();
-                setInmuebleInfo(data);
-            } catch (error) {
-                console.error('Error al obtener la información del inmueble:', error);
-            }
-        }
-
-        fetchInmuebleInfo();*/
         setInmuebleInfo(datosInmueble);
     }, []);
 
-    return (
-        <Fragment>            
-            <div className="main-container">
-                <div className="image-container">
-                    {inmuebleInfo && (
-                        <Carousel/>
-                    )}
+    const renderButtons = () => {
+        if (inmuebleInfo && tipo === '1') {
+            return (
+                <Fragment>
+                    <div className="field col-12 lg:col-2"></div>
+                    <div className="field col-12 lg:col-3">
+                        <Button
+                            type="button"
+                            label="Reservar"
+                            className="button-blue"
+                            onClick={() => window.location.href=`/home/infoInmueble/nuevaReserva/${id}`}
+                        />
+                    </div>
+                    <div className="field col-12 lg:col-3">
+                        <Button
+                            type="button"
+                            label="Denunciar"
+                            className="button-blue"
+                            onClick={() => window.location.href=`/home/infoInmueble/denuncia/${id}`}
+                        />
+                    </div>
+                    <div className="field col-12 lg:col-3">
+                        <Button
+                            type="button"
+                            label="Reseñar"
+                            className="button-blue"
+                            onClick={() => window.location.href=`/home/infoInmueble/resena/${id}`}
+                        />
+                    </div>
+                </Fragment>
+            );
+        } else if (inmuebleInfo && tipo === '2') {
+            return (
+                <div className="field col-12 lg:col-12">
+                    <Button
+                        type="button"
+                        label="Editar inmueble"
+                        className="button-blue"
+                        onClick={() => window.location.href=`/home/nuevaReserva/editar/${id}`}
+                    />
                 </div>
-                <div className="content-container">
-                    <div className="infoPrincipal-box">
+            );
+        }
+
+        return null;
+    };
+
+    return (
+            <div className="main-container">
+                <Fieldset legend="Detalles del inmueble">
+                    <div className="image-container">
                         {inmuebleInfo && (
-                            <div className="title-box">
-                                <h2>{inmuebleInfo.title}</h2>
-                                <p>Habitaciones {inmuebleInfo.habitaciones}, Baños {inmuebleInfo.banosCompletos}</p>
-                            </div>
-                        )}
-                        {inmuebleInfo && (
-                            <div className="description-box">
-                                <h2>Descripcion</h2>
-                                <p>{inmuebleInfo.descripcion}</p>
-                            </div>
+                            <Galleria
+                            value={data} 
+                            style={{ maxWidth: '100%', height: 'auto' }}  
+                            showThumbnails={false} 
+                            showIndicators 
+                            item={itemTemplate} 
+                            className="galleria-container"
+                            />
                         )}
                     </div>
-                    {inmuebleInfo && (    
-                        <div className="details-box">                  
-                            <h1>Especificaciones</h1>                    
-                            <p>Pisos: {inmuebleInfo.pisos}</p>                   
-                            <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
-                            <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
-                            <p>Baños Medios: {inmuebleInfo.banosMedios}</p>
-                            <p>Cocina: {inmuebleInfo.cocina === 1 ? 'Sí' : 'No'}</p>
-                            <p>Lavado: {inmuebleInfo.lavado === 1 ? 'Sí' : 'No'}</p>
-                            <p>Patio: {inmuebleInfo.patio === 1 ? 'Sí' : 'No'}</p>
-                            <p>Balcón: {inmuebleInfo.balcon === 1 ? 'Sí' : 'No'}</p>
-                            <p>Estacionamiento: {inmuebleInfo.estacionamiento === 1 ? 'Sí' : 'No'}</p>
-                            <p>Elevador: {inmuebleInfo.elevador === 1 ? 'Sí' : 'No'}</p>
-                            <p>Piscina: {inmuebleInfo.piscina === 1 ? 'Sí' : 'No'}</p>
-                            <p>Áreas Públicas: {inmuebleInfo.areasPublicas === 1 ? 'Sí' : 'No'}</p>
-                            <p>Fumar: {inmuebleInfo.fumar === 1 ? 'Sí' : 'No'}</p>
-                            <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
-                            <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>
-                            <p>Status: {inmuebleInfo.status === 1 ? 'Disponible' : 'No Disponible'}</p>
-                            <p>Indicaciones: {inmuebleInfo.indicaciones}</p>
+                    <div className="content-container">
+                        <div className="infoPrincipal-box">
+                            {inmuebleInfo && (
+                                <div className="title-box">
+                                    <h2>{inmuebleInfo.title}</h2>
+                                    <p>Habitaciones {inmuebleInfo.habitaciones}, Baños {inmuebleInfo.banosCompletos}</p>
+                                </div>
+                            )}
+                            {inmuebleInfo && (
+                                <div className="description-box">
+                                    <h2>Descripcion</h2>
+                                    <p>{inmuebleInfo.descripcion}</p>
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>   
+                        {inmuebleInfo && (    
+                            <div className="details-box">                  
+                                <h1>Especificaciones</h1>                    
+                                <p>Pisos: {inmuebleInfo.pisos}</p>                   
+                                <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
+                                <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
+                                <p>Baños Medios: {inmuebleInfo.banosMedios}</p>
+                                <p>Cocina: {inmuebleInfo.cocina === 1 ? 'Sí' : 'No'}</p>
+                                <p>Lavado: {inmuebleInfo.lavado === 1 ? 'Sí' : 'No'}</p>
+                                <p>Patio: {inmuebleInfo.patio === 1 ? 'Sí' : 'No'}</p>
+                                <p>Balcón: {inmuebleInfo.balcon === 1 ? 'Sí' : 'No'}</p>
+                                <p>Estacionamiento: {inmuebleInfo.estacionamiento === 1 ? 'Sí' : 'No'}</p>
+                                <p>Elevador: {inmuebleInfo.elevador === 1 ? 'Sí' : 'No'}</p>
+                                <p>Piscina: {inmuebleInfo.piscina === 1 ? 'Sí' : 'No'}</p>
+                                <p>Áreas Públicas: {inmuebleInfo.areasPublicas === 1 ? 'Sí' : 'No'}</p>
+                                <p>Fumar: {inmuebleInfo.fumar === 1 ? 'Sí' : 'No'}</p>
+                                <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
+                                <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>
+                                <p>Status: {inmuebleInfo.status === 1 ? 'Disponible' : 'No Disponible'}</p>
+                                <p>Indicaciones: {inmuebleInfo.indicaciones}</p>
+                            </div>
+                        )}
+                    </div>   
+                    <div className="button-container">
+                        <div className="p-fluid grid">
+                            {renderButtons()}
+                        </div>
+                    </div>
+                </Fieldset>
             </div>
-        </Fragment>
     );
 }
 
