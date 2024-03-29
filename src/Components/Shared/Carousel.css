@@ -8,9 +8,12 @@ li {
   display: inline;
 }
 
-img {
+img { 
+  width: 100%;
   margin-top: -16px;
-
+  object-fit: cover;
+  object-position: bottom;
+  overflow: hidden;
 }
 
 /* Slider container */
@@ -18,14 +21,22 @@ img {
   position: relative;
   width: 100%;
   height: 100%;
-  border:1px solid red
 }
+
+.imagenes-container{
+  width: 100%;
+  height: 100%;
+}
+
 
 /* dots carrusel */
 .dots-container {
   display: flex;
   justify-content: center;
-  
+  position: absolute;
+  z-index: 9999;
+  bottom: 5%;
+  left: 50%;
 }
 
 .dot-container-item {
@@ -61,16 +72,20 @@ img {
 }
 
 .container-images {
+  position: relative;
+  display: block;
   width: 100%;
   height: 100%;
-  border-radius: 20px;
-  border: 1px solid #eee;
   overflow: hidden;
+ 
 }
 
-img{
-  width: 100%;
+
+.container-images ul {
+  padding: 0;
+  margin: 0;
 }
+
 
 div.active {
   background: #ccc;

@@ -1,12 +1,17 @@
 .main-container {
-    width: 1000px;
-    height: 500px;
-    margin: 0 auto;
+    min-width: 250px;
+    max-width: 900px;
+    margin: 0 auto;  
   }
+
   .image-container{
-    width: 100%;
-    border: solid green;
+    margin-inline: auto;
+    width: 95%;
+    max-height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
   }
+
   
   .infoPrincipal-box {
     display: flex;
@@ -41,13 +46,13 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    width: 100%; /* Ajuste para que los elementos ocupen todo el ancho */
+    width: 100%; 
   }
   
   .details-box > p {
-    flex-basis: calc(50% - 20px); /* Ajuste para dejar espacio entre los elementos */
-    padding: 10px; /* Añade un espacio interior para separar el contenido del borde */
-    box-sizing: border-box; /* Asegura que el padding se incluya en el tamaño total */
+    flex-basis: calc(50% - 20px);
+    padding: 10px;
+    box-sizing: border-box;
   }
   
   

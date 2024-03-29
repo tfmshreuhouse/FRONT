@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { data } from '../../assets/data';
 import './Carousel.css';
 
-const Carousel = () => {
+const Imagenes = () => {
 
   const listRef = useRef<HTMLUListElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -42,7 +42,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="main-container">
+    <div className="imagenes-container">
       <div className="slider-container">
         <div className='leftArrow' onClick={() => scrollToImage('prev')}>&#10092;</div>
         <div className='rightArrow' onClick={() => scrollToImage('next')}>&#10093;</div>
@@ -51,7 +51,7 @@ const Carousel = () => {
             {
               data.map((item) => {
                 return <li key={item.id}>
-                  <img src={item.imgUrl} width={1000} height={500} />
+                  <img src={item.imgUrl}/>
                 </li>
               })
             }
@@ -72,4 +72,4 @@ const Carousel = () => {
   );
 }
 
-export default Carousel;
+export default Imagenes;
