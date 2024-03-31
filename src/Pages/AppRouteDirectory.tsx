@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
 
 function AppRouteDirectory(props: any) {
-
+    console.log("aca pasa");
     const navigate = useNavigate();
 
     const items = [
@@ -25,18 +25,13 @@ function AppRouteDirectory(props: any) {
 
     return (
         <Fragment>
-            <div className="surface-0">
-                <div className="font-medium text-3xl text-900 mb-3">Directorio de App Route</div>
-                <div className="text-700 mb-5">Pareciera que estas perdido. Estos son los posibles menus dentro de Inicio.</div>
-                <ul className="list-none p-0 m-0">
-                {items.map((item) => { return <li key={item.idRuta} className="flex align-items-center py-3 px-2 border-top-1 border-300 flex-wrap">
-                        <div className="text-900 w-6 md:w-2 font-bold">{item.nombreRuta}</div>
-                        <div className="text-700 w-full md:w-8 md:flex-order-0 flex-order-1">{item.detallesRuta}</div>
-                        <div className="w-6 md:w-2 flex justify-content-end">
-                            <Button label="Ir" icon="pi pi-external-link" className="p-button-text" onClick={() => {navigate(item.ruta);}} />
-                        </div>
-                    </li> })}
-                </ul>
+            <div className="card" style={{width: '18rem'}}>
+                <img src="..." className="card-img-top" alt="..."/>
+                <div className="card-body">
+                    <h5 className="card-title">Card title</h5>
+                    <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" className="btn btn-primary">Go somewhere</a>
+                </div>
             </div>
 
         </Fragment>

@@ -64,10 +64,10 @@ function Layout(props: any) {
                 } catch (error: any) {
                     console.log(error.response.data);
                     localStorage.removeItem('jwt');
-                    navigate('/');
+                    navigate('/login');
                 }
             } else {
-                navigate('/');
+                navigate('/login');
             }
         };
 

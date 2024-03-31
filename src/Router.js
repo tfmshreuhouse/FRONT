@@ -35,23 +35,18 @@ import EditInmueble from "./Pages/editInmueble";
           exact: true,
         },
         {
-          path: "/inicio",
-          element: <Layout validarPrograma={false} componentToRender={<AppRouteDirectory />}></Layout>,
+          path: "/home/infoInmueble/:tipo/:id",
+          element: <InfoInmueble />,
           exact: true,
         },
         {
-          path: "/inicio/dashboard",
-          element: <Layout validarPrograma={false} componentToRender={<Dashboard />}></Layout>,
+          path: "/home/infoInmueble/denuncia/:id",
+          element: <Layout componentToRender={<Denuncia />}></Layout>,
           exact: true,
         },
         {
-          path: "/funcsBasicas/nuevaReserva",
-          element: <Layout validarPrograma={true} nombrePrograma="Programa1" componentToRender={<NuevaReserva />}></Layout>,
-          exact: true,
-        },
-        {
-          path: "/funcsBasicas/infoInmueble",
-          element: <Layout validarPrograma={false} nombrePrograma="infoInmueble" componentToRender={<InfoInmueble />}></Layout>,
+          path: "/home/infoInmueble/resena/:id",
+          element: <Resena />,
           exact: true,
         },        
         {
@@ -60,18 +55,8 @@ import EditInmueble from "./Pages/editInmueble";
           exact: true,
         },
         {
-          path: "/home/infoInmueble/resena/:id",
-          element: <Resena />,
-          exact: true,
-        },
-        {
-          path: "/funcsBasicas/EditInmueble",
-          element: <Layout validarPrograma={true} nombrePrograma="EditInmueble" componentToRender={<EditInmueble />}></Layout>,
-          exact: true,
-        },
-        {
           path: "/home/infoInmueble/nuevaReserva/:id",
-          element: <NuevaReserva />,
+          element: <Layout componentToRender={<NuevaReserva />}></Layout>,
           exact: true,
         },
         {
@@ -81,22 +66,22 @@ import EditInmueble from "./Pages/editInmueble";
         },
         {
           path: "/perfil/modificar/:id",
-          element: <Modificar></Modificar>,
+          element: <Layout componentToRender={<Modificar/>}></Layout>,
           exact: true,
         },
         {
           path: "/perfil/historialPublicaciones/:id",
-          element: <Inmuebles />,
+          element: <Layout componentToRender={<Inmuebles />}></Layout>,
           exact: true,
         },
         {
           path: "/perfil/historialReservas/:id",
-          element: <Reservar />,
+          element: <Layout componentToRender={<Reservar />}></Layout>,
           exact: true,
         },
         {
           path: "/perfil/panel/:id",
-          element: <PanelUsuario />,
+          element: <Layout componentToRender={<PanelUsuario />}></Layout>,
           exact: true,
         },
         {

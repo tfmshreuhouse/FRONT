@@ -46,9 +46,9 @@ const Navbar = (props: any) => {
             icon: <HiOutlineHome />,
             items: [
                 {
-                    label: t('navbarText4'),
+                    label: "Perfil",
                     icon: <BiSolidDashboard />,
-                    command: () => { navigate('/inicio/dashboard'); }
+                    command: () => { navigate('/perfil'); }
                 },
                 {
                     separator: true
@@ -74,67 +74,6 @@ const Navbar = (props: any) => {
                 {
                     label: t('navbarText8'),
                     icon: <FaMagnifyingGlass />,
-                },
-            ]
-        },
-        {
-            label: t('navbarText9'),
-            icon: <BsSortDownAlt />,
-            items: [
-                {
-                    label: t('navbarText10'),
-                    icon: <BsFillCalendar2WeekFill />,
-
-                },
-                {
-                    separator: true
-                },
-                {
-                    label: t('navbarText11'),
-                    icon: <FaChair />,
-                },
-                {
-                    separator: true
-                },
-                {
-                    label: t('navbarText12'),
-                    icon: <FaToggleOn />,
-                },
-            ]
-        },
-        {
-            label: t('navbarText13'),
-            icon: <BsSortDownAlt />,
-            items: [
-                {
-                    label: t('navbarText14'),
-                    icon: <BsBellFill />,
-
-                },
-                {
-                    separator: true
-                },
-                {
-                    label: t('navbarText15'),
-                    icon: <TbPlayerTrackNextFilled />,
-                },
-                {
-                    separator: true
-                },
-                {
-                    label: t('navbarText16'),
-                    icon: <TbPlayerTrackPrevFilled />,
-                },
-            ]
-        },
-        {
-            label: t('navbarText17'),
-            icon: <BsSortDownAlt />,
-            items: [
-                {
-                    label: 'TBD',
-                    icon: 'pi pi-fw pi-user-plus',
-
                 },
             ]
         },
@@ -178,7 +117,7 @@ const Navbar = (props: any) => {
         }
     ];
 
-    const start = <img alt="logo" src="https://primefaces.org/cdn/primereact/images/logo.png" height="40" className="mr-2"></img>;
+    const start = <img alt="logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxByx-LL6YeQCZP13tRoS2LbcCNQKIgOboNA&usqp=CAU" height="40" className="mr-2"></img>;
     //const end = <Fragment><Button label="EN" severity="secondary" outlined onClick={() => i18next.changeLanguage('en')} /><Button label="ES" severity="secondary" outlined onClick={() => i18next.changeLanguage('es')} /><Button label="FR" severity="secondary" outlined onClick={() => i18next.changeLanguage('fr')} /><Button icon="pi pi-power-off" rounded text label="Cerrar sesion" severity="warning" onClick={logoutHandler} /></Fragment>;
     const end = <Fragment><div className="card flex justify-content-center">
         <Menu model={idiomas} popup ref={menuRight} id="popup_menu_right" popupAlignment="right" />

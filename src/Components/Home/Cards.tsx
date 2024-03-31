@@ -1,4 +1,3 @@
-// Card.js
 import React from "react";
 import { Button } from 'primereact/button';
 
@@ -9,11 +8,17 @@ interface CardProps {
   className?: string;
   tipo: string;
   id: string;
+  titulo: string;
+  precio: string;
+  direccion: string;
+  pais: string;
+  ciudad: string;
 }
 
-const Card: React.FC<CardProps> = ({ onBoton1Click, imageUrl, buttonText, className, tipo, id }) => {
+const Card: React.FC<CardProps> = ({ onBoton1Click, imageUrl, buttonText, className, tipo, id, titulo, precio, direccion, pais, ciudad }) => {
   const cardStyle: React.CSSProperties = {
     width: "100%", 
+    height: "250px"
   };
 
   return (
@@ -21,8 +26,10 @@ const Card: React.FC<CardProps> = ({ onBoton1Click, imageUrl, buttonText, classN
       <div className="card">
         <img className="imagen" src={imageUrl} alt="Propiedad" style={cardStyle}/>
         <div className="card-body">
-          <p className="card-text">$1.300.000 COP</p>
-          <p className="card-text">Bogota DC</p>
+          <p className="card-text">{titulo}</p>
+          <p className="card-text">{precio}</p>
+          <p className="card-text">{direccion}</p>
+          <p className="card-text">{pais}, {ciudad}</p>
         </div>
         <Button
           type="button"

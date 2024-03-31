@@ -4,6 +4,8 @@ import { Password } from 'primereact/password';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
+import { Avatar } from 'primereact/avatar';
+import { Fieldset } from 'primereact/fieldset';
 
 interface FormData {
   firstName: string;
@@ -60,102 +62,108 @@ function Perfil() {
   };
 
   return (
-      <div className="card box">
-        <form onSubmit={handleSubmit}>
-          <div className="p-fluid grid">
-            <div className="field col-12 lg:col-2"></div>
-              <div className="field col-12 lg:col-8">
-                <span className="p-float-label">
-                    <InputText
-                      id="firstName"
-                      name="firstName"
-                      value={formData?.firstName}
-                      onChange={handleInputChange}
-                    />
-                    <label htmlFor="firstName">Nombre</label>
-                </span>
-                <span className="p-float-label">
-                    <InputText
-                      id="lastName"
-                      name="lastName"
-                      value={formData?.lastName}
-                      onChange={handleInputChange}
-                    />
-                    <label htmlFor="inputtext">Apellido</label>
-                </span>
-                <span className="p-float-label">
-                    <InputText
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      value={formData?.phoneNumber}
-                      onChange={handleInputChange}
-                    />
-                    <label htmlFor="inputtext">Teléfono</label>
-                </span>
-                <span className="p-float-label">              
-                  <Password
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                  />
-                  <label htmlFor="password">Contraseña</label>
-                </span>
-            </div>          
-            <div className="field col-12 lg:col-4">   
-              <span style={{color:"#818ea1"}}>Estado</span>                 
-              <SelectButton style={{marginTop:"10px"}}
-                  value={formData.status}
-                  options={[
-                    { label: 'Activo', value: 'activo', className:"button-blueS"},
-                    { label: 'Inactivo', value: 'inactivo', styleClass:"button-blue" },
-                  ]}
-                  onChange={handleStatusChange}
-                />
-            </div>
-            <div className="p-field col-12 lg:col-8"/>
-            <div className="p-field col-12 lg:col-2"/>
-            <div className="field col-12 lg:col-2">
-            <Button
-              type="button"
-              icon="pi pi-user"
-              label="Modificar Datos"
-              className="button-green"
-              onClick={navigateModificar}
-            />
-            </div>
-            <div className="field col-12 lg:col-2">
-            <Button
-              type="button"
-              icon="pi pi-home"
-              label="Panel de control"
-              className="button-green"
-              onClick={navigatePanel}
-            />
-            </div>
-            <div className="field col-12 lg:col-2">
-            <Button
-              type="button"
-              icon="pi pi-home"
-              label="Mis Reservas"
-              className="button-green"
-              onClick={navigateToHistorialReservas}
-            />
-            </div>
-            <div className="field col-12 lg:col-2">
-            <Button
-              type="button"
-              icon="pi pi-book"
-              label="Mis publicaciones"
-              className="button-green"
-              onClick={navigateToHistorialPublicaciones}
-            />
-            </div>
-            <div className="field col-12 lg:col-2">
-              <Button type="submit" icon="pi pi-check" label="Guardar" className="button-blue" />
-            </div>
+      <div className="main-container">
+        <Fieldset legend="Perfil">
+          <div style={{ textAlign: 'center' }}>
+            <Avatar image="https://e0.pxfuel.com/wallpapers/442/989/desktop-wallpaper-perfil-boy-face.jpg" size="xlarge" shape="circle" />
           </div>
-        </form>
+          <form onSubmit={handleSubmit}>
+            <div className="p-fluid grid">
+              <div className="field col-12 lg:col-2"></div>
+                <div className="field col-12 lg:col-8">
+                  <div className="field col-12 lg:col-12">
+                    <span className="p-float-label">
+                        <InputText
+                          id="firstName"
+                          name="firstName"
+                          value={formData?.firstName}
+                          onChange={handleInputChange}
+                        />
+                        <label htmlFor="firstName">Nombre</label>
+                    </span>
+                  </div>
+                  <div className="field col-12 lg:col-12">
+                    <span className="p-float-label">
+                        <InputText
+                          id="lastName"
+                          name="lastName"
+                          value={formData?.lastName}
+                          onChange={handleInputChange}
+                        />
+                        <label htmlFor="inputtext">Apellido</label>
+                    </span>
+                  </div>
+                  <div className="field col-12 lg:col-12">
+                    <span className="p-float-label">
+                        <InputText
+                          id="phoneNumber"
+                          name="phoneNumber"
+                          value={formData?.phoneNumber}
+                          onChange={handleInputChange}
+                        />
+                        <label htmlFor="inputtext">Teléfono</label>
+                    </span>
+                  </div>
+                  <div className="field col-12 lg:col-12">
+                    <span className="p-float-label">              
+                      <InputText
+                        id="mail"
+                        name="mail"
+                        onChange={handleInputChange}
+                      />
+                      <label htmlFor="Correo">Correo</label>
+                    </span>
+                  </div>
+                  <div className="field col-12 lg:col-12">
+                    <span className="p-float-label">              
+                      <InputText
+                        id="direccion"
+                        name="direccion"
+                        onChange={handleInputChange}
+                      />
+                      <label htmlFor="Direccion">Direccion</label>
+                    </span>
+                  </div>
+              </div>          
+              <div className="field col-12 lg:col-3">                 
+                <Button
+                  type="button"
+                  icon="pi pi-user"
+                  label="Modificar mis datos"
+                  className="button-green"
+                  onClick={navigateModificar}
+                />
+              </div>
+              <div className="field col-12 lg:col-3">
+              <Button
+                type="button"
+                icon="pi pi-home"
+                label="Panel de control"
+                className="button-green"
+                onClick={navigatePanel}
+              />
+              </div>
+              <div className="field col-12 lg:col-3">
+              <Button
+                type="button"
+                icon="pi pi-home"
+                label="Mis Reservas"
+                className="button-green"
+                onClick={navigateToHistorialReservas}
+              />
+              </div>
+              <div className="field col-12 lg:col-3">
+              <Button
+                type="button"
+                icon="pi pi-book"
+                label="Mis publicaciones"
+                className="button-green"
+                onClick={navigateToHistorialPublicaciones}
+              />
+              </div>
+            </div>
+          </form>
+        </Fieldset>
       </div>
     );
   }
