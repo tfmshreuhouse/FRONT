@@ -40,6 +40,11 @@ import EditInmueble from "./Pages/editInmueble";
           exact: true,
         },
         {
+          path: "/home/infoInmueble/editar/:id",
+          element: <Layout componentToRender={<EditInmueble />}></Layout>,
+          exact: true,
+        },
+        {
           path: "/home/infoInmueble/denuncia/:id",
           element: <Layout componentToRender={<Denuncia />}></Layout>,
           exact: true,

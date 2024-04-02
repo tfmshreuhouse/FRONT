@@ -65,7 +65,7 @@ function InfoInmueble() {
                         type="button"
                         label="Editar inmueble"
                         className="button-blue"
-                        onClick={() => window.location.href=`/home/nuevaReserva/editar/${id}`}
+                        onClick={() => window.location.href=`/home/infoInmueble/editar/${id}`}
                     />
                 </div>
             );
@@ -77,59 +77,73 @@ function InfoInmueble() {
     return (
             <div className="main-container">
                 <Fieldset legend="Detalles del inmueble">
-                    <div className="image-container">
-                        {inmuebleInfo && (
-                            <Galleria
-                            value={data} 
-                            style={{ maxWidth: '100%', height: 'auto' }}  
-                            showThumbnails={false} 
-                            showIndicators 
-                            item={itemTemplate} 
-                            className="galleria-container"
-                            />
-                        )}
-                    </div>
-                    <div className="content-container">
-                        <div className="infoPrincipal-box">
-                            {inmuebleInfo && (
-                                <div className="title-box">
-                                    <h2>{inmuebleInfo.title}</h2>
-                                    <p>Habitaciones {inmuebleInfo.habitaciones}, Baños {inmuebleInfo.banosCompletos}</p>
-                                </div>
-                            )}
-                            {inmuebleInfo && (
-                                <div className="description-box">
-                                    <h2>Descripcion</h2>
-                                    <p>{inmuebleInfo.descripcion}</p>
-                                </div>
-                            )}
-                        </div>
-                        {inmuebleInfo && (    
-                            <div className="details-box">                  
-                                <h1>Especificaciones</h1>                    
-                                <p>Pisos: {inmuebleInfo.pisos}</p>                   
-                                <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
-                                <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
-                                <p>Baños Medios: {inmuebleInfo.banosMedios}</p>
-                                <p>Cocina: {inmuebleInfo.cocina === 1 ? 'Sí' : 'No'}</p>
-                                <p>Lavado: {inmuebleInfo.lavado === 1 ? 'Sí' : 'No'}</p>
-                                <p>Patio: {inmuebleInfo.patio === 1 ? 'Sí' : 'No'}</p>
-                                <p>Balcón: {inmuebleInfo.balcon === 1 ? 'Sí' : 'No'}</p>
-                                <p>Estacionamiento: {inmuebleInfo.estacionamiento === 1 ? 'Sí' : 'No'}</p>
-                                <p>Elevador: {inmuebleInfo.elevador === 1 ? 'Sí' : 'No'}</p>
-                                <p>Piscina: {inmuebleInfo.piscina === 1 ? 'Sí' : 'No'}</p>
-                                <p>Áreas Públicas: {inmuebleInfo.areasPublicas === 1 ? 'Sí' : 'No'}</p>
-                                <p>Fumar: {inmuebleInfo.fumar === 1 ? 'Sí' : 'No'}</p>
-                                <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
-                                <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>
-                                <p>Status: {inmuebleInfo.status === 1 ? 'Disponible' : 'No Disponible'}</p>
-                                <p>Indicaciones: {inmuebleInfo.indicaciones}</p>
+                    <div className="p-fluid grid">
+                        <div className="field col-12 lg:col-1"></div>
+                        <div className="field col-12 lg:col-10">
+                            <div className="image-container">
+                                {inmuebleInfo && (
+                                    <Galleria
+                                    value={data} 
+                                    style={{ maxWidth: '100%', height: 'auto' }}  
+                                    showThumbnails={false} 
+                                    showIndicators 
+                                    item={itemTemplate} 
+                                    className="galleria-container"
+                                    />
+                                )}
                             </div>
-                        )}
-                    </div>   
-                    <div className="button-container">
-                        <div className="p-fluid grid">
-                            {renderButtons()}
+                        </div>
+                        <div className="field col-12 lg:col-1"></div>
+
+                        <div className="field col-12 lg:col-1"></div>
+                        <div className="field col-12 lg:col-10">
+                            <div className="infoPrincipal-box">
+                                {inmuebleInfo && (
+                                    <div className="title-box">
+                                        <h2>{inmuebleInfo.title}</h2>
+                                        <p>Habitaciones {inmuebleInfo.habitaciones}, Baños {inmuebleInfo.banosCompletos}</p>
+                                    </div>
+                                )}
+                                {inmuebleInfo && (
+                                    <div className="description-box">
+                                        <h2>Descripcion</h2>
+                                        <p>{inmuebleInfo.descripcion}</p>
+                                    </div>
+                                )}
+                            </div>
+                         </div>
+                         <div className="field col-12 lg:col-1"></div>
+
+                         <div className="field col-12 lg:col-1"></div>
+                         <div className="field col-12 lg:col-10">
+                            <Fieldset legend="Especificaciones">
+                                {inmuebleInfo && (  
+                                    <div className="details-box">               
+                                        <p>Pisos: {inmuebleInfo.pisos}</p>                   
+                                        <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
+                                        <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
+                                        <p>Baños Medios: {inmuebleInfo.banosMedios}</p>
+                                        <p>Cocina: {inmuebleInfo.cocina === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Lavado: {inmuebleInfo.lavado === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Patio: {inmuebleInfo.patio === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Balcón: {inmuebleInfo.balcon === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Estacionamiento: {inmuebleInfo.estacionamiento === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Elevador: {inmuebleInfo.elevador === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Piscina: {inmuebleInfo.piscina === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Áreas Públicas: {inmuebleInfo.areasPublicas === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Fumar: {inmuebleInfo.fumar === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>
+                                        <p>Status: {inmuebleInfo.status === 1 ? 'Disponible' : 'No Disponible'}</p>
+                                        <p>Indicaciones: {inmuebleInfo.indicaciones}</p>
+                                    </div>
+                                )}
+                            </Fieldset>
+                        </div>   
+                        <div className="button-container">
+                            <div className="p-fluid grid">
+                                {renderButtons()}
+                            </div>
                         </div>
                     </div>
                 </Fieldset>
