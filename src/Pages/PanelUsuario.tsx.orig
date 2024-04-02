@@ -4,12 +4,19 @@ import { DataView } from 'primereact/dataview';
 import { Rating } from 'primereact/rating';
 import { DataViewLayoutOptions } from 'primereact/dataview';
 import '../index.css';
+<<<<<<< HEAD
+=======
 import { Fieldset } from 'primereact/fieldset';
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
 
 const PanelUsuario = () => {
   interface Product {
     name: string;
     category: string;
+<<<<<<< HEAD
+    inventoryStatus: string;
+=======
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
     price: number;
     rating: number;
     description: string;
@@ -17,6 +24,34 @@ const PanelUsuario = () => {
   }
 
   const products: Product[] = [
+<<<<<<< HEAD
+    { name: 'Producto 1', category: 'Categoria 1', inventoryStatus: 'IN_STOCK', price: 10, rating: 4, description: 'Descripción del producto 1', image: 'producto1.jpg' },
+    { name: 'Producto 2', category: 'Categoria 2', inventoryStatus: 'OUT_OF_STOCK', price: 20, rating: 3, description: 'Descripción del producto 2', image: 'producto2.jpg' },
+  ];
+
+  const renderListItem = (product: Product) => (
+    <div className="product-grid-item card border-1 row">
+      <div className="col-8">
+            <i className="pi pi-tag product-category-icon"/>
+            <span className="product-category">{product.category}</span>
+          <span className={`product-badge status-${product.inventoryStatus.toLowerCase()}`}>{product.inventoryStatus}</span>
+          <img src={`images/product/${product.image}`} alt={product.name} />
+          <div className="product-name">{product.name}</div>
+          <div className="product-description">{product.description}</div>
+          <Rating value={product.rating} readOnly />
+      </div>
+      <div className="col-4">
+          <span className="product-price">${product.price}</span>
+          <Button type="button" label="Add To Cart" icon="pi pi-shopping-cart" disabled={product.inventoryStatus === 'OUT_OF_STOCK'} />
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="card product">
+      <DataView value={products} layout={'grid'} itemTemplate={renderListItem} />
+    </div>
+=======
     { name: 'Apartamento maria paula', category: 'Apartamento', price: 300.000, rating: 3, description: 'Aprtamentos con 3 habitacion en el conjunto residencial maria paula', image: 'https://lajoya.ec/wp-content/uploads/2015/02/LJ-CONDOMINIO-2-SALA-COMEDOR-1108x960.png' },
     { name: 'casa colinas del igua', category: 'Casa', price: 800.000, rating: 1, description: 'Casa de dos pisos con 4 habitaciones ', image: 'https://lajoya.ec/wp-content/uploads/2015/02/LJ-CONDOMINIO-2-SALA-COMEDOR-1108x960.png' },
   ];
@@ -60,6 +95,7 @@ const PanelUsuario = () => {
       </p>
   </Fieldset>
   </div>
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
   );
 };
 

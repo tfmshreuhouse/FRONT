@@ -1,12 +1,18 @@
 import React, { useState, useEffect, Fragment } from 'react';
+<<<<<<< HEAD
+import datosInmueble from '../../src/assets/inmueble.json'; 
+import './inmuebles.css';
+import Imagenes from '../Components/Shared/imagenes';
+=======
 import { useParams } from 'react-router-dom';
 // import Carousel from '../Components/Shared/Carousel';
 import datosInmueble from '../../src/assets/inmueble.json'; 
 import '../index.css';
-import Imagenes from '../Components/Shared/imagenes';
+import { Button } from 'primereact/button';
 import { Galleria } from 'primereact/galleria';
 import { data } from '../assets/data';
 import { Fieldset } from 'primereact/fieldset';
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
 
 function InfoInmueble() {
     // Supongamos que recibes la información del inmueble como un objeto JSON
@@ -27,6 +33,15 @@ function InfoInmueble() {
         setInmuebleInfo(datosInmueble);
     }, []);
 
+<<<<<<< HEAD
+    return (
+        <Fragment>            
+            <div className="main-container">
+                <div className="image-container">
+                    {inmuebleInfo && (
+                        <Imagenes/>
+                    )}
+=======
     const renderButtons = () => {
         if (inmuebleInfo && tipo === '1') {
             return (
@@ -67,6 +82,7 @@ function InfoInmueble() {
                         className="button-blue"
                         onClick={() => window.location.href=`/home/nuevaReserva/editar/${id}`}
                     />
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
                 </div>
             );
         }
@@ -89,6 +105,28 @@ function InfoInmueble() {
                             />
                         )}
                     </div>
+<<<<<<< HEAD
+                    {inmuebleInfo && (    
+                        <div className="details-box">                  
+                            <h1>Especificaciones</h1>
+                            <p></p>
+                            <p>Pisos: {inmuebleInfo.pisos}</p>                   
+                            <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
+                            <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
+                            <p>Baños Medios: {inmuebleInfo.banosMedios}</p>
+                            <p>Cocina: {inmuebleInfo.cocina === 1 ? 'Sí' : 'No'}</p>
+                            <p>Lavado: {inmuebleInfo.lavado === 1 ? 'Sí' : 'No'}</p>
+                            <p>Patio: {inmuebleInfo.patio === 1 ? 'Sí' : 'No'}</p>
+                            <p>Balcón: {inmuebleInfo.balcon === 1 ? 'Sí' : 'No'}</p>
+                            <p>Estacionamiento: {inmuebleInfo.estacionamiento === 1 ? 'Sí' : 'No'}</p>
+                            <p>Elevador: {inmuebleInfo.elevador === 1 ? 'Sí' : 'No'}</p>
+                            <p>Piscina: {inmuebleInfo.piscina === 1 ? 'Sí' : 'No'}</p>
+                            <p>Áreas Públicas: {inmuebleInfo.areasPublicas === 1 ? 'Sí' : 'No'}</p>
+                            <p>Fumar: {inmuebleInfo.fumar === 1 ? 'Sí' : 'No'}</p>
+                            <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
+                            <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>                            
+                            <p>Indicaciones: {inmuebleInfo.indicaciones}</p>
+=======
                     <div className="content-container">
                         <div className="infoPrincipal-box">
                             {inmuebleInfo && (
@@ -103,11 +141,11 @@ function InfoInmueble() {
                                     <p>{inmuebleInfo.descripcion}</p>
                                 </div>
                             )}
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
                         </div>
                         {inmuebleInfo && (    
                             <div className="details-box">                  
-                            <h1>Especificaciones</h1>
-                            <p></p>
+                                <h1>Especificaciones</h1>                    
                                 <p>Pisos: {inmuebleInfo.pisos}</p>                   
                                 <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
                                 <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
@@ -122,7 +160,7 @@ function InfoInmueble() {
                                 <p>Áreas Públicas: {inmuebleInfo.areasPublicas === 1 ? 'Sí' : 'No'}</p>
                                 <p>Fumar: {inmuebleInfo.fumar === 1 ? 'Sí' : 'No'}</p>
                                 <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
-                            <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>                            
+                                <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>
                                 <p>Status: {inmuebleInfo.status === 1 ? 'Disponible' : 'No Disponible'}</p>
                                 <p>Indicaciones: {inmuebleInfo.indicaciones}</p>
                             </div>

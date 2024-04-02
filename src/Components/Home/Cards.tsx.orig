@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // Card.js
+=======
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
 import React from "react";
 import { Button } from 'primereact/button';
 
@@ -9,6 +12,13 @@ interface CardProps {
   className?: string;
   tipo: string;
   id: string;
+<<<<<<< HEAD
+}
+
+const Card: React.FC<CardProps> = ({ onBoton1Click, imageUrl, buttonText, className, tipo, id }) => {
+  const cardStyle: React.CSSProperties = {
+    width: "100%", 
+=======
   titulo: string;
   precio: string;
   direccion: string;
@@ -20,6 +30,7 @@ const Card: React.FC<CardProps> = ({ onBoton1Click, imageUrl, buttonText, classN
   const cardStyle: React.CSSProperties = {
     width: "100%", 
     height: "250px"
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
   };
 
   return (
@@ -27,10 +38,15 @@ const Card: React.FC<CardProps> = ({ onBoton1Click, imageUrl, buttonText, classN
       <div className="card">
         <img className="imagen" src={imageUrl} alt="Propiedad" style={cardStyle}/>
         <div className="card-body">
+<<<<<<< HEAD
+          <p className="card-text">$1.300.000 COP</p>
+          <p className="card-text">Bogota DC</p>
+=======
           <p className="card-text">{titulo}</p>
           <p className="card-text">{precio}</p>
           <p className="card-text">{direccion}</p>
           <p className="card-text">{pais}, {ciudad}</p>
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
         </div>
         <Button
           type="button"

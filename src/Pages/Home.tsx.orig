@@ -1,21 +1,36 @@
 
 import React from 'react';
 import '../index.css';
+<<<<<<< HEAD
+import Card from '../Components/Home/Cards';  // Aseg�rate de importar el componente correcto
+import Buscadores from '../Components/Home/Buscador';
+import { useNavigate } from 'react-router-dom';
+=======
 import Card from '../Components/Home/Cards';
 import Buscadores from '../Components/Home/Buscador';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
 
 const Home = () => {
   const navigate = useNavigate();
   const handleBoton1Click = (tipo: string, id: string) => {
     navigate(`/home/infoInmueble/${tipo}/${id}`);
   };
+<<<<<<< HEAD
+  return (
+    <div className="container">
+      {/* <nav className="nva-home">
+        <img className="logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxByx-LL6YeQCZP13tRoS2LbcCNQKIgOboNA&usqp=CAU" alt="Logo" />
+      </nav> */}
+
+=======
   const handleBoton2Click = () => {
     navigate(`/`);
   };
   return (
     <div className="container">
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
       <Buscadores />
       <div className="row">
       <Card
@@ -25,6 +40,16 @@ const Home = () => {
           className="col-md-4 col-sm-12"
           tipo="1"
           id="1"
+<<<<<<< HEAD
+        />
+        <Card
+          onBoton1Click={handleBoton1Click}
+          imageUrl="https://lajoya.ec/wp-content/uploads/2015/02/LJ-CONDOMINIO-2-SALA-COMEDOR-1108x960.png"
+          buttonText="Contactar"
+          className="col-md-4 col-sm-12"
+          tipo="1"
+          id="2"
+=======
           titulo="Apartamento maria paula"
           precio="800.000 COP"
           direccion="Cra 5 a 16-86"
@@ -43,10 +68,41 @@ const Home = () => {
           direccion="Av. boyaca cll 55"
           pais="Colombia"
           ciudad="Bogota"
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
         />
         <Card
           onBoton1Click={handleBoton1Click}
           imageUrl="https://img10.naventcdn.com/avisos/18/00/64/76/56/44/720x532/340390153.jpg?isFirstImage=true"
+<<<<<<< HEAD
+          buttonText="Contactar"
+          className="col-md-4 col-sm-12"
+          tipo="1"
+          id="3"
+        />
+        <Card
+          onBoton1Click={handleBoton1Click}
+          imageUrl="https://img10.naventcdn.com/avisos/18/00/64/76/56/44/720x532/340390153.jpg?isFirstImage=true"
+          buttonText="Contactar"
+          className="col-md-4 col-sm-12"
+          tipo="1"
+          id="4"
+        />
+        <Card
+          onBoton1Click={handleBoton1Click}
+          imageUrl="https://img10.naventcdn.com/avisos/18/00/64/76/56/44/720x532/340390153.jpg?isFirstImage=true"
+          buttonText="Contactar"
+          className="col-md-4 col-sm-12"
+          tipo="1"
+          id="5"
+        />
+        <Card
+          onBoton1Click={handleBoton1Click}
+          imageUrl="https://img10.naventcdn.com/avisos/18/00/64/76/56/44/720x532/340390153.jpg?isFirstImage=true"
+          buttonText="Contactar"
+          className="col-md-4 col-sm-12"
+          tipo="1"
+          id="6"
+=======
           buttonText="Ver detalles"
           className="col-md-4 col-sm-12"
           tipo="1"
@@ -104,6 +160,7 @@ const Home = () => {
           label="Volver"
           className="button-red"
           onClick={handleBoton2Click}
+>>>>>>> f1e92c591fc8cc61bee5e5df43df397a9f851485
         />
       </div>
     </div>

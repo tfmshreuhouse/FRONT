@@ -13,6 +13,7 @@
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "axios": "^1.4.0",
+    "bootstrap": "^5.3.3",
     "chart.js": "^4.4.0",
     "countries-cities-geo": "^0.0.9",
     "country-flag-icons": "^1.5.7",
@@ -61,5 +62,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }

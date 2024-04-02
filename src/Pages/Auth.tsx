@@ -47,7 +47,7 @@ function Auth() {
       <div className="flex align-items-center justify-content-center mt-2">
         <div className="surface-card p-4 shadow-2 border-round w-full lg:w-6">
           <div className="text-center mb-5">
-            <img src="https://primefaces.org/cdn/primereact/images/logo.png" alt="hyper" height={50} className="mb-3" />
+          <img style={{ borderRadius: '20px' }} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxByx-LL6YeQCZP13tRoS2LbcCNQKIgOboNA&usqp=CAU"  alt="Error" className="mb-5" width="80%" />
             <div className="text-900 text-3xl font-medium mb-3">{t('authText1')}</div>
             <span className="text-600 font-medium line-height-3">{islogin ? t('authText2') : t('authText3')}</span>
             <a className="font-medium no-underline ml-2 text-blue-500 cursor-pointer" onClick={isLoginHandler}>{islogin ? t('authText4') : t('authText5')}</a>
@@ -55,7 +55,7 @@ function Auth() {
           {islogin ? <LoginForm></LoginForm> : <RegisterForm></RegisterForm>}
         </div>
       </div>
-      {data ? data.map((user) => { return <li key={user.id}>{user.nombres}</li> }) : <div>h1</div>}      
+      {data ? data.map((user) => { return <li key={user.id}>{user.nombres}</li> }) : <div></div>}      
     </Fragment>
   );
 }
