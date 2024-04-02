@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom';
 // import Carousel from '../Components/Shared/Carousel';
 import datosInmueble from '../../src/assets/inmueble.json'; 
 import '../index.css';
-import { Button } from 'primereact/button';
+import Imagenes from '../Components/Shared/imagenes';
 import { Galleria } from 'primereact/galleria';
 import { data } from '../assets/data';
 import { Fieldset } from 'primereact/fieldset';
+import { Button } from 'primereact/button';
 
 function InfoInmueble() {
     // Supongamos que recibes la información del inmueble como un objeto JSON
