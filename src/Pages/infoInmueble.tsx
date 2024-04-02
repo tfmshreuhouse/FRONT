@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import Carousel from '../Components/Shared/Carousel';
 import datosInmueble from '../../src/assets/inmueble.json'; 
 import './inmuebles.css';
+import Imagenes from '../Components/Shared/imagenes';
 
 function InfoInmueble() {
     // Supongamos que recibes la información del inmueble como un objeto JSON
@@ -28,7 +28,7 @@ function InfoInmueble() {
             <div className="main-container">
                 <div className="image-container">
                     {inmuebleInfo && (
-                        <Carousel/>
+                        <Imagenes/>
                     )}
                 </div>
                 <div className="content-container">
@@ -48,7 +48,8 @@ function InfoInmueble() {
                     </div>
                     {inmuebleInfo && (    
                         <div className="details-box">                  
-                            <h1>Especificaciones</h1>                    
+                            <h1>Especificaciones</h1>
+                            <p></p>
                             <p>Pisos: {inmuebleInfo.pisos}</p>                   
                             <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
                             <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
@@ -63,8 +64,7 @@ function InfoInmueble() {
                             <p>Áreas Públicas: {inmuebleInfo.areasPublicas === 1 ? 'Sí' : 'No'}</p>
                             <p>Fumar: {inmuebleInfo.fumar === 1 ? 'Sí' : 'No'}</p>
                             <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
-                            <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>
-                            <p>Status: {inmuebleInfo.status === 1 ? 'Disponible' : 'No Disponible'}</p>
+                            <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>                            
                             <p>Indicaciones: {inmuebleInfo.indicaciones}</p>
                         </div>
                     )}
