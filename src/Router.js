@@ -91,7 +91,7 @@ import EditInmueble from "./Pages/editInmueble";
           path: "/detalles",
           element: <DetalleReserva></DetalleReserva>,
           exact: true,
-        }
+        },
         {
           path: "/perfil/modificar/:id",
           element: <Modificar></Modificar>,

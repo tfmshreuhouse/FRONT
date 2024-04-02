@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from 'react';
-import InputField from '../Components/Login/InputField';
+import InputField from '../Components/login/InputField';
 import { Fieldset } from 'primereact/fieldset';
 const ModificarDatosForm: React.FC = () => {
   const [nombre, setNombre] = useState('');
