@@ -11,8 +11,8 @@ const Inicio: React.FC = () => {
   };
 
   const handleBoton2Click = () => {
-    navigate('/inicio');
-    console.log('Botón 2 clickeado');
+    navigate('/perfil/historialPublicaciones/?from=inicio');
+    console.log('Botï¿½n 2 clickeado');
   };
 
   return (

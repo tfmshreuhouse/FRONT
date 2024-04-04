@@ -7,13 +7,21 @@ import { Button } from 'primereact/button';
 
 const MisInmuebles = () => {
   const navigate = useNavigate();
-
+  const searchParams = new URLSearchParams(window.location.search);
+  const from = searchParams.get('from');
   const handleBoton1Click = (tipo: string, id: string) => {
     // Aquí puedes hacer lo que necesites con tipo e id antes de navegar
     navigate(`/home/infoInmueble/${tipo}/${id}`);
   };
   const handleBoton2Click = () => {
-    navigate(`/crear`);
+    navigate(`/home/infoInmueble/editar/2`);
+  };
+  const handleBoton3Click = () => {
+    if (from === 'inicio') {
+      navigate('/');
+    } else {
+      navigate('/perfil');
+    }
   };
   return (
     <div className="container">
@@ -72,15 +80,27 @@ const MisInmuebles = () => {
           ciudad="Ciudad de Mexico"
         />
         </div>
-        <div className="col-md-12 mb-3 text-center">
-        <Button
-          type="button"
-          icon="pi pi-angle-left"
-          label="Crear Nuevo Inmueble"
-          className="button-red"
-          onClick={handleBoton2Click}
-        />
-      </div>
+        <div className="p-fluid grid">
+          <div className="field col-12 lg:col-3"></div>
+          <div className="field col-12 lg:col-3">
+            <Button
+              type="button"
+              icon="pi pi-home"
+              label="Crear Nuevo Inmueble"
+              className="button-red"
+              onClick={handleBoton2Click}
+            />
+          </div>
+          <div className="field col-12 lg:col-3">
+            <Button
+              type="button"
+              icon="pi pi-angle-left"
+              label="Volver"
+              className="button-red"
+              onClick={handleBoton3Click}
+            />
+          </div>
+        </div>
       </Fieldset>
     </div>
   );

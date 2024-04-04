@@ -1,140 +1,145 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
-import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
 import { Avatar } from 'primereact/avatar';
 import { Fieldset } from 'primereact/fieldset';
 
-interface FormData {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  password: string;
-  status: string;
+interface User {
+  nombres: string;
+  apellidos: string;
+  telefono: string;
+  correo: string;
 }
 
 function Perfil() {
-  let formInitial: FormData = {
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    password: '',
-    status: 'activo', // Estado por defecto
-  };
-
-  const [formData, setFormData] = useState<FormData>(formInitial);
   const navigate = useNavigate();
+  const [user, setUser] = useState<User>({
+    nombres: '',
+    apellidos: '',
+    telefono: '',
+    correo: ''
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const axiosTokenInfo = axios.create({
+          baseURL: process.env.REACT_APP_API_URL,
+          params: { token: localStorage.getItem('jwt') }
+        });
+
+        const responseAxiosTokenInfo = await axiosTokenInfo.get('/auth/Token/info');
+        const userId = responseAxiosTokenInfo.data.data;
+        
+        const responseAxiosUserInfo = await axiosTokenInfo.get(`http://localhost:3000/auth/user/info/${userId.userID}`);
+        const userData = responseAxiosUserInfo.data.data;
+        
+        setUser(userData);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
+    setUser((prevUser) => ({
+      ...prevUser,
       [name]: value,
-    }));
-  };
-
-  const handleStatusChange = (e: { value: string }) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      status: e.value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Aquí puedes manejar la lógica para enviar el formulario
-    console.log(formData);
+    console.log(user);
   };
 
   const navigateToHistorialPublicaciones = () => {
-    navigate('/perfil/historialPublicaciones/1');
+    navigate('/perfil/historialPublicaciones/?from=perfil');
   };
+
   const navigateModificar = () => {
     navigate('/perfil/modificar/1');
-  }
+  };
+
   const navigatePanel = () => {
     navigate('/perfil/panel/1');
   };
+
   const navigateToHistorialReservas = () => {
     navigate('/perfil/historialReservas/1');
   };
 
   return (
-      <div className="main-container">
-        <Fieldset legend="Perfil">
-          <div style={{ textAlign: 'center' }}>
-            <Avatar image="https://e0.pxfuel.com/wallpapers/442/989/desktop-wallpaper-perfil-boy-face.jpg" size="xlarge" shape="circle" />
-          </div>
-          <form onSubmit={handleSubmit}>
-            <div className="p-fluid grid">
-              <div className="field col-12 lg:col-2"></div>
-                <div className="field col-12 lg:col-8">
-                  <div className="field col-12 lg:col-12">
-                    <span className="p-float-label">
-                        <InputText
-                          id="firstName"
-                          name="firstName"
-                          value={formData?.firstName}
-                          onChange={handleInputChange}
-                        />
-                        <label htmlFor="firstName">Nombre</label>
-                    </span>
-                  </div>
-                  <div className="field col-12 lg:col-12">
-                    <span className="p-float-label">
-                        <InputText
-                          id="lastName"
-                          name="lastName"
-                          value={formData?.lastName}
-                          onChange={handleInputChange}
-                        />
-                        <label htmlFor="inputtext">Apellido</label>
-                    </span>
-                  </div>
-                  <div className="field col-12 lg:col-12">
-                    <span className="p-float-label">
-                        <InputText
-                          id="phoneNumber"
-                          name="phoneNumber"
-                          value={formData?.phoneNumber}
-                          onChange={handleInputChange}
-                        />
-                        <label htmlFor="inputtext">Teléfono</label>
-                    </span>
-                  </div>
-                  <div className="field col-12 lg:col-12">
-                    <span className="p-float-label">              
-                      <InputText
-                        id="mail"
-                        name="mail"
-                        onChange={handleInputChange}
-                      />
-                      <label htmlFor="Correo">Correo</label>
-                    </span>
-                  </div>
-                  <div className="field col-12 lg:col-12">
-                    <span className="p-float-label">              
-                      <InputText
-                        id="direccion"
-                        name="direccion"
-                        onChange={handleInputChange}
-                      />
-                      <label htmlFor="Direccion">Direccion</label>
-                    </span>
-                  </div>
-              </div>          
-              <div className="field col-12 lg:col-3">                 
-                <Button
-                  type="button"
-                  icon="pi pi-user"
-                  label="Modificar mis datos"
-                  className="button-green"
-                  onClick={navigateModificar}
-                />
+    <div className="main-container">
+      <Fieldset legend="Perfil">
+        <div style={{ textAlign: 'center' }}>
+          <Avatar image="https://e0.pxfuel.com/wallpapers/442/989/desktop-wallpaper-perfil-boy-face.jpg" size="xlarge" shape="circle" />
+        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="p-fluid grid">
+            <div className="field col-12 lg:col-2"></div>
+            <div className="field col-12 lg:col-8">
+              <div className="field col-12 lg:col-12">
+                <span className="p-float-label">
+                  <InputText
+                    id="nombres"
+                    name="nombres"
+                    value={user.nombres}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="nombres">Nombres</label>
+                </span>
               </div>
-              <div className="field col-12 lg:col-3">
+              <div className="field col-12 lg:col-12">
+                <span className="p-float-label">
+                  <InputText
+                    id="apellidos"
+                    name="apellidos"
+                    value={user.apellidos}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="inputtext">Apellidos</label>
+                </span>
+              </div>
+              <div className="field col-12 lg:col-12">
+                <span className="p-float-label">
+                  <InputText
+                    id="telefono"
+                    name="telefono"
+                    value={user.telefono}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="inputtext">Teléfono</label>
+                </span>
+              </div>
+              <div className="field col-12 lg:col-12">
+                <span className="p-float-label">
+                  <InputText
+                    id="correo"
+                    name="correo"
+                    value={user.correo}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="correo">Correo</label>
+                </span>
+              </div>
+            </div>
+            <div className="field col-12 lg:col-3">
+              <Button
+                type="button"
+                icon="pi pi-user"
+                label="Modificar mis datos"
+                className="button-green"
+                onClick={navigateModificar}
+              />
+            </div>
+            <div className="field col-12 lg:col-3">
               <Button
                 type="button"
                 icon="pi pi-home"
@@ -142,8 +147,8 @@ function Perfil() {
                 className="button-green"
                 onClick={navigatePanel}
               />
-              </div>
-              <div className="field col-12 lg:col-3">
+            </div>
+            <div className="field col-12 lg:col-3">
               <Button
                 type="button"
                 icon="pi pi-home"
@@ -151,8 +156,8 @@ function Perfil() {
                 className="button-green"
                 onClick={navigateToHistorialReservas}
               />
-              </div>
-              <div className="field col-12 lg:col-3">
+            </div>
+            <div className="field col-12 lg:col-3">
               <Button
                 type="button"
                 icon="pi pi-book"
@@ -160,13 +165,12 @@ function Perfil() {
                 className="button-green"
                 onClick={navigateToHistorialPublicaciones}
               />
-              </div>
             </div>
-          </form>
-        </Fieldset>
-      </div>
-    );
-  }
-  
-  export default Perfil;
-  
+          </div>
+        </form>
+      </Fieldset>
+    </div>
+  );
+}
+
+export default Perfil;

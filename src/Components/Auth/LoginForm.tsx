@@ -52,7 +52,7 @@ function LoginForm() {
 
         if (jwt) {
             console.log("JWT ya existe");
-            navigate("/inicio/dashboard", { state: "location", replace: true });
+            navigate("/", { state: "location", replace: true });
         }
 
       }, []);
@@ -80,7 +80,7 @@ function LoginForm() {
             localStorage.setItem('jwt', response.data.data);
             setErrors(null);
             setLoading(false);
-            navigate("/inicio/dashboard", { state: "location", replace: true });
+            navigate("/", { state: "location", replace: true });
         } catch (error: any) {
             try {
                 console.log("Valor de erro: ", error.response.data.error);

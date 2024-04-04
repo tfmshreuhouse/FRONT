@@ -3,7 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import '../index.css';
 import { Button } from 'primereact/button';
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Fieldset } from 'primereact/fieldset';
+import { Dropdown } from 'primereact/dropdown';
 
 const DenunciaView = () => {
   const { id } = useParams();
@@ -28,7 +30,11 @@ const DenunciaView = () => {
       [name]: value,
     });
   };
-
+  const options = [
+    { label: 'acoso', value: 'acoso' },
+    { label: 'fraude', value: 'fraude' },
+    { label: 'otro', value: 'otro' }
+  ];
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
@@ -39,10 +45,10 @@ const DenunciaView = () => {
   const handleVolverClick = () => {
     navigate('/home/infoInmueble/1/${id}');
   };
-
+  const [selectedOption, setSelectedOption] = useState(null);
   return (
     <div className="main-container">
-      <Fieldset legend="Denuncia publicacion">
+      <Fieldset legend="Denunciar publicacion">
         <form onSubmit={handleSubmit}>
           <div className="p-fluid grid">
             <div className="field col-12 lg:col-2"></div>
@@ -50,18 +56,13 @@ const DenunciaView = () => {
                 <label htmlFor="motivoDenuncia" className="label-style">Motivo de Denuncia</label>
             </div>
             <div className="field col-12 lg:col-4">
-                <select
-                  className='input-div'
-                  name="motivoDenuncia"
-                  value={formData.motivoDenuncia}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Seleccione un motivo</option>
-                  <option value="acoso">Acoso</option>
-                  <option value="fraude">Fraude</option>
-                  <option value="otro">Otro</option>
-                </select>
+              <Dropdown
+                value={selectedOption} // Establece el valor seleccionado
+                options={options}     // Establece las opciones
+                onChange={(e) => setSelectedOption(e.value)}
+                optionLabel="label"
+                placeholder="Selecione el motivo"
+              />
             </div>
             <div className="field col-12 lg:col-2"></div>
             <div className="field col-12 lg:col-2"></div>
@@ -69,14 +70,15 @@ const DenunciaView = () => {
                 <label htmlFor="justificacionDenuncia" className="label-style">Justificación de la Denuncia</label>
             </div>
             <div className="field col-12 lg:col-4">
-                <textarea
+                <InputTextarea
                   name="justificacionDenuncia"
                   className='text-area-div'
                   placeholder="Ingrese justificación"
                   value={formData.justificacionDenuncia}
                   onChange={handleChange}
                   required
-                  style={{ width: '100%', height: '100%' }}
+                  rows={5} 
+                  cols={30}
                 />
             </div>
             <div className="field col-12 lg:col-2"></div>

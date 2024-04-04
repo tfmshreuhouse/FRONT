@@ -13,14 +13,24 @@ const DivHome = () => {
       </div>
       <div className="col-md-4 mb-3">
         <div className="form-button">
-          <label htmlFor="apartamento" className="label-style">TIPO DE INMUEBLE</label>
-          <input type="text" className='input-div' name="apartamento" placeholder="APARTAMENTO" />
+          <span className="p-float-label">
+            <InputText
+              id="apartamento"
+              name="apartamento"
+            />
+            <label htmlFor="firstName">TIPO DE INMUEBLE</label>
+          </span>
         </div>
       </div>
       <div className="col-md-4 mb-3">
         <div className="form-button">
-          <label htmlFor="ubicacion" className="label-style">UBICACION</label>
-          <input type="text" className='input-div' name="ubicacion" placeholder="Bogota, Colombia" />
+          <span className="p-float-label">
+            <InputText
+              id="ubicacion"
+              name="ubicacion"
+            />
+            <label htmlFor="firstName">UBICACION</label>
+          </span>
         </div>
       </div>
       <div className="col-md-4 mb-3">
