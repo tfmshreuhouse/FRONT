@@ -5,6 +5,7 @@ export interface intUserInfo {
     correo: string,
     password?: string,
     perfil: string,
+    telefono: string,
     status: number,
     createdAt: string,
     updatedAt: string
@@ -16,6 +17,7 @@ export interface intUserNew {
     correo: string,
     password: string,
     perfil: string,
+    telefono: string,
     status: number,
     createdAt?: string,
     updatedAt?: string
