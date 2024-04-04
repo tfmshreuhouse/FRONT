@@ -12,12 +12,18 @@ import { Checkbox } from 'primereact/checkbox';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useTranslation } from "react-i18next";
+import SuccessRegisterAlert from '../Shared/SuccessRegisterAlert';
 
-function RegisterForm() {
+interface ChildProps {
+    isLoginHandler: () => void; // Definir correctamente la prop handleClick
+}
+
+const RegisterForm:React.FC<ChildProps> = ({ isLoginHandler }) => {
 
     const { t } = useTranslation();
 
     const [checked, setChecked] = useState<boolean>(false);
+    const [success, setSuccess] = useState<boolean>(false);
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -33,6 +39,7 @@ function RegisterForm() {
         apellidos: '',
         correo: '',
         password: '',
+        telefono: ''
     }
 
     const formik: any = useFormik({
@@ -45,6 +52,7 @@ function RegisterForm() {
             console.log(data.apellidos);
             console.log(data.correo);
             console.log(data.password);
+            console.log(data.telefono);
             registerHandler(data)
             //loginHandler(data.correo, data.password);
         }
@@ -65,7 +73,7 @@ function RegisterForm() {
 
     const registerHandler = async (obj: any) => {
 
-        const { nombres, apellidos, correo, password } = obj;
+        const { nombres, apellidos, correo, password, telefono } = obj;
 
         setLoading(true);
         console.log("Register");
@@ -77,14 +85,16 @@ function RegisterForm() {
                 correo,
                 password,
                 perfil: "Super",
+                telefono,
                 status: 1
             }
             const response = await axiosInstance.post('/auth', userNew);
             //console.log("Usuario creado exitosamente.");
             console.log(response.data.data)
-            setErrors(null);
             setLoading(false);
+            setSuccess(true);
             setChecked(false);
+            setErrors(null);
         } catch (error: any) {
             try {
                 console.log(error.response.data);
@@ -129,6 +139,19 @@ function RegisterForm() {
                     {getFormErrorMessage('apellidos')}
                     <span className="p-float-label mt-4">
                         <InputText
+                            id="telefono"
+                            name="telefono"
+                            value={formik.values.telefono}
+                            onChange={(e) => {
+                                formik.setFieldValue('telefono', e.target.value);
+                            }}
+                            className={classNames("w-full", { 'p-invalid w-full': isFormFieldInvalid('telefono') })}
+                        />
+                        <label htmlFor="telefono">{t('loginRegisterText11')}</label>
+                    </span>
+                    {getFormErrorMessage('telefono')}
+                    <span className="p-float-label mt-4">
+                        <InputText
                             id="correo"
                             name="correo"
                             value={formik.values.correo}
@@ -169,6 +192,7 @@ function RegisterForm() {
                     {errors.error.map((error: any) => { return <p key={error.message} style={{ fontWeight: 'bold' }}>*{t(AuthErrorCodeTranslator(error.message))}</p> })}
                 </div>
             </div> : <div></div>}
+            {success ? <SuccessRegisterAlert isLoginHandler={isLoginHandler}/> : <div></div>}
         </Fragment>
     );
 }

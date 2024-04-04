@@ -5,6 +5,7 @@ const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]
 const regexSoloLetras = /^[A-Za-z]+$/;
 const regexCorreo = /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/;
 const regexLetrasNumerosSinEspacio = /^[aA-zZ0-9]+$/;
+const regexTelefono = /^\+(?:[0-9] ?){6,14}[0-9]$/;
 
 
 export const formAuthLogin = yup.object().shape({
@@ -35,5 +36,9 @@ export const formAuthRegister = yup.object().shape({
         .min(9, "authYupErrorsText5")
         .max(15, "authYupErrorsText6")
         .matches(regexPassword, "authYupErrorsText7")
+        .required("authYupErrorsText1"),
+    telefono: yup
+        .string()
+        .matches(regexTelefono, "authYupErrorsText8")
         .required("authYupErrorsText1"),
 });
