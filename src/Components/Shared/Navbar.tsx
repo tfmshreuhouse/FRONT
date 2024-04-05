@@ -62,8 +62,9 @@ const Navbar = (props: any) => {
                         separator: true
                     },
                     {
-                        label: t('navbarText5'),
+                        label: "Panel administrador",
                         icon: <FaScaleBalanced />,
+                        command: () => { navigate('/panel-administrador'); }
                     }
                 ]
             },
