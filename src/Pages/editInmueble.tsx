@@ -123,7 +123,7 @@ function EditInmueble() {
             }
 
             const response = await axios.get<{ success: boolean; data: { id: number; tipo: string }[] }>(
-                "http://localhost:3000/rest/tipos-inmuebles",
+                process.env.REACT_APP_API_URL + "rest/tipos-inmuebles",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -190,7 +190,7 @@ function EditInmueble() {
         try {
             debugger;
             const response = await axios.post(
-                "http://localhost:3000/rest/DetallesInmuebles",
+                process.env.REACT_APP_API_URL + "rest/DetallesInmuebles",
                 formDataDatail,
                 {
                     headers: {
@@ -214,7 +214,7 @@ function EditInmueble() {
         try {
             debugger;
             const response = await axios.post(
-                "http://localhost:3000/rest/inmuebles",
+                process.env.REACT_APP_API_URL + "rest/inmuebles",
                 FormDataInmueble,
                 {
                     headers: {
