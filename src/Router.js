@@ -14,6 +14,7 @@ import Inmuebles from "./Pages/MisInmuebles";
 import Reservar from "./Pages/MiReservas";
 import PanelUsuario from "./Pages/PanelUsuario";
 import EditInmueble from "./Pages/editInmueble";
+import PanelAdmin from "./Pages/PanelAdmin";
 
     const router = createBrowserRouter([
         {
@@ -85,8 +86,8 @@ import EditInmueble from "./Pages/editInmueble";
           exact: true,
         },
         {
-          path: "/panel",
-          element: <Layout componentToRender={<PanelUsuario></PanelUsuario>}></Layout>,
+          path: "/panel-administrador",
+          element: <Layout componentToRender={<PanelAdmin></PanelAdmin>}></Layout>,
           exact: true,
         }
       ]);
