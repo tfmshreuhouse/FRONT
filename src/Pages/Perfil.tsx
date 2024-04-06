@@ -33,7 +33,7 @@ function Perfil() {
         const responseAxiosTokenInfo = await axiosTokenInfo.get('/auth/Token/info');
         const userId = responseAxiosTokenInfo.data.data;
         
-        const responseAxiosUserInfo = await axiosTokenInfo.get(`/auth/user/info/${userId.userID}`);
+        const responseAxiosUserInfo = await axiosTokenInfo.get(`${process.env.REACT_APP_API_URL}auth/user/info/${userId.userID}`);
         const userData = responseAxiosUserInfo.data.data;
         
         setUser(userData);

@@ -32,6 +32,7 @@
     "loginRegisterText2": "Apellido",
     "loginRegisterText3": "Correo",
     "loginRegisterText4": "Contrasena",
+    "loginRegisterText41": "Confirmar Contrasena",
     "loginRegisterText5": "Enviar",
     "authYupErrorsText1": "Campo requerido",
     "authYupErrorsText2": "Correo contiene caracteres o formato invalido",

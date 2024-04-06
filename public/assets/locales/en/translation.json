@@ -32,6 +32,7 @@
     "loginRegisterText2": "Surname",
     "loginRegisterText3": "Email",
     "loginRegisterText4": "Password",
+    "loginRegisterText41": "Confirm Password",
     "loginRegisterText5": "Submit",
     "authYupErrorsText1": "Field required",
     "authYupErrorsText2": "Email has invalid characters or wrong format",
