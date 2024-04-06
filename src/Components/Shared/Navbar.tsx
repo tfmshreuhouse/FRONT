@@ -36,7 +36,6 @@ const Navbar = (props: any) => {
 
         try {
             const response = await instance.get('/auth/logout');
-            console.log(response.data.data)
             localStorage.removeItem('jwt');
             navigate('/');
         } catch (error: any) {

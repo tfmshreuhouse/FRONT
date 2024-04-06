@@ -28,7 +28,7 @@ import EditInmueble from "./Pages/editInmueble";
         },
         {
           path: "/home",
-          element: <Home />,
+          element: <Layout validarInicio={"1"} componentToRender={<Home />}></Layout>,
           exact: true,
         },
         {
@@ -36,7 +36,7 @@ import EditInmueble from "./Pages/editInmueble";
         },
         {
           path: "/home/infoInmueble/:tipo/:id",
-          element: <InfoInmueble />,
+          element: <Layout validarInicio={"1"} componentToRender={<InfoInmueble />}></Layout>,
           exact: true,
         },
         {
@@ -51,7 +51,7 @@ import EditInmueble from "./Pages/editInmueble";
         },
         {
           path: "/home/infoInmueble/resena/:id",
-          element: <Resena />,
+          element: <Layout componentToRender={<Resena />}></Layout>,
           exact: true,
         },
         {

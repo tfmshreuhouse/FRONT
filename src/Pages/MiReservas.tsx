@@ -1,16 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../index.css';
 import Card from '../Components/Home/Cards'; 
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const MisReservas = () => {
   const navigate = useNavigate();
+  interface Reserva {
+    id: string;
+    fechaInicio: string;
+    fechaFin: string;
+    Publicacione: {
+      precio: string;
+      direccion: string;
+      pais: string;
+      ciudad: string;
+    };
+  }
+  
+  const [reservas, setReservas] = useState<Reserva[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
 
+        const token = localStorage.getItem('jwt');
+
+        const axiosTokenInfo = axios.create({
+          baseURL: process.env.REACT_APP_API_URL,
+          params: { token: token },
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const responseAxiosTokenInfo = await axiosTokenInfo.get('/auth/Token/info');
+        const userId = responseAxiosTokenInfo.data.data;
+        
+        const responseAxiosReservaInfo = await axiosTokenInfo.get(`/rest/reservas/User/${userId.userID}`);
+        const Datos = responseAxiosReservaInfo.data.data;
+        console.log(Datos);
+        setReservas(Datos);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
   const handleBoton1Click = (tipo: string, id: string) => {
-    // Aquí puedes hacer lo que necesites con tipo e id antes de navegar
     navigate(`/home/infoInmueble/${tipo}/${id}`);
   };
-
   return (
     <div className="container">
       <h2 className="titulo-container">Mis Reservas</h2>

@@ -12,7 +12,6 @@ import axios from 'axios';
 import { useTranslation } from "react-i18next";
 
 function Layout(props: any) {
-    console.log(props);
     const { t } = useTranslation();
 
     const [loading, setLoading]: any = useState(true);
@@ -47,12 +46,10 @@ function Layout(props: any) {
                             setRenderComponent(noProgramaBlock);
                         }
                     } else {
-                        console.log("No se debe validar acceso a programa y se renderiza componente.");
                         setLoading(false);
                         setRenderComponent(componentBlock);
                     }
                 } catch (error: any) {
-                    console.log(error.response.data);
                     localStorage.removeItem('jwt');
                     navigate('/login');
                 }
@@ -61,7 +58,6 @@ function Layout(props: any) {
                     setLoading(false);
                     setRenderComponent(componentBlock);
                 } catch (error: any) {
-                    console.log(error.response.data);
                     navigate('/login');
                 }
             }else{

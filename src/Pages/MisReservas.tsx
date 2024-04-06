@@ -1,9 +1,4 @@
 import React, { useState } from 'react';
-import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
-import { SelectButton } from 'primereact/selectbutton';
-import { intUserInfo } from '../Interfaces/authInterfaces'
-import { Button } from 'primereact/button';
 import MiReservaCard from '../Components/Reservas/MiReservaCard';
 
 interface FormData {
