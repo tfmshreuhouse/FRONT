@@ -12,7 +12,6 @@ import axios from 'axios';
 import { useTranslation } from "react-i18next";
 
 function Layout(props: any) {
-
     const { t } = useTranslation();
 
     const [loading, setLoading]: any = useState(true);
@@ -29,44 +28,39 @@ function Layout(props: any) {
     };
 
     useEffect(() => {
-
-        //const accesoPrograma = false;
-
         const validarAccesoPrograma = async () => {
-
             const token = localStorage.getItem('jwt');
 
             if (token) {
                 try {
                     const axiosTokenInfo = await axiosBuilder({ token: localStorage.getItem('jwt') });
                     const responseAxiosTokenInfo = await axiosTokenInfo.get('/auth/token/info');
-                    console.log("Respuesta de getTokenInfo:", responseAxiosTokenInfo.data.data);
-                    console.log("ID de usuario:", responseAxiosTokenInfo.data.data.userID);
                     if (props.validarPrograma) {
-                        console.log("Se debe validar acceso a programa");
                         const axiosAccesoPrograma = await axiosBuilder({ token: localStorage.getItem('jwt'), programa: props.nombrePrograma })
                         const responseAxiosAccesoPrograma = await axiosAccesoPrograma.get('/auth/programa');
-                        console.log(responseAxiosAccesoPrograma.data);
                         if (responseAxiosAccesoPrograma.data.permitido) {
-                            console.log("Si tienes acceso a programa y se renderiza componente.");
                             setLoading(false);
                             setRenderComponent(componentBlock);
                         } else {
-                            console.log("No tienes acceso a programa y no se renderiza componente.");
                             setLoading(false);
                             setRenderComponent(noProgramaBlock);
                         }
                     } else {
-                        console.log("No se debe validar acceso a programa y se renderiza componente.");
                         setLoading(false);
                         setRenderComponent(componentBlock);
                     }
                 } catch (error: any) {
-                    console.log(error.response.data);
                     localStorage.removeItem('jwt');
                     navigate('/login');
                 }
-            } else {
+            } else if(props.validarInicio == '1'){
+                try {
+                    setLoading(false);
+                    setRenderComponent(componentBlock);
+                } catch (error: any) {
+                    navigate('/login');
+                }
+            }else{
                 navigate('/login');
             }
         };

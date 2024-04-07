@@ -33,7 +33,7 @@ function InfoInmueble() {
             return (
                 <Fragment>
                     <div className="field col-12 lg:col-2"></div>
-                    <div className="field col-12 lg:col-3">
+                    <div className="field col-12 lg:col-2">
                         <Button
                             type="button"
                             label="Reservar"
@@ -41,7 +41,7 @@ function InfoInmueble() {
                             onClick={() => window.location.href=`/home/infoInmueble/nuevaReserva/${id}`}
                         />
                     </div>
-                    <div className="field col-12 lg:col-3">
+                    <div className="field col-12 lg:col-2">
                         <Button
                             type="button"
                             label="Denunciar"
@@ -49,7 +49,7 @@ function InfoInmueble() {
                             onClick={() => window.location.href=`/home/infoInmueble/denuncia/${id}`}
                         />
                     </div>
-                    <div className="field col-12 lg:col-3">
+                    <div className="field col-12 lg:col-2">
                         <Button
                             type="button"
                             label="Reseñar"
@@ -57,18 +57,37 @@ function InfoInmueble() {
                             onClick={() => window.location.href=`/home/infoInmueble/resena/${id}`}
                         />
                     </div>
+                    <div className="field col-12 lg:col-2">
+                        <Button
+                            type="button"
+                            label="Volver"
+                            className="button-blue"
+                            onClick={() => window.location.href=`/home`}
+                        />
+                    </div>
                 </Fragment>
             );
         } else if (inmuebleInfo && tipo === '2') {
             return (
-                <div className="field col-12 lg:col-12">
+                <Fragment>
+                    <div className="field col-12 lg:col-2"></div>
+                    <div className="field col-12 lg:col-4">
+                        <Button
+                            type="button"
+                            label="Editar inmueble"
+                            className="button-blue"
+                            onClick={() => window.location.href=`/home/infoInmueble/editar/${id}`}
+                        />
+                    </div>
+                    <div className="field col-12 lg:col-4">
                     <Button
-                        type="button"
-                        label="Editar inmueble"
-                        className="button-blue"
-                        onClick={() => window.location.href=`/home/infoInmueble/editar/${id}`}
-                    />
-                </div>
+                            type="button"
+                            label="Volver"
+                            className="button-blue"
+                            onClick={() => window.location.href=`/perfil/historialPublicaciones/`}
+                        />
+                    </div>
+                </Fragment>
             );
         }
 
@@ -139,13 +158,14 @@ function InfoInmueble() {
                                         <p>Indicaciones: {inmuebleInfo.indicaciones}</p>
                                     </div>
                                 )}
+                                <div className="button-container">
+                                    <div className="p-fluid grid">
+                                        {renderButtons()}
+                                    </div>
+                                </div>
                             </Fieldset>
                         </div>   
-                        <div className="button-container">
-                            <div className="p-fluid grid">
-                                {renderButtons()}
-                            </div>
-                        </div>
+                        
                     </div>
                 </Fieldset>
             </div>

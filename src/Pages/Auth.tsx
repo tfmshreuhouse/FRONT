@@ -22,7 +22,7 @@ function Auth() {
     //withCredentials: true,
   });  
 
-  const isLoginHandler = () => {
+  function isLoginHandler() {
     setIsLogin(!islogin);
   };
 
@@ -52,7 +52,7 @@ function Auth() {
             <span className="text-600 font-medium line-height-3">{islogin ? t('authText2') : t('authText3')}</span>
             <a className="font-medium no-underline ml-2 text-blue-500 cursor-pointer" onClick={isLoginHandler}>{islogin ? t('authText4') : t('authText5')}</a>
           </div>
-          {islogin ? <LoginForm></LoginForm> : <RegisterForm></RegisterForm>}
+          {islogin ? <LoginForm></LoginForm> : <RegisterForm isLoginHandler={isLoginHandler}></RegisterForm>}
         </div>
       </div>
       {data ? data.map((user) => { return <li key={user.id}>{user.nombres}</li> }) : <div></div>}      

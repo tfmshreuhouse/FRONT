@@ -1,13 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import Auth from './Pages/Auth'
-import Dashboard from "./Pages/Dashboard";
 import NuevaReserva from "./Pages/NuevaReserva";
 import Layout from "./Pages/Layout";
 import Inicio from "./Pages/Inicio";
 import Home from "./Pages/Home";
-import AppRouteDirectory from "./Pages/AppRouteDirectory";
 import Perfil from "./Pages/Perfil";
-import MisReservas from "./Pages/MisReservas";
 import DetalleReserva from "./Pages/DetalleReserva";
 import InfoInmueble from "./Pages/infoInmueble";
 import Modificar from "./Pages/ModificarPerfil";
@@ -17,11 +14,12 @@ import Inmuebles from "./Pages/MisInmuebles";
 import Reservar from "./Pages/MiReservas";
 import PanelUsuario from "./Pages/PanelUsuario";
 import EditInmueble from "./Pages/editInmueble";
+import PanelAdmin from "./Pages/PanelAdmin";
 
     const router = createBrowserRouter([
         {
           path: "/",
-          element: <Inicio></Inicio>,
+          element: <Layout validarInicio={"1"} componentToRender={<Inicio/>}></Layout>,
           exact: true,
         },
         {
@@ -31,7 +29,7 @@ import EditInmueble from "./Pages/editInmueble";
         },
         {
           path: "/home",
-          element: <Home />,
+          element: <Layout validarInicio={"1"} componentToRender={<Home />}></Layout>,
           exact: true,
         },
         {
@@ -39,7 +37,7 @@ import EditInmueble from "./Pages/editInmueble";
         },
         {
           path: "/home/infoInmueble/:tipo/:id",
-          element: <InfoInmueble />,
+          element: <Layout validarInicio={"1"} componentToRender={<InfoInmueble />}></Layout>,
           exact: true,
         },
         
@@ -60,12 +58,7 @@ import EditInmueble from "./Pages/editInmueble";
         },
         {
           path: "/home/infoInmueble/resena/:id",
-          element: <Resena />,
-          exact: true,
-        },        
-        {
-          path: "/home/infoInmueble/denuncia/:id",
-          element: <Denuncia />,
+          element: <Layout componentToRender={<Resena />}></Layout>,
           exact: true,
         },
         {
@@ -75,7 +68,7 @@ import EditInmueble from "./Pages/editInmueble";
         },
         {
           path: "/perfil",
-          element: <Perfil />,
+          element:  <Layout componentToRender={<Perfil />}></Layout>,
           exact: true,
         },        
         {
@@ -84,7 +77,7 @@ import EditInmueble from "./Pages/editInmueble";
           exact: true,
         },
         {
-          path: "/perfil/historialPublicaciones/:id",
+          path: "/perfil/historialPublicaciones/",
           element: <Layout componentToRender={<Inmuebles />}></Layout>,
           exact: true,
         },
@@ -99,43 +92,8 @@ import EditInmueble from "./Pages/editInmueble";
           exact: true,
         },
         {
-          path: "/reservas",
-          element: <Layout componentToRender={<MisReservas />}></Layout>,
-          exact: true,
-        },
-        {
-          path: "/detalles",
-          element: <DetalleReserva></DetalleReserva>,
-          exact: true,
-        },
-        {
-          path: "/perfil/modificar/:id",
-          element: <Modificar></Modificar>,
-          exact: true,
-        },
-        {
-          path: "/perfil/historialPublicaciones/:id",
-          element: <Inmuebles />,
-          exact: true,
-        },
-        {
-          path: "/perfil/historialReservas/:id",
-          element: <Reservar />,
-          exact: true,
-        },
-        {
-          path: "/perfil/panel/:id",
-          element: <PanelUsuario />,
-          exact: true,
-        },
-        {
-          path: "/reservas",
-          element: <Layout componentToRender={<MisReservas />}></Layout>,
-          exact: true,
-        },
-        {
-          path: "/detalles",
-          element: <DetalleReserva></DetalleReserva>,
+          path: "/panel-administrador",
+          element: <Layout componentToRender={<PanelAdmin></PanelAdmin>}></Layout>,
           exact: true,
         }
       ]);
