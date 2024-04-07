@@ -40,6 +40,12 @@ import PanelAdmin from "./Pages/PanelAdmin";
           element: <Layout validarInicio={"1"} componentToRender={<InfoInmueble />}></Layout>,
           exact: true,
         },
+        
+        {
+          path: "/home/infoInmueble/editar",
+          element: <Layout componentToRender={<EditInmueble />}></Layout>,
+          exact: true,
+        },
         {
           path: "/home/infoInmueble/editar/:id",
           element: <Layout componentToRender={<EditInmueble />}></Layout>,
