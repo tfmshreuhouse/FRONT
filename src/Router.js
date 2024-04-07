@@ -66,7 +66,7 @@ import PanelAdmin from "./Pages/PanelAdmin";
           exact: true,
         },        
         {
-          path: "/perfil/modificar/:id",
+          path: "/perfil/modificar",
           element: <Layout componentToRender={<Modificar/>}></Layout>,
           exact: true,
         },
@@ -76,12 +76,12 @@ import PanelAdmin from "./Pages/PanelAdmin";
           exact: true,
         },
         {
-          path: "/perfil/historialReservas/:id",
+          path: "/perfil/historialReservas",
           element: <Layout componentToRender={<Reservar />}></Layout>,
           exact: true,
         },
         {
-          path: "/perfil/panel/:id",
+          path: "/perfil/panel",
           element: <Layout componentToRender={<PanelUsuario />}></Layout>,
           exact: true,
         },

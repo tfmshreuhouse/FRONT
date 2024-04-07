@@ -64,15 +64,15 @@ function Perfil() {
   };
 
   const navigateModificar = () => {
-    navigate('/perfil/modificar/1');
+    navigate('/perfil/modificar');
   };
 
   const navigatePanel = () => {
-    navigate('/perfil/panel/1');
+    navigate('/perfil/panel');
   };
 
   const navigateToHistorialReservas = () => {
-    navigate('/perfil/historialReservas/1');
+    navigate('/perfil/historialReservas');
   };
 
   return (
