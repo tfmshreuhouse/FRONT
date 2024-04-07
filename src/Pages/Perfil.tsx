@@ -33,7 +33,7 @@ function Perfil() {
         const responseAxiosTokenInfo = await axiosTokenInfo.get('/auth/Token/info');
         const userId = responseAxiosTokenInfo.data.data;
         
-        const responseAxiosUserInfo = await axiosTokenInfo.get(`${process.env.REACT_APP_API_URL}auth/user/info/${userId.userID}`);
+        const responseAxiosUserInfo = await axiosTokenInfo.get(`auth/user/info/${userId.userID}`);
         const userData = responseAxiosUserInfo.data.data;
         
         setUser(userData);
@@ -92,6 +92,7 @@ function Perfil() {
                     name="nombres"
                     value={user.nombres}
                     onChange={handleInputChange}
+                    readOnly={true}
                   />
                   <label htmlFor="nombres">Nombres</label>
                 </span>
@@ -103,6 +104,7 @@ function Perfil() {
                     name="apellidos"
                     value={user.apellidos}
                     onChange={handleInputChange}
+                    readOnly={true}
                   />
                   <label htmlFor="inputtext">Apellidos</label>
                 </span>
@@ -114,6 +116,7 @@ function Perfil() {
                     name="telefono"
                     value={user.telefono}
                     onChange={handleInputChange}
+                    readOnly={true}
                   />
                   <label htmlFor="inputtext">Teléfono</label>
                 </span>
@@ -125,6 +128,7 @@ function Perfil() {
                     name="correo"
                     value={user.correo}
                     onChange={handleInputChange}
+                    readOnly={true}
                   />
                   <label htmlFor="correo">Correo</label>
                 </span>
