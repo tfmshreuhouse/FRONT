@@ -6,39 +6,32 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { RadioButton, RadioButtonChangeEvent } from "primereact/radiobutton";
 import { Button } from 'primereact/button';
+import { InputSwitch } from "primereact/inputswitch";
 import { Fieldset } from 'primereact/fieldset';
 import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-
-interface Country {
-    place_id: string;
-    display_name: string;
-}
-
-interface City {
-    place_id: string;
-    display_name: string;
-}
-
-
+import { string } from "yup";
 
 function EditInmueble() {
-    const { id } = useParams();
-    const location = useLocation();
+    
+    const pathname = window.location.pathname;
+    const segments = pathname.split('/');
+    let idInmueble = !isNaN(parseInt(segments[segments.length - 1])) ? parseInt(segments[segments.length - 1]) : 0;
     const navigate = useNavigate();
-    let idDetalle = 0;
-    let idInmueble = 0;
 
-    const [Images, setImages] = useState([]);
-    const [links, setLinks] = useState<{ publicId: string; url: string; }[]>([]);
+    const [idDetalle, setIdDetalle] = useState<number | null>(null);
+    const [idpublicacion, setIdPublicacion] = useState<number | null>(null);
+    const [Images, setImages] = useState<any[]>([]);
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
+    const [Nombre, setNombre] = useState('');
     const [Pisos, setPisos] = useState<number>(0);
     const [Habitaciones, setHabitaciones] = useState<number>(0);
     const [BanosCom, setBanosCom] = useState<number>(0);
     const [BanosMed, setBanosMed] = useState<number>(0);
-    const [tipoInmueble, setTipoInmueble] = useState<{ id: string; tipo: string } | null>(null);
-    const [tipoInmuebleOptions, setTipoInmuebleOptions] = useState<{ id: number; tipo: string }[]>([]);
+    const [tipoInmueble, setTipoInmueble] = useState(null);
+    const [tipoInmuebleOptions, setTipoInmuebleOptions] = useState<{ value: number; label: string }[]>([]);
     const [Descripcion, setDescripcion] = useState('');
     const [Cocina, setCocina] = useState('');
     const [Lavado, setLavado] = useState('');
@@ -51,63 +44,146 @@ function EditInmueble() {
     const [Fumar, setFumar] = useState('');
     const [Mascotas, setMascotas] = useState('');
     const [Reuniones, setReuniones] = useState('');
-    const [Nombre, setNombre] = useState('');
     const [Direccion, setDireccion] = useState('');
     const [Indicaciones, setIndicaciones] = useState('');
-    const [Status, setStatus] = useState<number>(0);
+    const [Status, setStatus] = useState(null);
+    const [Precio, setPrecio] = useState<number>(0);
+    const [Capacidad, setCapacidad] = useState<number>(0);
 
-    const [countries, setCountries] = useState<Country[]>([]);
-    const [selectedCountry, setSelectedCountry] = useState<string>('');
-    const [cities, setCities] = useState<City[]>([]);
-    const [selectedCity, setSelectedCity] = useState<string>('');
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [selectedCity, setSelectedCity] = useState(null);
+    const [countryOptions, setCountryOptions] = useState([]);
+    const [cityOptions, setCityOptions] = useState([]);
 
-    const options = [
-        { name: 'Si', code: '1' },
-        { name: 'No', code: '0' }
-    ];
+    const currentDate: Date = new Date();
+    const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+    const optionsStatus = [
+        {label: 'Oculto', value: 0},
+        {label: 'Publicado', value: 1},
+        {label: 'Reservado', value: 2}
+      ];   
+
+    const [formCompleted, setFormCompleted] = useState(false);
 
     const token: string | null = localStorage.getItem('jwt');
 
+    const p = require('countries-cities-geo');
+
     useEffect(() => {
-        const fetchCountries = async () => {
-            try {
-                const response = await axios.get('https://nominatim.openstreetmap.org/search?q=country&format=json&limit=1000');
-                setCountries(response.data);
-            } catch (error) {
-                console.error('Error fetching countries:', error);
+        const obtenerDatosTipoInmueble = async () => {            
+            
+            if (idInmueble != 0) {
+                
+                try {
+                    if (!token) {
+                        console.error('Token de autorización no encontrado en el localStorage');
+                        return;
+                    }
+    
+                    const response = await axios.get<{ success: boolean; data: any }>(
+                        "http://localhost:3000/rest/inmuebles/"+ idInmueble,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                    setNombre(response.data.data.Nombre);
+                    setDireccion(response.data.data.Direccion);
+                    setTipoInmueble(response.data.data.TiposInmueble.id);
+                    setSelectedCountry(response.data.data.Pais);
+                    setSelectedCity(response.data.data.Ciudad);
+                    setPisos(response.data.data.DetallesInmueble.pisos);
+                    setHabitaciones(response.data.data.DetallesInmueble.habitaciones);
+                    setBanosCom(response.data.data.DetallesInmueble.banosCompletos);
+                    setBanosMed(response.data.data.DetallesInmueble.banosMedios);
+                    setCocina(response.data.data.DetallesInmueble.cocina.toString());
+                    setLavado(response.data.data.DetallesInmueble.lavado.toString());
+                    setPatio(response.data.data.DetallesInmueble.patio.toString());
+                    setBalcon(response.data.data.DetallesInmueble.balcon.toString());
+                    setEstacionamiento(response.data.data.DetallesInmueble.estacionamiento.toString());
+                    setElevador(response.data.data.DetallesInmueble.elevador.toString());
+                    setPiscina(response.data.data.DetallesInmueble.piscina.toString());
+                    setAreaPublicas(response.data.data.DetallesInmueble.areasPublicas.toString());
+                    setFumar(response.data.data.DetallesInmueble.fumar.toString());
+                    setMascotas(response.data.data.DetallesInmueble.mascotas.toString());
+                    setReuniones(response.data.data.DetallesInmueble.reuniones.toString());
+                    setDescripcion(response.data.data.DetallesInmueble.descripcion);
+                    setIndicaciones(response.data.data.DetallesInmueble.indicaciones);
+                    setStatus(response.data.data.DetallesInmueble.status);
+                    setIdDetalle(response.data.data.DetallesInmueble.id);
+
+                    console.log(response);
+
+                    const responseimg = await axios.get<{ success: boolean; data: any }>(
+                        "http://localhost:3000/rest/ImagnenesInmuebles/"+ idInmueble,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                    const images = responseimg.data.data.map((image: any) => image.URL);
+                    setImageUrls(images);                   
+                    setImages(images);
+                    setImagePreviews(images);
+
+                    const responsePubc = await axios.get<{ success: boolean; data: any }>(
+                        "http://localhost:3000/rest/publicacion/"+ idInmueble,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                    setPrecio(responsePubc.data.data.costo);
+                    setCapacidad(responsePubc.data.data.PAX);
+                    setIdPublicacion(responsePubc.data.data.id);
+
+                } catch (error) {
+                    console.error('Error al cargar tipos de inmueble:', error);
+                }
             }
         };
 
-        fetchCountries();
+        cargarTipoInmueble();
+        obtenerDatosTipoInmueble();
     }, []);
 
-    const handleCountryChange = async (event: any) => {
-        const selectedCountry = event.target.value;
-        setSelectedCountry(selectedCountry);
+    const handleVolverClick = () => {
+        navigate('/home/infoInmueble/2/' + idInmueble);
+      };
 
-        try {
-            const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${selectedCountry}&format=json&limit=1000`);
-            setCities(response.data);
-        } catch (error) {
-            console.error('Error fetching cities:', error);
+    useEffect(() => {
+        
+        const countries = p.getCountryNames();
+        const formattedCountries = countries.map((country: any) => ({
+          value: country,
+          label: country
+        }));
+        setCountryOptions(formattedCountries);
+      }, []);
+    
+      useEffect(() => {
+        if (selectedCountry) {
+          const cities = p.getCities(selectedCountry);
+          const formattedCities = cities.map((city: any) => ({
+            value: city,
+            label: city
+          }));
+          setCityOptions(formattedCities);
         }
-    };
-
-    const countryOptions = countries.map(country => ({
-        label: country.display_name,
-        value: country.display_name
-    }));
-
-    const cityOptions = cities.map(city => ({
-        label: city.display_name,
-        value: city.display_name
-    }));
+      }, [selectedCountry]);
 
     const UploadImage = async (file: any) => {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("folder", "sharehouse/subfolder");
-        formData.append("upload_preset", "sharehouse");
+        formData.append("folder", "sharehouse/subfolder"); 
+        formData.append("upload_preset", "sharehouse");        
         const { data } = await axios.post(
             "https://api.cloudinary.com/v1_1/dcdrax4ou/image/upload", formData
         );
@@ -131,20 +207,19 @@ function EditInmueble() {
                 }
             );
 
-            // Guardar los datos en el estado
-            setTipoInmuebleOptions(response.data.data);
+            const optionstipo = [];
+
+            for(let i=0; i<response.data.data.length; i++){
+                let label = response.data.data[i].tipo
+                let value = response.data.data[i].id
+                optionstipo.push({ label: `${label}`, value: value });
+            }
+
+            setTipoInmuebleOptions(optionstipo);
         } catch (error) {
             console.error('Error al cargar tipos de inmueble:', error);
         }
     };
-
-    useEffect(() => {
-        cargarTipoInmueble();
-    }, []);
-
-    const handleVolverClick = () => {
-        navigate('/home/infoInmueble/2/1');
-      };
 
     const GuardarInmueble = async (e: any) => {
 
@@ -155,101 +230,337 @@ function EditInmueble() {
 
         e.preventDefault();
 
-        try {
-            let arr = [];
-            for (let i = 0; i < Images.length; i++) {
-                const data = await UploadImage(Images[i]);
-                arr.push(data);
+        if(idInmueble != 0)
+        {
+            try {
+                debugger;
+                let arr = [];
+                for (let i = 0; i < Images.length; i++) {
+
+                    if (typeof Images[i] !== 'string') {
+                        const data = await UploadImage(Images[i]);
+                        arr.push(data.url);
+                    }else{
+                        arr.push(Images[i]);
+                    }
+                }
+           
+
+                const formDataDatail = {
+                    id: idDetalle,
+                    pisos: Pisos,
+                    habitaciones: Habitaciones,
+                    banosCompletos: BanosCom,
+                    banosMedios: BanosMed,
+                    cocina: parseInt(Cocina),
+                    lavado: parseInt(Lavado),
+                    patio: parseInt(Patio),
+                    balcon: parseInt(Balcon),
+                    estacionamiento: parseInt(Estacionamiento),
+                    elevador: parseInt(Elevador),
+                    piscina: parseInt(Piscina),
+                    areasPublicas: parseInt(AreaPublicas),
+                    fumar: parseInt(Fumar),
+                    mascotas: parseInt(Mascotas),
+                    reuniones: parseInt(Reuniones),
+                    descripcion: Descripcion,
+                    indicaciones: Indicaciones,
+                    status: Status == true ? 1: 0
+                };
+
+                const responseDetail = await axios.patch(
+                    "http://localhost:3000/rest/DetallesInmuebles",
+                    formDataDatail,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );                
+                
+                const FormDataInmueble = {
+                    id: idInmueble,
+                    Nombre: Nombre,
+                    Pais: selectedCountry,
+                    Ciudad: selectedCity,
+                    Direccion: Direccion,
+                    TiposInmuebleId: tipoInmueble,
+                    DetallesInmuebles: idDetalle,
+                    UserId: 1
+                };
+
+                const responseInmueble = await axios.patch(
+                    "http://localhost:3000/rest/inmuebles",
+                    FormDataInmueble,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );                
+                
+                const FormDataPublicacion = {
+                    id: idpublicacion,
+                    fechaActiva: currentDate,
+                    fechaInactiva: Status != 1 ? currentDate : null,
+                    PAX: Capacidad,
+                    costo: Precio,
+                    descripcion: Descripcion,
+                    indicaciones: Indicaciones,
+                    status: Status,
+                    Inmuebles: idInmueble
+                };
+
+                const responsePublicacion = await axios.patch(
+                    "http://localhost:3000/rest/publicacion",
+                    FormDataPublicacion,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );    
+
+                for(let i = 0; i < arr.length; i++){
+
+                    if(imageUrls.includes(arr[i])){
+                        const FormDataImage = {
+                            URL: arr[i],
+                            status: 1,
+                            InmuebleId: idInmueble
+                        };                
+                        
+                        const response = await axios.patch(
+                            "http://localhost:3000/rest/ImagnenesInmuebles",
+                            FormDataImage,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            }
+                        );
+                    }
+                    else
+                    {
+                        const FormDataImage = {
+                            URL: arr[i],
+                            status: 1,
+                            InmuebleId: idInmueble
+                        };                    
+                        
+                        const response = await axios.post(
+                            "http://localhost:3000/rest/ImagnenesInmuebles",
+                            FormDataImage,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            }
+                        );
+                    }                    
+                }
+                for(let i = 0; i < imageUrls.length; i++){
+
+                    if(!arr.includes(imageUrls[i])){
+                        const FormDataImage = {
+                            URL: imageUrls[i],
+                            status: 0,
+                            InmuebleId: idInmueble
+                        };                
+                        
+                        const response = await axios.patch(
+                            "http://localhost:3000/rest/ImagnenesInmuebles",
+                            FormDataImage,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`
+                                }
+                            }
+                        );
+                    }
+                }
+
+
+            } catch (error) {
+                console.log(error)
             }
-            setLinks(arr);
-        } catch (error) {
-            console.log(error)
         }
+        else
+        {
+            try{
+                
+                let arr = [];
+                for (let i = 0; i < Images.length; i++) {
+                    const data = await UploadImage(Images[i]);
+                    arr.push(data.url);
+                }           
 
-        const formDataDatail = {
-            pisos: Pisos,
-            habitaciones: Habitaciones,
-            banosCompletos: BanosCom,
-            banosMedios: BanosMed,
-            cocina: parseInt(Cocina),
-            lavado: parseInt(Lavado),
-            patio: parseInt(Patio),
-            balcon: parseInt(Balcon),
-            estacionamiento: parseInt(Estacionamiento),
-            elevador: parseInt(Elevador),
-            piscina: parseInt(Piscina),
-            areasPublicas: parseInt(AreaPublicas),
-            fumar: parseInt(Fumar),
-            mascotas: parseInt(Mascotas),
-            reuniones: parseInt(Reuniones),
-            descripcion: Descripcion,
-            indicaciones: Indicaciones,
-            status: Status
-        };
+                const formDataDatail = {
+                    pisos: Pisos,
+                    habitaciones: Habitaciones,
+                    banosCompletos: BanosCom,
+                    banosMedios: BanosMed,
+                    cocina: parseInt(Cocina),
+                    lavado: parseInt(Lavado),
+                    patio: parseInt(Patio),
+                    balcon: parseInt(Balcon),
+                    estacionamiento: parseInt(Estacionamiento),
+                    elevador: parseInt(Elevador),
+                    piscina: parseInt(Piscina),
+                    areasPublicas: parseInt(AreaPublicas),
+                    fumar: parseInt(Fumar),
+                    mascotas: parseInt(Mascotas),
+                    reuniones: parseInt(Reuniones),
+                    descripcion: Descripcion,
+                    indicaciones: Indicaciones,
+                    status: Status == true ? 1 : 0
+                };
 
-        try {
-            debugger;
-            const response = await axios.post(
-                "http://localhost:3000/rest/DetallesInmuebles",
-                formDataDatail,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
+                const response = await axios.post(
+                    "http://localhost:3000/rest/DetallesInmuebles",
+                    formDataDatail,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
                     }
+                );
+                
+                
+
+                const FormDataInmueble = {
+                    Nombre: Nombre,
+                    Pais: selectedCountry,
+                    Ciudad: selectedCity,
+                    Direccion: Direccion,
+                    TiposInmuebleId: tipoInmueble,
+                    DetallesInmuebles: response.data.data.id,
+                    UserId: 1
+                };
+
+                const responseInmueble = await axios.post(
+                    "http://localhost:3000/rest/inmuebles",
+                    FormDataInmueble,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                idInmueble = parseInt(responseInmueble.data.data.id);
+
+                const FormDataPublicacion = {
+                    fechaActiva: currentDate,
+                    fechaInactiva: null,
+                    PAX: Capacidad,
+                    costo: Precio,
+                    descripcion: Descripcion,
+                    indicaciones: Indicaciones,
+                    status: Status,
+                    Inmuebles: idInmueble
+                };
+
+                const responsePubli = await axios.post(
+                    "http://localhost:3000/rest/publicacion",
+                    FormDataPublicacion,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                
+                for(let i = 0; i < arr.length; i++){
+
+                    const FormDataImage = {
+                        URL: arr[i],
+                        status: 1,
+                        InmuebleId: idInmueble
+                    };                    
+                    
+                    const response = await axios.post(
+                        "http://localhost:3000/rest/ImagnenesInmuebles",
+                        FormDataImage,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
                 }
-            );
-            idDetalle = parseInt(response.data.data.id);
-        } catch (error) {
-            console.error('Error al enviar los detalles del inmueble: ', error);
+            }catch(err){
+                alert.call(err);
+            }
         }
+                
+    };   
 
-        const FormDataInmueble = {
-            DireccionesGenerales: 1,
-            DireccionesParticulares: 1,
-            TiposInmuebles: tipoInmueble?.id,
-            DetallesInmuebles: idDetalle,
-            UserId: 1
-        };
-
-        try {
-            debugger;
-            const response = await axios.post(
-                "http://localhost:3000/rest/inmuebles",
-                FormDataInmueble,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-            idInmueble = parseInt(response.data.id);
-        } catch (error) {
-            console.error('Error al crear el Inmueble: ', error);
-        }
-
-        /*
-        try {
-            const response = await axios.post(
-                "http://localhost:3000/rest/ImagnenesInmuebles",
-                FormDataInmueble,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-            
-        } catch (error) {
-            console.error('Error al cargar url de imagenes: ', error);
-        }*/
+    const handleFileSelect = () => {
+        document.getElementById('file-input')?.click();
     };
+    
+    const handleFileChange = (event: any) => {
+        const files = event.target.files;
+        if (files) {
+            const selectedImages = Array.from(files).filter(file => file instanceof Blob) as Blob[];
+            const previews = selectedImages.map(image => URL.createObjectURL(image));
+            setImages(prevState => [...prevState, ...selectedImages]);
+            setImagePreviews(prevState => [...prevState, ...previews]);
+        }
+    };
+
+    const handleRemoveImage = (index: number) => {
+
+        const updatedImages = [...Images];
+        const updatedPreviews = [...imagePreviews];
+        updatedImages.splice(index, 1);
+        updatedPreviews.splice(index, 1);
+        
+        setImages(updatedImages);
+        setImagePreviews(updatedPreviews);
+    };
+
+    useEffect(() => {
+        // Verificar si todos los campos del formulario están llenos
+        const isFormCompleted = () => {
+            if (
+                Nombre !== "" &&
+                Direccion !== "" &&
+                tipoInmueble !== null &&
+                selectedCountry !== null &&
+                selectedCity !== null &&
+                Cocina !== "" &&
+                Lavado !== "" &&
+                Patio !== "" &&
+                Balcon !== "" &&
+                Estacionamiento !== "" &&
+                Elevador !== "" &&
+                Piscina !== "" &&
+                AreaPublicas !== "" &&
+                Fumar !== "" &&
+                Mascotas !== "" &&
+                Reuniones !== "" &&
+                Descripcion !== "" &&
+                Indicaciones !== "" &&
+                Images.length > 0
+            ) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        // Actualizar estado de formCompleted
+        setFormCompleted(isFormCompleted());
+    }, [Nombre, Direccion, tipoInmueble, selectedCountry, selectedCity, Pisos, Habitaciones, BanosCom, BanosMed, Cocina, Lavado, Patio, Balcon, Estacionamiento, Elevador, Piscina, AreaPublicas, Fumar, Mascotas, Reuniones, Descripcion, Indicaciones, Images]);
+
 
     return (
         <>
             <div className="main-container">
                 <Fieldset legend="Modificar del inmueble">
                     <form onSubmit={GuardarInmueble}>
-                        <div className="p-fluid grid">
+                        <div className="p-fluid grid">                            
                             <div className="field col-12 lg:col-1"></div>
                             <div className="field col-12 lg:col-10">
                                 <span className="p-float-label">
@@ -264,7 +575,6 @@ function EditInmueble() {
                                 </span>
                             </div>
                             <div className="field col-12 lg:col-1"></div>
-
                             <div className="field col-12 lg:col-1"></div>
                             <div className="field col-12 lg:col-5">
                                 <span className="p-float-label">
@@ -278,13 +588,12 @@ function EditInmueble() {
                                 </span>
                             </div>
                             <div className="field col-12 lg:col-5">
-                                <span className="p-float-label">
+                                <span className="p-float-label">                                     
                                     <Dropdown
                                         value={tipoInmueble}
-                                        onChange={(e) => setTipoInmueble(e.value)}
                                         options={tipoInmuebleOptions}
-                                        optionLabel="tipo"
-                                        editable
+                                        onChange={(e) => setTipoInmueble(e.value)}                                        
+                                        optionLabel="label"
                                         placeholder="Seleccione"
                                         className="TipoInmueble"
                                     />
@@ -292,16 +601,15 @@ function EditInmueble() {
                                 </span>
                             </div>
                             <div className="field col-12 lg:col-1"></div>
-
                             <div className="field col-12 lg:col-1"></div>
                             <div className="field col-12 lg:col-5">
                                 <span className="p-float-label">
                                     <Dropdown
-                                        value={selectedCountry}
-                                        onChange={handleCountryChange}
-                                        options={countryOptions}
-                                        optionLabel="label"
-                                        placeholder="Select a country"
+                                    value={selectedCountry}
+                                    onChange={(e) => setSelectedCountry(e.value)}
+                                    options={countryOptions}
+                                    optionLabel="label"
+                                    placeholder="Seleccione"
                                     />
                                     <label>Pais</label>
                                 </span>
@@ -309,17 +617,17 @@ function EditInmueble() {
                             <div className="field col-12 lg:col-5">
                                 <span className="p-float-label">
                                     <Dropdown
-                                        value={selectedCity}
-                                        onChange={(e) => setSelectedCity(e.value)}
-                                        options={cityOptions}
-                                        optionLabel="label"
-                                        placeholder="Select a city"
+                                    value={selectedCity}
+                                    onChange={(e) => setSelectedCity(e.value)}
+                                    options={cityOptions}
+                                    optionLabel="label"
+                                    placeholder="Seleccione"
+                                    appendTo="self"
                                     />
                                     <label>Ciudad</label>
                                 </span>
                             </div>
                             <div className="field col-12 lg:col-1"></div>
-
                             <div className="field col-12 lg:col-1"></div>
                             <div className="field col-12 lg:col-2">
                                 <span className="p-float-label">
@@ -332,7 +640,7 @@ function EditInmueble() {
                                     <label>Pisos</label>
                                 </span>
                             </div>
-                            <div className="field col-12 lg:col-3">
+                            <div className="field col-12 lg:col-2">
                                 <span className="p-float-label">
                                     <InputNumber 
                                         value={Habitaciones} 
@@ -343,7 +651,7 @@ function EditInmueble() {
                                     <label>Habitaciones</label>
                                 </span>
                             </div>
-                            <div className="field col-12 lg:col-3">
+                            <div className="field col-12 lg:col-2">
                                 <span className="p-float-label">
                                     <InputNumber 
                                         value={BanosCom} 
@@ -365,9 +673,6 @@ function EditInmueble() {
                                     <label>Baños Medios</label>
                                 </span>
                             </div>
-                            <div className="field col-12 lg:col-1"></div>
-                            
-                            <div className="field col-12 lg:col-1"></div>
                             <div className="field col-12 lg:col-2">
                                 <label>Cocina</label>
                                 <div className="flex align-items-center">
@@ -389,6 +694,8 @@ function EditInmueble() {
                                     <label htmlFor="Cocina2" className="ml-2">No</label>
                                 </div>
                             </div>
+                            <div className="field col-12 lg:col-1"></div>                            
+                            <div className="field col-12 lg:col-1"></div>                            
                             <div className="field col-12 lg:col-2">
                                 <label>Lavado</label>
                                 <div className="flex align-items-center">
@@ -473,9 +780,6 @@ function EditInmueble() {
                                     <label htmlFor="Estacionamiento2" className="ml-2">No</label>
                                 </div>
                             </div>
-                            <div className="field col-12 lg:col-1"></div>
-
-                            <div className="field col-12 lg:col-1"></div>
                             <div className="field col-12 lg:col-2">
                                 <label>Elevador</label>
                                 <div className="flex align-items-center">
@@ -497,6 +801,8 @@ function EditInmueble() {
                                     <label htmlFor="Elevador2" className="ml-2">No</label>
                                 </div>
                             </div>
+                            <div className="field col-12 lg:col-1"></div>
+                            <div className="field col-12 lg:col-1"></div>                            
                             <div className="field col-12 lg:col-2">
                                 <label>Piscina</label>
                                 <div className="flex align-items-center">
@@ -559,7 +865,7 @@ function EditInmueble() {
                                     <label htmlFor="Fumar2" className="ml-2">No</label>
                                 </div>
                             </div>
-                            <div className="field col-12 lg:col-1">
+                            <div className="field col-12 lg:col-2">
                                 <label>Mascotas</label>
                                 <div className="flex align-items-center">
                                     <RadioButton 
@@ -580,7 +886,7 @@ function EditInmueble() {
                                     <label htmlFor="Mascotas2" className="ml-2">No</label>
                                 </div>
                             </div>
-                            <div className="field col-12 lg:col-1">
+                            <div className="field col-12 lg:col-2">
                                 <label>Reuniones</label>
                                 <div className="flex align-items-center">
                                     <RadioButton 
@@ -628,23 +934,64 @@ function EditInmueble() {
                                 </span>
                             </div>
                             <div className="field col-12 lg:col-1"></div>
-
+                            <div className="field col-12 lg:col-1"></div>
+                            <div className="field col-12 lg:col-3">                           
+                                <span className="p-float-label">
+                                    <Dropdown 
+                                        value={Status} 
+                                        options={optionsStatus} 
+                                        onChange={(e) => setStatus(e.value)}
+                                        optionLabel="label"
+                                        placeholder="Seleccione" 
+                                    />
+                                    <label>Estado</label>   
+                                </span>                            
+                            </div>
+                            <div className="field col-12 lg:col-3">
+                                <span className="p-float-label">
+                                    <InputNumber 
+                                         value={Capacidad} 
+                                         onValueChange={(e: any) => setCapacidad(e.value)} 
+                                         className="Capacidad" 
+                                         useGrouping={false} min={0} 
+                                    />
+                                    <label>capacidad</label>
+                                </span>
+                            </div>
+                            <div className="field col-12 lg:col-4">
+                                <span className="p-float-label">
+                                    <InputNumber 
+                                         value={Precio} 
+                                         onValueChange={(e: any) => setPrecio(e.value)} 
+                                         className="Precio" 
+                                         useGrouping={false} min={0} 
+                                    />
+                                    <label>Precio</label>
+                                </span>
+                            </div>
+                            <div className="field col-12 lg:col-1"></div>
                             <div className="field col-12 lg:col-1"></div>
                             <div className="field col-12 lg:col-10">
                                 <div className="card">
-                                    <FileUpload 
-                                        name="demo[]" 
-                                        url={'/api/upload'} 
-                                        multiple accept="image/*" 
-                                        maxFileSize={1000000} 
-                                        emptyTemplate={<p className="m-0">Selecciona las imagenes a cargar</p>} 
-                                        chooseLabel="Seleccionar"
-                                        uploadLabel="Cargar"
-                                        cancelLabel="Cancelar"
-                                    />
+                                    <div>
+                                        <Button label="Seleccionar archivos" icon="pi pi-upload" onClick={handleFileSelect} type="button"/>
+                                        <input id="file-input" type="file" multiple style={{ display: 'none' }} onChange={handleFileChange} />
+                                    </div>
+                                    {Images && Images.length > 0 && (
+                                        <div>
+                                            <h3>Imágenes seleccionadas:</h3>
+                                            <ul>
+                                                {Array.from(Images).map((image: any, index: number) => (
+                                                    <li key={index}>
+                                                        <img src={imagePreviews[index]} alt={image.name} style={{ maxWidth: '200px', maxHeight: '200px' }} />
+                                                        <Button icon="pi pi-times" onClick={() => handleRemoveImage(index)} className="p-button-danger" type="button"/>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    </div>                                
                                 </div>
-                                <input type="file" multiple onChange={(e: any) => setImages(e.target.files)} />
-                            </div>
                             <div className="field col-12 lg:col-1"></div>
                             <div className="field col-12 lg:col-2"></div>
                             <div className="field col-12 lg:col-4">
@@ -652,8 +999,9 @@ function EditInmueble() {
                                     type="submit" 
                                     label="Guardar" 
                                     icon="pi pi-check"
+                                    disabled={!formCompleted}
                                 />
-                            </div>
+                            </div>                            
                             <div className="field col-12 lg:col-4">
                                 <Button 
                                     type="button" 
