@@ -22,7 +22,7 @@ const MisInmuebles = () => {
     navigate(`/home/infoInmueble/${tipo}/${id}`);
   };
   const handleBoton2Click = () => {
-    navigate(`/home/infoInmueble/editar/2`);
+    navigate(`/home/infoInmueble/crear`);
   };
   const handleBoton3Click = () => {
     if (from === 'inicio') {
