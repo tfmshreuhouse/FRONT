@@ -56,7 +56,7 @@ const DenunciaView = () => {
     try {
         debugger;
         const response = await axios.post(
-            process.env.REACT_APP_API_URL + "rest/denuncias",
+            process.env.REACT_APP_API_URL + "/rest/denuncias",
             formData,
             {
                 headers: {
@@ -90,7 +90,7 @@ const DenunciaView = () => {
   };
 
   const handleVolverClick = () => {
-    navigate('/home/infoInmueble/1/${id}');
+    navigate('/home/infoInmueble/1/'+id);
   };
 
   const handleErrorAlertClose = () => {
