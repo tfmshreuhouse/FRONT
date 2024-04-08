@@ -6,18 +6,18 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { RadioButton, RadioButtonChangeEvent } from "primereact/radiobutton";
 import { Button } from 'primereact/button';
-import { InputSwitch } from "primereact/inputswitch";
 import { Fieldset } from 'primereact/fieldset';
 import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { string } from "yup";
+import GeneralSuccessAlert from '../Components/Shared/GeneralSuccessAlert';
+import ErrorAlert from '../Components/Shared/ErrorAlert ';
 
 function EditInmueble() {
     
     const pathname = window.location.pathname;
     const segments = pathname.split('/');
     let idInmueble = !isNaN(parseInt(segments[segments.length - 1])) ? parseInt(segments[segments.length - 1]) : 0;
+    const titulo = idInmueble != null && idInmueble != 0 ? "Modificar del inmueble" : "Creacion del inmueble";
     const navigate = useNavigate();
 
     const [idDetalle, setIdDetalle] = useState<number | null>(null);
@@ -58,6 +58,9 @@ function EditInmueble() {
     const currentDate: Date = new Date();
     const [imageUrls, setImageUrls] = useState<string[]>([]);
 
+    const [success, setSuccess] = useState<boolean>(false);
+    const [failure, setFailure] = useState<boolean>(false);
+
     const optionsStatus = [
         {label: 'Oculto', value: 0},
         {label: 'Publicado', value: 1},
@@ -82,7 +85,7 @@ function EditInmueble() {
                     }
     
                     const response = await axios.get<{ success: boolean; data: any }>(
-                        "http://localhost:3000/rest/inmuebles/"+ idInmueble,
+                        process.env.REACT_APP_API_URL + "/rest/inmuebles/"+ idInmueble,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`
@@ -118,7 +121,7 @@ function EditInmueble() {
                     console.log(response);
 
                     const responseimg = await axios.get<{ success: boolean; data: any }>(
-                        "http://localhost:3000/rest/ImagnenesInmuebles/"+ idInmueble,
+                        process.env.REACT_APP_API_URL + "/rest/ImagnenesInmuebles/"+ idInmueble,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`
@@ -132,7 +135,7 @@ function EditInmueble() {
                     setImagePreviews(images);
 
                     const responsePubc = await axios.get<{ success: boolean; data: any }>(
-                        "http://localhost:3000/rest/publicacion/"+ idInmueble,
+                        process.env.REACT_APP_API_URL + "/rest/publicacion/"+ idInmueble,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`
@@ -158,24 +161,34 @@ function EditInmueble() {
         navigate('/home/infoInmueble/2/' + idInmueble);
       };
 
-    useEffect(() => {
-        
+      useEffect(() => {
         const countries = p.getCountryNames();
-        const formattedCountries = countries.map((country: any) => ({
+      
+        // Filtrar el país "Aland Islands"
+        const filteredCountries = countries.filter((country: string) => /^[a-zA-Z0-9\s]*$/.test(country));
+      
+        const formattedCountries = filteredCountries.map((country: string) => ({
           value: country,
           label: country
         }));
+      
         setCountryOptions(formattedCountries);
       }, []);
     
       useEffect(() => {
         if (selectedCountry) {
           const cities = p.getCities(selectedCountry);
-          const formattedCities = cities.map((city: any) => ({
-            value: city,
-            label: city
-          }));
-          setCityOptions(formattedCities);
+          
+          if (cities) {
+            const formattedCities = cities.map((city: any) => ({
+              value: city,
+              label: city
+            }));
+            
+            setCityOptions(formattedCities);
+          } else {
+            setCityOptions([]);
+          }
         }
       }, [selectedCountry]);
 
@@ -269,7 +282,7 @@ function EditInmueble() {
                 };
 
                 const responseDetail = await axios.patch(
-                    "http://localhost:3000/rest/DetallesInmuebles",
+                    process.env.REACT_APP_API_URL + "/rest/DetallesInmuebles",
                     formDataDatail,
                     {
                         headers: {
@@ -290,7 +303,7 @@ function EditInmueble() {
                 };
 
                 const responseInmueble = await axios.patch(
-                    "http://localhost:3000/rest/inmuebles",
+                    process.env.REACT_APP_API_URL + "/rest/inmuebles",
                     FormDataInmueble,
                     {
                         headers: {
@@ -312,7 +325,7 @@ function EditInmueble() {
                 };
 
                 const responsePublicacion = await axios.patch(
-                    "http://localhost:3000/rest/publicacion",
+                    process.env.REACT_APP_API_URL + "/rest/publicacion",
                     FormDataPublicacion,
                     {
                         headers: {
@@ -331,7 +344,7 @@ function EditInmueble() {
                         };                
                         
                         const response = await axios.patch(
-                            "http://localhost:3000/rest/ImagnenesInmuebles",
+                            process.env.REACT_APP_API_URL + "/rest/ImagnenesInmuebles",
                             FormDataImage,
                             {
                                 headers: {
@@ -349,7 +362,7 @@ function EditInmueble() {
                         };                    
                         
                         const response = await axios.post(
-                            "http://localhost:3000/rest/ImagnenesInmuebles",
+                            process.env.REACT_APP_API_URL + "/rest/ImagnenesInmuebles",
                             FormDataImage,
                             {
                                 headers: {
@@ -369,7 +382,7 @@ function EditInmueble() {
                         };                
                         
                         const response = await axios.patch(
-                            "http://localhost:3000/rest/ImagnenesInmuebles",
+                            process.env.REACT_APP_API_URL + "/rest/ImagnenesInmuebles",
                             FormDataImage,
                             {
                                 headers: {
@@ -417,7 +430,7 @@ function EditInmueble() {
                 };
 
                 const response = await axios.post(
-                    "http://localhost:3000/rest/DetallesInmuebles",
+                    process.env.REACT_APP_API_URL + "/rest/DetallesInmuebles",
                     formDataDatail,
                     {
                         headers: {
@@ -425,8 +438,6 @@ function EditInmueble() {
                         }
                     }
                 );
-                
-                
 
                 const FormDataInmueble = {
                     Nombre: Nombre,
@@ -439,7 +450,7 @@ function EditInmueble() {
                 };
 
                 const responseInmueble = await axios.post(
-                    "http://localhost:3000/rest/inmuebles",
+                    process.env.REACT_APP_API_URL + "/rest/inmuebles",
                     FormDataInmueble,
                     {
                         headers: {
@@ -461,7 +472,7 @@ function EditInmueble() {
                 };
 
                 const responsePubli = await axios.post(
-                    "http://localhost:3000/rest/publicacion",
+                    process.env.REACT_APP_API_URL + "/rest/publicacion",
                     FormDataPublicacion,
                     {
                         headers: {
@@ -479,7 +490,7 @@ function EditInmueble() {
                     };                    
                     
                     const response = await axios.post(
-                        "http://localhost:3000/rest/ImagnenesInmuebles",
+                        process.env.REACT_APP_API_URL + "/rest/ImagnenesInmuebles",
                         FormDataImage,
                         {
                             headers: {
@@ -492,7 +503,7 @@ function EditInmueble() {
                 alert.call(err);
             }
         }
-                
+        setSuccess(true);
     };   
 
     const handleFileSelect = () => {
@@ -554,11 +565,18 @@ function EditInmueble() {
         setFormCompleted(isFormCompleted());
     }, [Nombre, Direccion, tipoInmueble, selectedCountry, selectedCity, Pisos, Habitaciones, BanosCom, BanosMed, Cocina, Lavado, Patio, Balcon, Estacionamiento, Elevador, Piscina, AreaPublicas, Fumar, Mascotas, Reuniones, Descripcion, Indicaciones, Images]);
 
+    const handleErrorAlertClose = () => {
+    setFailure(false); 
+    };
 
+    const handleSuccessAlertClose = () => {
+        navigate('/home/infoInmueble/1/'+idInmueble);
+      };
+        
     return (
         <>
             <div className="main-container">
-                <Fieldset legend="Modificar del inmueble">
+                <Fieldset legend={titulo}>
                     <form onSubmit={GuardarInmueble}>
                         <div className="p-fluid grid">                            
                             <div className="field col-12 lg:col-1"></div>
@@ -1014,6 +1032,14 @@ function EditInmueble() {
                         </div>
                     </form>
                 </Fieldset>
+                {success ? <GeneralSuccessAlert header={idInmueble != null && idInmueble != 0 ? "Modificar del inmueble" : "Creacion del inmueble"} text={idInmueble != null && idInmueble != 0 ? "Inmueble actualizado exitosamente" : "Inmueble creado exitosamente"}  onClose={handleSuccessAlertClose}/> : <div></div>}
+                {failure && (
+                    <ErrorAlert
+                    header="Error al guardar reseña"
+                    text="Por favor, complete todos los campos requeridos y vuelva a intentarlo mas tarde"
+                    onClose={handleErrorAlertClose}
+                    />
+                )}
             </div>
         </>
     );

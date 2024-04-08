@@ -10,13 +10,14 @@ const MisInmuebles = () => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(window.location.search);
   const from = searchParams.get('from');
-  interface Inmeubles {
+  interface Inmuebles {
     id: string;
     nombre: string;
     pais: string;
     ciudad: string;
     direccion: string;
     tipoInmueble: string;
+    imagen: string;
   }
   const handleBoton1Click = (tipo: string, id: string) => {
     navigate(`/home/infoInmueble/${tipo}/${id}`);
@@ -32,13 +33,12 @@ const MisInmuebles = () => {
     }
   };
 
-  const [inmuebles, setInmuebles] = useState<Inmeubles[]>([]);
+  const [inmuebles, setInmuebles] = useState<Inmuebles[]>([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const token = localStorage.getItem('jwt');
-
+  
         const axiosTokenInfo = axios.create({
           baseURL: process.env.REACT_APP_API_URL,
           params: { token: token },
@@ -46,30 +46,45 @@ const MisInmuebles = () => {
             Authorization: `Bearer ${token}`
           }
         });
-
+  
         const responseAxiosTokenInfo = await axiosTokenInfo.get('/auth/Token/info');
         const userId = responseAxiosTokenInfo.data.data;
-        
+  
         const responseAxiosReservaInfo = await axiosTokenInfo.get(`/rest/inmuebles/user/${userId.userID}`);
         const Datos = responseAxiosReservaInfo.data.data;
-        console.log(Datos);
-        const inmueblesTransformados: Inmeubles[] = Datos.map((inmueble: any) => ({
-          id: inmueble.id,
-          nombre: inmueble.Nombre,
-          pais: inmueble.Pais,
-          ciudad: inmueble.Ciudad,
-          direccion: inmueble.Direccion,
-          tipoInmueble: inmueble.TiposInmueble ? inmueble.TiposInmueble.tipo : ''
+  
+        const inmueblesTransformados: Inmuebles[] = await Promise.all(Datos.map(async (inmueble: any) => {
+          const responseimg = await axiosTokenInfo.get<{ success: boolean; data: any }>(
+            `/rest/ImagnenesInmuebles/${inmueble.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            }
+          );
+          
+          const firstImageURL = responseimg.data.data[0]?.URL; // Obtener la URL del primer registro de imágenes
+  
+          return {
+            id: inmueble.id,
+            nombre: inmueble.Nombre,
+            pais: inmueble.Pais,
+            ciudad: inmueble.Ciudad,
+            direccion: inmueble.Direccion,
+            tipoInmueble: inmueble.TiposInmueble ? inmueble.TiposInmueble.tipo : '',
+            imagen: firstImageURL // Asignar la URL del primer registro de imágenes al objeto de inmueble transformado
+          };
         }));
-
-    setInmuebles(inmueblesTransformados);
+  
+        setInmuebles(inmueblesTransformados);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
-
+  
     fetchData();
   }, []);
+
   console.log(inmuebles);
   return (
     <div className="container">
@@ -79,7 +94,7 @@ const MisInmuebles = () => {
             <Card
               key={index}
               onBoton1Click={() => handleBoton1Click('2',inmueble.id)}
-              imageUrl="https://img10.naventcdn.com/avisos/18/00/64/76/56/44/720x532/340390153.jpg?isFirstImage=true" 
+              imageUrl={inmueble.imagen} 
               buttonText="Ver detalles"
               className="col-md-4 col-sm-12"
               tipo="1"

@@ -1,31 +1,117 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 // import Carousel from '../Components/Shared/Carousel';
-import datosInmueble from '../../src/assets/inmueble.json'; 
 import '../index.css';
 import Imagenes from '../Components/Shared/imagenes';
 import { Galleria } from 'primereact/galleria';
 import { data } from '../assets/data';
 import { Fieldset } from 'primereact/fieldset';
 import { Button } from 'primereact/button';
+import axios from "axios";
 
 function InfoInmueble() {
     // Supongamos que recibes la información del inmueble como un objeto JSON
     const [inmuebleInfo, setInmuebleInfo] = useState<any>(null);
     const { tipo, id } = useParams();
-      interface GalleryItem {
-        id: number;
-        imgUrl: string;
-      }
-      const itemTemplate = (item: GalleryItem) => {
+
+    const pathname = window.location.pathname;
+    const segments = pathname.split('/');
+    let idInmueble = !isNaN(parseInt(segments[segments.length - 1])) ? parseInt(segments[segments.length - 1]) : 0;
+
+    const token: string | null = localStorage.getItem('jwt');
+
+    const [Images, setImages] = useState<any[]>([]);
+
+      const itemTemplate = (item: any) => {
         return (
           <div className="custom-item">
-            <img src={item.imgUrl} alt={item.id.toString()} />
+            <img src={item} />
           </div>
         );
       };
-    useEffect(() => {
-        setInmuebleInfo(datosInmueble);
+
+      useEffect(() => {
+        const obtenerDatosTipoInmueble = async () => {            
+            
+            if (idInmueble != 0) {
+                
+                try {
+                    if (!token) {
+                        console.error('Token de autorización no encontrado en el localStorage');
+                        return;
+                    }
+    
+                    const response = await axios.get<{ success: boolean; data: any }>(
+                        process.env.REACT_APP_API_URL + "/rest/inmuebles/"+ idInmueble,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                    console.log(response);
+
+                    const responseimg = await axios.get<{ success: boolean; data: any }>(
+                        process.env.REACT_APP_API_URL + "/rest/ImagnenesInmuebles/"+ idInmueble,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );              
+                    
+                    const images = responseimg.data.data.map((image: any) => image.URL);
+                    setImages(images);
+
+                    const responsePubc = await axios.get<{ success: boolean; data: any }>(
+                        process.env.REACT_APP_API_URL + "/rest/publicacion/"+ idInmueble,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                    const inmuebleInfo = {
+                        id: response.data.data.id,
+                        pais: response.data.data.Pais,
+                        ciudad: response.data.data.Ciudad,
+                        pisos: response.data.data.DetallesInmueble.pisos,
+                        habitaciones: response.data.data.DetallesInmueble.habitaciones,
+                        banosCompletos: response.data.data.DetallesInmueble.banosCompletos,
+                        banosMedios: response.data.data.DetallesInmueble.banosMedios,
+                        cocina: parseInt(response.data.data.DetallesInmueble.cocina),
+                        lavado: parseInt(response.data.data.DetallesInmueble.lavado),
+                        patio: parseInt(response.data.data.DetallesInmueble.patio),
+                        balcon: parseInt(response.data.data.DetallesInmueble.balcon),
+                        estacionamiento: parseInt(response.data.data.DetallesInmueble.estacionamiento),
+                        elevador: parseInt(response.data.data.DetallesInmueble.elevador),
+                        piscina: parseInt(response.data.data.DetallesInmueble.piscina),
+                        areasPublicas: parseInt(response.data.data.DetallesInmueble.areasPublicas),
+                        fumar: parseInt(response.data.data.DetallesInmueble.fumar),
+                        mascotas: parseInt(response.data.data.DetallesInmueble.mascotas),
+                        reuniones: parseInt(response.data.data.DetallesInmueble.reuniones),
+                        descripcion: response.data.data.DetallesInmueble.descripcion,
+                        indicaciones: response.data.data.DetallesInmueble.indicaciones,
+                        status: response.data.data.DetallesInmueble.status,
+                        Direccion: response.data.data.Direccion,
+                        Nombre: response.data.data.Nombre,
+                        costo: responsePubc.data.data.costo,
+                        capacidad: responsePubc.data.data.PAX
+
+                    };
+    
+
+                    setInmuebleInfo(inmuebleInfo);
+
+                } catch (error) {
+                    console.error('Error al cargar tipos de inmueble:', error);
+                }
+            }
+        };
+
+        obtenerDatosTipoInmueble();
     }, []);
 
     const renderButtons = () => {
@@ -103,7 +189,7 @@ function InfoInmueble() {
                             <div className="image-container">
                                 {inmuebleInfo && (
                                     <Galleria
-                                    value={data} 
+                                    value={Images} 
                                     style={{ maxWidth: '100%', height: 'auto' }}  
                                     showThumbnails={false} 
                                     showIndicators 
@@ -120,8 +206,8 @@ function InfoInmueble() {
                             <div className="infoPrincipal-box">
                                 {inmuebleInfo && (
                                     <div className="title-box">
-                                        <h2>{inmuebleInfo.title}</h2>
-                                        <p>Habitaciones {inmuebleInfo.habitaciones}, Baños {inmuebleInfo.banosCompletos}</p>
+                                        <h2>{inmuebleInfo.Nombre}</h2>
+                                        <p>{inmuebleInfo.ciudad}, {inmuebleInfo.pais}</p>
                                     </div>
                                 )}
                                 {inmuebleInfo && (
@@ -138,8 +224,8 @@ function InfoInmueble() {
                          <div className="field col-12 lg:col-10">
                             <Fieldset legend="Especificaciones">
                                 {inmuebleInfo && (  
-                                    <div className="details-box">               
-                                        <p>Pisos: {inmuebleInfo.pisos}</p>                   
+                                    <div className="details-box">
+                                        <p>Pisos: {inmuebleInfo.pisos}</p>
                                         <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
                                         <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
                                         <p>Baños Medios: {inmuebleInfo.banosMedios}</p>
@@ -155,7 +241,8 @@ function InfoInmueble() {
                                         <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
                                         <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>
                                         <p>Status: {inmuebleInfo.status === 1 ? 'Disponible' : 'No Disponible'}</p>
-                                        <p>Indicaciones: {inmuebleInfo.indicaciones}</p>
+                                        <p>Costo: {inmuebleInfo.costo}</p>
+                                        <p>Capacidad: {inmuebleInfo.capacidad}</p>
                                     </div>
                                 )}
                                 <div className="button-container">
