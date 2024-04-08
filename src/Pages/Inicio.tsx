@@ -18,7 +18,7 @@ const Inicio: React.FC = () => {
   return (
     <div className="vista-azul">
       <div className="titulo-container">
-        <h2>Que quieres hacer primero?</h2>
+        <h1>¿Qué quieres hacer primero?</h1>
       </div>
       <div className="botones-container">
         <Botones
@@ -26,7 +26,7 @@ const Inicio: React.FC = () => {
           onBoton2Click={handleBoton2Click}
           imagenBoton1="companero-de-cuarto.png"
           imagenBoton2="signo-de-poste.png"
-          textoBoton1="Buscar roommate"
+          textoBoton1="Buscar propiedad"
           textoBoton2="Publicar una propiedad"
         />
       </div>
