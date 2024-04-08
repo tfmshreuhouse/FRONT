@@ -1,7 +1,7 @@
 @import 'primeflex/primeflex.css';
 
 .container {
-  display: flex;
+  display: block;
   flex-wrap: wrap;
 }
 

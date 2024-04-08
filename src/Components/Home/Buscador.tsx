@@ -7,8 +7,6 @@ const DivHome = () => {
     <div className="row">
       <div className="col-md-4 mb-3">
         <div className="form-button">
-          <label htmlFor="venta" className="label-style">CATEGORIA</label>
-          <input type="text" className='input-div' name="venta" placeholder="venta" />
         </div>
       </div>
       <div className="col-md-4 mb-3">
@@ -35,29 +33,35 @@ const DivHome = () => {
       </div>
       <div className="col-md-4 mb-3">
         <div className="form-button">
-          <label htmlFor="precio" className="label-style">PRECIO MINIMO</label>
-          <input type="text" className='input-div' name="precio_minimo" placeholder="precio minimo" />
+          <span className="p-float-label">
+            <InputText
+              id="precio_minimo"
+              name="precio_minimo"
+            />
+            <label htmlFor="firstName">PRECIO MINIMO</label>
+          </span>
         </div>
       </div>
       <div className="col-md-4 mb-3">
         <div className="form-button">
-          <label htmlFor="precio" className="label-style">PRECIO MAXIMO</label>
-          <input type="text" className='input-div' name="precio_mazimo" placeholder="precio maximo" />
+          <span className="p-float-label">
+            <InputText
+              id="precio_maximo"
+              name="precio_maximo"
+            />
+            <label htmlFor="firstName">PRECIO MAXIMO</label>
+          </span>
         </div>
       </div>
       <div className="col-md-4 mb-3">
         <div className="form-button">
-          <label htmlFor="estrato" className="label-style">ESTRATO</label>
-          <select className='select-div' name="estrato">
-            <option value=''>selecione</option>
-            <option value='0'>0</option>
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-            <option value='4'>4</option>
-            <option value='5'>5</option>
-            <option value='6'>6</option>
-          </select>
+          <span className="p-float-label">
+            <InputText
+              id="precio_maximo"
+              name="precio_maximo"
+            />
+            <label htmlFor="firstName">CALIFICACION MINIMA</label>
+          </span>
         </div>
       </div>
       <div className="col-md-12 mb-3 text-center">
