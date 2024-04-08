@@ -23,19 +23,19 @@ const Botones: React.FC<BotonesProps> = ({ onBoton1Click, onBoton2Click, imagenB
   };
 
   const estiloTexto: React.CSSProperties = {
-    fontSize: '18px', // Ajusta el tamaño de la fuente según tus necesidades
-    marginTop: '8px', // Ajusta el margen superior según tus necesidades
+    fontSize: '18px', // Ajusta el tamaï¿½o de la fuente segï¿½n tus necesidades
+    marginTop: '8px', // Ajusta el margen superior segï¿½n tus necesidades
   };
 
   return (
     <div className="contenedor-botones">
-      <button className="submit" onClick={onBoton1Click} style={estiloBoton}>
+      <button className="submitInicio" onClick={onBoton1Click} style={estiloBoton}>
         <div>
-          <img src={`/images/${imagenBoton1}`} alt="Buscar roommate" style={estiloImagen} />
+          <img src={`/images/${imagenBoton1}`} alt="Buscar propiedad" style={estiloImagen} />
         </div>
         <span style={estiloTexto}>{textoBoton1}</span>
       </button>
-      <button className="submit" onClick={onBoton2Click} style={estiloBoton}>
+      <button className="submitInicio" onClick={onBoton2Click} style={estiloBoton}>
         <div>
           <img src={`/images/${imagenBoton2}`} alt="Publicar una propiedad" style={estiloImagen} />
         </div>

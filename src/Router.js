@@ -42,7 +42,7 @@ import PanelAdmin from "./Pages/PanelAdmin";
         },
         
         {
-          path: "/home/infoInmueble/editar",
+          path: "/home/infoInmueble/crear",
           element: <Layout componentToRender={<EditInmueble />}></Layout>,
           exact: true,
         },

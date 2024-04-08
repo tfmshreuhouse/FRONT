@@ -21,7 +21,7 @@ const GeneralSuccessAlert:React.FC<ChildProps> = ({ header, text, onClose }) => 
       <div>
         <Dialog
           visible={visible}
-          onHide={() => setVisible(false)}
+          onHide={() => redirectToAnotherRoute}
           header={header}
           footer={
             <div>
