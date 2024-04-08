@@ -369,3 +369,7 @@ body {
   height: 390px;
   object-fit: cover;
 }
+
+.button-blue {
+  width: 80%; 
+}
