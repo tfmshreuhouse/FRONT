@@ -53,28 +53,16 @@ const MisInmuebles = () => {
         const responseAxiosReservaInfo = await axiosTokenInfo.get(`/rest/inmuebles/user/${userId.userID}`);
         const Datos = responseAxiosReservaInfo.data.data;
   
-        const inmueblesTransformados: Inmuebles[] = await Promise.all(Datos.map(async (inmueble: any) => {
-          const responseimg = await axiosTokenInfo.get<{ success: boolean; data: any }>(
-            `/rest/ImagnenesInmuebles/${inmueble.id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          );
+        const inmueblesTransformados: Inmuebles[] = Datos.map((inmueble: any) => ({
           
-          const firstImageURL = responseimg.data.data[0]?.URL; // Obtener la URL del primer registro de imágenes
-  
-          return {
-            id: inmueble.id,
-            nombre: inmueble.Nombre,
-            pais: inmueble.Pais,
-            ciudad: inmueble.Ciudad,
-            direccion: inmueble.Direccion,
-            tipoInmueble: inmueble.TiposInmueble ? inmueble.TiposInmueble.tipo : '',
-            imagen: firstImageURL // Asignar la URL del primer registro de imágenes al objeto de inmueble transformado
-          };
-        }));
+          id: inmueble.id,
+          nombre: inmueble.Nombre,
+          pais: inmueble.Pais,
+          ciudad: inmueble.Ciudad,
+          direccion: inmueble.Direccion,
+          tipoInmueble: inmueble.TiposInmueble ? inmueble.TiposInmueble.tipo : '',
+          imagen: inmueble.ImagnenesInmuebles[0]?.URL
+        }));  
   
         setInmuebles(inmueblesTransformados);
       } catch (error) {

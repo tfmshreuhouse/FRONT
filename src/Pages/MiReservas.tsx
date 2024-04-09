@@ -20,6 +20,7 @@ const MisReservas = () => {
     pais: string;
     ciudad: string;
     nombreInmueble: string;
+    Url: string;
   }
   
   const [reservas, setReservas] = useState<Reserva[]>([]);
@@ -65,7 +66,7 @@ const MisReservas = () => {
             <Card
               key={index}
               onBoton1Click={() => handleBoton1Click('1',reserva.inmuebleId)}
-              imageUrl="https://img10.naventcdn.com/avisos/18/00/64/76/56/44/720x532/340390153.jpg?isFirstImage=true" 
+              imageUrl={reserva.Url} 
               buttonText="Ver detalles"
               className="col-md-4 col-sm-12"
               tipo="1"

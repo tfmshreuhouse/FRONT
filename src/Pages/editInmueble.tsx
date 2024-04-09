@@ -11,6 +11,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from 'react-router-dom';
 import GeneralSuccessAlert from '../Components/Shared/GeneralSuccessAlert';
 import ErrorAlert from '../Components/Shared/ErrorAlert ';
+import tipoMoneda from '../assets/tipoMoneda.json';
 
 function EditInmueble() {
     
@@ -20,6 +21,7 @@ function EditInmueble() {
     const titulo = idInmueble != null && idInmueble != 0 ? "Modificar del inmueble" : "Creacion del inmueble";
     const navigate = useNavigate();
 
+    const [Id, setId] = useState<number | null>(null);
     const [idDetalle, setIdDetalle] = useState<number | null>(null);
     const [idpublicacion, setIdPublicacion] = useState<number | null>(null);
     const [Images, setImages] = useState<any[]>([]);
@@ -49,6 +51,7 @@ function EditInmueble() {
     const [Status, setStatus] = useState(null);
     const [Precio, setPrecio] = useState<number>(0);
     const [Capacidad, setCapacidad] = useState<number>(0);
+    const [moneda, setMoneda] = useState(null);
 
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [selectedCity, setSelectedCity] = useState(null);
@@ -77,6 +80,8 @@ function EditInmueble() {
         const obtenerDatosTipoInmueble = async () => {            
             
             if (idInmueble != 0) {
+
+                setId(idInmueble);
                 
                 try {
                     if (!token) {
@@ -118,34 +123,15 @@ function EditInmueble() {
                     setStatus(response.data.data.DetallesInmueble.status);
                     setIdDetalle(response.data.data.DetallesInmueble.id);
 
-                    console.log(response);
-
-                    const responseimg = await axios.get<{ success: boolean; data: any }>(
-                        process.env.REACT_APP_API_URL + "/rest/ImagnenesInmuebles/"+ idInmueble,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`
-                            }
-                        }
-                    );
-
-                    const images = responseimg.data.data.map((image: any) => image.URL);
+                    const images = response.data.data.ImagnenesInmuebles.map((image: any) => image.URL);
                     setImageUrls(images);                   
                     setImages(images);
                     setImagePreviews(images);
 
-                    const responsePubc = await axios.get<{ success: boolean; data: any }>(
-                        process.env.REACT_APP_API_URL + "/rest/publicacion/"+ idInmueble,
-                        {
-                            headers: {
-                                Authorization: `Bearer ${token}`
-                            }
-                        }
-                    );
-
-                    setPrecio(responsePubc.data.data.costo);
-                    setCapacidad(responsePubc.data.data.PAX);
-                    setIdPublicacion(responsePubc.data.data.id);
+                    setPrecio(response.data.data.Publicaciones[0].costo);
+                    setCapacidad(response.data.data.Publicaciones[0].PAX);
+                    setIdPublicacion(response.data.data.Publicaciones[0].id);
+                    setMoneda(response.data.data.Publicaciones[0].moneda);
 
                 } catch (error) {
                     console.error('Error al cargar tipos de inmueble:', error);
@@ -164,8 +150,7 @@ function EditInmueble() {
       useEffect(() => {
         const countries = p.getCountryNames();
       
-        // Filtrar el país "Aland Islands"
-        const filteredCountries = countries.filter((country: string) => /^[a-zA-Z0-9\s]*$/.test(country));
+        const filteredCountries = countries.filter((country: string) => /^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]*$/.test(country));
       
         const formattedCountries = filteredCountries.map((country: string) => ({
           value: country,
@@ -178,7 +163,7 @@ function EditInmueble() {
       useEffect(() => {
         if (selectedCountry) {
           const cities = p.getCities(selectedCountry);
-          
+
           if (cities) {
             const formattedCities = cities.map((city: any) => ({
               value: city,
@@ -212,7 +197,7 @@ function EditInmueble() {
             }
 
             const response = await axios.get<{ success: boolean; data: { id: number; tipo: string }[] }>(
-                process.env.REACT_APP_API_URL + "rest/tipos-inmuebles",
+                process.env.REACT_APP_API_URL + "/rest/tipos-inmuebles",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -317,6 +302,7 @@ function EditInmueble() {
                     fechaActiva: currentDate,
                     fechaInactiva: Status != 1 ? currentDate : null,
                     PAX: Capacidad,
+                    moneda: moneda, 
                     costo: Precio,
                     descripcion: Descripcion,
                     indicaciones: Indicaciones,
@@ -392,10 +378,10 @@ function EditInmueble() {
                         );
                     }
                 }
-
-
+                setSuccess(true);
             } catch (error) {
-                console.log(error)
+                console.log(error);
+                setFailure(true);
             }
         }
         else
@@ -439,6 +425,8 @@ function EditInmueble() {
                     }
                 );
 
+               
+
                 const FormDataInmueble = {
                     Nombre: Nombre,
                     Pais: selectedCountry,
@@ -458,12 +446,15 @@ function EditInmueble() {
                         }
                     }
                 );
+
+                setId(parseInt(responseInmueble.data.data.id));
                 idInmueble = parseInt(responseInmueble.data.data.id);
 
                 const FormDataPublicacion = {
                     fechaActiva: currentDate,
                     fechaInactiva: null,
                     PAX: Capacidad,
+                    moneda: moneda, 
                     costo: Precio,
                     descripcion: Descripcion,
                     indicaciones: Indicaciones,
@@ -499,11 +490,13 @@ function EditInmueble() {
                         }
                     );
                 }
+                setSuccess(true);
             }catch(err){
                 alert.call(err);
+                setFailure(true);
             }
         }
-        setSuccess(true);
+        
     };   
 
     const handleFileSelect = () => {
@@ -570,7 +563,7 @@ function EditInmueble() {
     };
 
     const handleSuccessAlertClose = () => {
-        navigate('/home/infoInmueble/1/'+idInmueble);
+        navigate('/home/infoInmueble/1/'+Id);
       };
         
     return (
@@ -965,7 +958,7 @@ function EditInmueble() {
                                     <label>Estado</label>   
                                 </span>                            
                             </div>
-                            <div className="field col-12 lg:col-3">
+                            <div className="field col-12 lg:col-2">
                                 <span className="p-float-label">
                                     <InputNumber 
                                          value={Capacidad} 
@@ -976,7 +969,19 @@ function EditInmueble() {
                                     <label>capacidad</label>
                                 </span>
                             </div>
-                            <div className="field col-12 lg:col-4">
+                            <div className="field col-12 lg:col-3">                           
+                                <span className="p-float-label">
+                                    <Dropdown 
+                                        value={moneda} 
+                                        options={tipoMoneda.tiposMoneda} 
+                                        onChange={(e) => setMoneda(e.value)}
+                                        optionLabel="label"
+                                        placeholder="Seleccione" 
+                                    />
+                                    <label>Moneda</label>   
+                                </span>                            
+                            </div>
+                            <div className="field col-12 lg:col-2">
                                 <span className="p-float-label">
                                     <InputNumber 
                                          value={Precio} 
@@ -1035,8 +1040,8 @@ function EditInmueble() {
                 {success ? <GeneralSuccessAlert header={idInmueble != null && idInmueble != 0 ? "Modificar del inmueble" : "Creacion del inmueble"} text={idInmueble != null && idInmueble != 0 ? "Inmueble actualizado exitosamente" : "Inmueble creado exitosamente"}  onClose={handleSuccessAlertClose}/> : <div></div>}
                 {failure && (
                     <ErrorAlert
-                    header="Error al guardar reseña"
-                    text="Por favor, complete todos los campos requeridos y vuelva a intentarlo mas tarde"
+                    header={idInmueble != null && idInmueble != 0 ? "Error al modificar del inmueble" : "Error al crear el inmueble"}
+                    text="Ha ocurrido un error al guardar la informacion del inmueble"
                     onClose={handleErrorAlertClose}
                     />
                 )}

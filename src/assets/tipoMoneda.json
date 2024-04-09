@@ -1,0 +1,57 @@
+{
+    "tiposMoneda": [
+      {
+        "value": "USD",
+        "label": "Dólar estadounidense"
+      },
+      {
+        "value": "EUR",
+        "label": "Euro"
+      },
+      {
+        "value": "GBP",
+        "label": "Libra esterlina"
+      },
+      {
+        "value": "JPY",
+        "label": "Yen japonés"
+      },
+      {
+        "value": "AUD",
+        "label": "Dólar australiano"
+      },
+      {
+        "value": "ARS",
+        "label": "Peso argentino"
+      },
+      {
+        "value": "BRL",
+        "label": "Real brasileño"
+      },
+      {
+        "value": "COP",
+        "label": "Peso colombiano"
+      },
+      {
+        "value": "MXN",
+        "label": "Peso mexicano"
+      },
+      {
+        "value": "CLP",
+        "label": "Peso chileno"
+      },
+      {
+        "value": "PEN",
+        "label": "Sol peruano"
+      },
+      {
+        "value": "CUP",
+        "label": "Peso cubano"
+      },
+      {
+        "value": "UYU",
+        "label": "Peso uruguayo"
+      }
+    ]
+  }
+  
