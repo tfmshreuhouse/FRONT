@@ -138,7 +138,7 @@ function Perfil() {
               <Button
                 type="button"
                 icon="pi pi-user"
-                label="Modificar mis datos"
+                label="Actualizar mis datos"
                 className="button-green"
                 onClick={navigateModificar}
               />

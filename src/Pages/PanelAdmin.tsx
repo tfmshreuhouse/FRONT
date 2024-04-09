@@ -273,6 +273,7 @@ const PanelAdmin = () => {
         data={dynamicData}
         columns={dynamicColumns}
         header={headerTabla}
+        actionButtons={[]}
       />
       {success ? <GeneralSuccessAlert header="Operación exitosa" text='La publicación fue dada de baja exitosamente' onClose={handleSuccessAlertClose}/> : <div></div>}
   </div>

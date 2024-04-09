@@ -61,40 +61,65 @@ const MisReservas = () => {
   return (
     <div className="container">
       <Fieldset legend="Mis reservas">
-        <div className="row">
-          {reservas.map((reserva, index) => (
-            <Card
-              key={index}
-              onBoton1Click={() => handleBoton1Click('1',reserva.inmuebleId)}
-              imageUrl={reserva.Url} 
-              buttonText="Ver detalles"
-              className="col-md-4 col-sm-12"
-              tipo="1"
-              id={reserva.inmuebleId}
-              titulo={reserva.nombreInmueble} 
-              precio={reserva.costo}
-              direccion={reserva.direccion}
-              pais={reserva.pais}
-              ciudad={reserva.ciudad}
-            />
-          ))}
-        </div>
-        <div className="p-fluid grid">
-          <div className="field col-12 lg:col-4"></div>
-          <div className="field col-12 lg:col-3">
-            <Button
-              type="button"
-              icon="pi pi-angle-left"
-              label="Volver"
-              className="button-red"
-              onClick={handleVolverClick}
-            />
+        {reservas.length === 0 ? (
+          <div className="p-fluid grid">
+            <div className="field col-12 lg:col-4"></div>
+            <div className="field col-12 lg:col-4">
+              <h2>Aun no tienes reservas.</h2>
+            </div>
+            <div className="field col-12 lg:col-4"></div>
+            <div className="field col-12 lg:col-4"></div>
+            <div className="field col-12 lg:col-4">
+              <Button
+                  type="button"
+                  icon="pi pi-angle-left"
+                  label="Volver"
+                  className="button-red"
+                  onClick={handleVolverClick}
+                />
+            </div>
+            <div className="field col-12 lg:col-4"></div>
           </div>
-        </div>
+          
+        ) : (
+          <>
+            <div className="row">
+              {reservas.map((reserva, index) => (
+                <Card
+                  key={index}
+                  onBoton1Click={() => handleBoton1Click('1',reserva.inmuebleId)}
+              imageUrl={reserva.Url} 
+                  buttonText="Ver detalles"
+                  className="col-md-4 col-sm-12"
+                  tipo="1"
+                  id={reserva.inmuebleId}
+                  titulo={reserva.nombreInmueble} 
+                  precio={reserva.costo}
+                  direccion={reserva.direccion}
+                  pais={reserva.pais}
+                  ciudad={reserva.ciudad}
+                />
+              ))}
+            </div>
+            <div className="p-fluid grid">
+              <div className="field col-12 lg:col-4"></div>
+              <div className="field col-12 lg:col-3">
+                <Button
+                  type="button"
+                  icon="pi pi-angle-left"
+                  label="Volver"
+                  className="button-red"
+                  onClick={handleVolverClick}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </Fieldset>
     </div>
     
   );
+}
 };
 
 export default MisReservas;

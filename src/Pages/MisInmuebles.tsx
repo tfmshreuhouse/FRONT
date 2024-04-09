@@ -77,50 +77,78 @@ const MisInmuebles = () => {
   return (
     <div className="container">
       <Fieldset legend="Mis Inmuebles">
-        <div className="row">
-        {inmuebles.map((inmueble, index) => (
-            <Card
-              key={index}
-              onBoton1Click={() => handleBoton1Click('2',inmueble.id)}
-              imageUrl={inmueble.imagen} 
-              buttonText="Ver detalles"
-              className="col-md-4 col-sm-12"
-              tipo="1"
-              id={inmueble.id}
-              titulo={inmueble.nombre} 
-              precio={inmueble.tipoInmueble}
-              direccion={inmueble.direccion}
-              pais={inmueble.pais}
-              ciudad={inmueble.ciudad}
-            />
-          ))}
-        </div>
-        <div className="p-fluid grid">
-          <div className="field col-12 lg:col-3"></div>
-          <div className="field col-12 lg:col-3">
-            <Button
-              type="button"
-              icon="pi pi-home"
-              label="Crear Nuevo Inmueble"
-              className="button-red"
-              onClick={handleBoton2Click}
-            />
+        {inmuebles.length === 0 ? (
+          <div className="p-fluid grid">
+            <div className="field col-12 lg:col-4"></div>
+            <div className="field col-12 lg:col-5">
+              <h2>Aun no tienes inmuebles.</h2>
+            </div>
+            <div className="field col-12 lg:col-3"></div>
+            <div className="field col-12 lg:col-3"></div>
+              <div className="field col-12 lg:col-3">
+                <Button
+                  type="button"
+                  icon="pi pi-home"
+                  label="Crear Nuevo Inmueble"
+                  className="button-red"
+                  onClick={handleBoton2Click}
+                />
+              </div>
+              <div className="field col-12 lg:col-3">
+                <Button
+                  type="button"
+                  icon="pi pi-angle-left"
+                  label="Volver"
+                  className="button-red"
+                  onClick={handleBoton3Click}
+                />
+              </div>
           </div>
-          <div className="field col-12 lg:col-3">
-            <Button
-              type="button"
-              icon="pi pi-angle-left"
-              label="Volver"
-              className="button-red"
-              onClick={handleBoton3Click}
-            />
-          </div>
-        </div>
+        ) : (
+          <>
+            <div className="row">
+              {inmuebles.map((inmueble, index) => (
+                <Card
+                  key={index}
+                  onBoton1Click={() => handleBoton1Click('2', inmueble.id)}
+                  imageUrl={inmueble.imagen} 
+                  buttonText="Ver detalles"
+                  className="col-md-4 col-sm-12"
+                  tipo="1"
+                  id={inmueble.id}
+                  titulo={inmueble.nombre}
+                  precio={inmueble.tipoInmueble}
+                  direccion={inmueble.direccion}
+                  pais={inmueble.pais}
+                  ciudad={inmueble.ciudad}
+                />
+              ))}
+            </div>
+            <div className="p-fluid grid">
+              <div className="field col-12 lg:col-3"></div>
+              <div className="field col-12 lg:col-3">
+                <Button
+                  type="button"
+                  icon="pi pi-home"
+                  label="Crear Nuevo Inmueble"
+                  className="button-red"
+                  onClick={handleBoton2Click}
+                />
+              </div>
+              <div className="field col-12 lg:col-3">
+                <Button
+                  type="button"
+                  icon="pi pi-angle-left"
+                  label="Volver"
+                  className="button-red"
+                  onClick={handleBoton3Click}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </Fieldset>
     </div>
   );
-};
-
-export default MisInmuebles
-
-;
+}
+export default MisInmuebles;
