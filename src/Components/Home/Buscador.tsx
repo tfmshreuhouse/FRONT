@@ -1,37 +1,84 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
+import axios from 'axios';
 
 const DivHome = () => {
+
+  const [tipoInmueble, setTipoInmueble] = useState(null);
+  const [tipoInmuebleOptions, setTipoInmuebleOptions] = useState<{ value: number; label: string }[]>([]);
+  const token: string | null = localStorage.getItem('jwt');
+
+  useEffect(() => { 
+    cargarTipoInmueble();
+  }, []); 
+
+  const cargarTipoInmueble = async () => {
+      try {
+
+          const response = await axios.get<{ success: boolean; data: { id: number; tipo: string }[] }>(
+              process.env.REACT_APP_API_URL + "rest/tipos-inmuebles"
+          );
+
+          const optionstipo = [];
+
+          for(let i=0; i<response.data.data.length; i++){
+              let label = response.data.data[i].tipo
+              let value = response.data.data[i].id
+              optionstipo.push({ label: `${label}`, value: value });
+          }
+
+          setTipoInmuebleOptions(optionstipo);
+      } catch (error) {
+          console.error('Error al cargar tipos de inmueble:', error);
+      }
+  };
+
   return (
-    <div className="row">
-      <div className="col-md-4 mb-3">
-        <div className="form-button">
-        </div>
+    <div className="p-fluid grid">  
+    <div className="field col-12 lg:col-12 text-center"></div>
+      <div className="field col-12 lg:col-12 text-center">
+        <h2>¡Encuentra tu próximo hogar con simples pasos!</h2>
       </div>
-      <div className="col-md-4 mb-3">
-        <div className="form-button">
-          <span className="p-float-label">
-            <InputText
-              id="apartamento"
-              name="apartamento"
-            />
-            <label htmlFor="firstName">TIPO DE INMUEBLE</label>
-          </span>
-        </div>
-      </div>
-      <div className="col-md-4 mb-3">
+      <div className="field col-12 lg:col-4">
         <div className="form-button">
           <span className="p-float-label">
             <InputText
-              id="ubicacion"
-              name="ubicacion"
+              id="pais"
+              name="pais"
             />
-            <label htmlFor="firstName">UBICACION</label>
+            <label htmlFor="firstName">PAIS</label>
           </span>
         </div>
       </div>
-      <div className="col-md-4 mb-3">
+      <div className="field col-12 lg:col-4">
+        <div className="form-button">
+          <span className="p-float-label">
+            <InputText
+              id="ciudad"
+              name="ciudad"
+            />
+            <label htmlFor="firstName">CIUDAD</label>
+          </span>
+        </div>
+      </div>
+      <div className="field col-12 lg:col-4">
+        <div className="form-button">
+          <span className="p-float-label">                                     
+              <Dropdown
+                  value={tipoInmueble}
+                  options={tipoInmuebleOptions}
+                  onChange={(e) => setTipoInmueble(e.value)}                                        
+                  optionLabel="label"
+                  placeholder="Seleccione"
+                  className="TipoInmueble"
+              />
+              <label>Tipo de Inmueble</label>
+          </span>
+        </div>
+      </div>
+      <div className="field col-12 lg:col-4">
         <div className="form-button">
           <span className="p-float-label">
             <InputText
@@ -42,7 +89,7 @@ const DivHome = () => {
           </span>
         </div>
       </div>
-      <div className="col-md-4 mb-3">
+      <div className="field col-12 lg:col-4">
         <div className="form-button">
           <span className="p-float-label">
             <InputText
@@ -53,24 +100,16 @@ const DivHome = () => {
           </span>
         </div>
       </div>
-      <div className="col-md-4 mb-3">
+      <div className="field col-12 lg:col-4">
         <div className="form-button">
           <span className="p-float-label">
             <InputText
-              id="precio_maximo"
-              name="precio_maximo"
+              id="PAX"
+              name="PAX"
             />
-            <label htmlFor="firstName">CALIFICACION MINIMA</label>
+            <label htmlFor="firstName">CANTIDAD DE PERSONAS</label>
           </span>
         </div>
-      </div>
-      <div className="col-md-12 mb-3 text-center">
-      <Button
-        type="button"
-        icon="pi pi-search"
-        label="Buscar"
-        className="button-red"
-      />
       </div>
     </div>
   );
