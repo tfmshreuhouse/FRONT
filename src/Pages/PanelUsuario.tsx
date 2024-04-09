@@ -253,13 +253,13 @@ const PanelUsuario = () => {
           style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
         />
       </div>
-      <div className="field col-12 lg:col-7">        
+      <div className="field col-12 lg:col-8">        
         <div className="publicacion-name">{publicacion.indicaciones}</div>
         <div className="publicacion-description"><b>PAX: </b> {publicacion.PAX}</div>
         <p><i className="pi pi-dollar" /><span className="publicacion-category">{publicacion.costo}</span></p>
         <p><i className="pi pi-calendar" /><span className="publicacion-category"><b> Cantidad de reservas: </b>{publicacion.Reservas.length}</span></p>
       </div>
-      <div className="field col-12 lg:col-3 d-flex flex-column justify-content-between">
+      <div className="field col-12 lg:col-2 d-flex flex-column justify-content-between">
         <div style={{ marginBottom: '8px' }}>
           <Button type="submit" className="button-blue" label="Ver Reservas" icon="pi pi-calendar" onClick={() => toggleModal(publicacion)}/>
         </div>
@@ -281,10 +281,10 @@ const PanelUsuario = () => {
         </div>
         <div className="field col-12 lg:col-4">        
           <div className="publicacion-name">{publicacion.indicaciones}</div>
-          <div className="publicacion-description"><b>PAX: </b> {publicacion.PAX}</div>
-          <p><i className="pi pi-dollar" /><span className="publicacion-category">{publicacion.costo}</span></p>
+          <div className="publicacion-description"><b>PAX: </b> {publicacion.PAX} - <i className="pi pi-dollar" /><span className="publicacion-category">{publicacion.costo}</span></div>
           <p><i className="pi pi-user" /><span className="publicacion-category"><b> Arrendador</b> {publicacion.Inmueble.User.nombres} {publicacion.Inmueble.User.apellidos}</span></p>
-          <p><i className="pi pi-inbox" /><span className="publicacion-category"><b> Contacto del arrendador:</b> {publicacion.Inmueble.User.correo}, <i className="pi pi-phone" /> {publicacion.Inmueble.User.telefono}</span></p>
+          <p><i className="pi pi-inbox" /><span className="publicacion-category"><b> Correo del arrendador:</b> {publicacion.Inmueble.User.correo}</span></p>
+          <p><i className="pi pi-phone" /><span className="publicacion-category"><b> Telefono del arrendador:</b> {publicacion.Inmueble.User.telefono}</span></p>
         </div>
         <div className="field col-12 lg:col-4"> 
           <p><i className="pi pi-calendar" /><span className="publicacion-category"><b> Fecha reservada: </b>{reserva.fechaInicio} / {reserva.fechaFin}</span></p>
