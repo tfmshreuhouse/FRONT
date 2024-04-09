@@ -143,15 +143,15 @@ function NuevaReserva() {
     }
     
     try {
-        // const response = await axios.post(
-        //     process.env.REACT_APP_API_URL + "/rest/reservas",
-        //     formData,
-        //     {
-        //         headers: {
-        //             Authorization: `Bearer ${token}`
-        //         }
-        //     }
-        // );
+        const response = await axios.post(
+            process.env.REACT_APP_API_URL + "/rest/reservas",
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
 
         const responsePublicaion = await axios.patch(
           process.env.REACT_APP_API_URL + "/rest/publicacion",

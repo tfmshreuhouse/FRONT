@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { intUserNew } from '../../Interfaces/authInterfaces';
 import { AuthErrorCodeTranslator } from '../../ErrorCodes/AuthErrors';
 import { formAuthRegister } from '../../YupSchemas/yupSchemas';
-
+import { useNavigate } from 'react-router-dom';
 import { classNames } from 'primereact/utils';
 import { InputText } from "primereact/inputtext";
 import { Password } from 'primereact/password';
@@ -21,7 +21,7 @@ interface ChildProps {
 const RegisterForm:React.FC<ChildProps> = ({ isLoginHandler }) => {
 
     const { t } = useTranslation();
-
+    const [islogin, setIsLogin] = useState<boolean>(true);
     const [checked, setChecked] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
     const [samePass, setSamePass] = useState<boolean>(true);
@@ -216,6 +216,7 @@ const RegisterForm:React.FC<ChildProps> = ({ isLoginHandler }) => {
                     </div>
                     <Button type='submit' label={t('loginRegisterText5')} loading={loading} disabled={!samePass}
                     onClick={checkFormikIsValid} className="w-full mt-4" />
+                    <Button type='button' label="Volver" loading={loading} onClick={isLoginHandler} className="w-full mt-4" />
                 </div>
             </form>
             {errors ? <div style={{ marginTop: '20px' }} className="card flex justify-content-center">

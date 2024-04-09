@@ -10,6 +10,7 @@ import ErrorAlert from '../Components/Shared/ErrorAlert ';
 import { Paginator } from 'primereact/paginator';
 import ModalConTabla from '../Components/Denuncias/ModalConTabla';
 import GeneralSuccessAlert from '../Components/Shared/GeneralSuccessAlert';
+import { useNavigate } from 'react-router-dom';
 
 interface ImagnenesInmuebles {
   URL: string;
@@ -111,6 +112,7 @@ const PanelUsuario = () => {
     });
     setReservaData(updatedData);
   };
+  const navigate = useNavigate();
 
   const handleRejectReserva = async (reserva:Reserva) => {
     fetchPublicacionesReservas();
@@ -124,6 +126,10 @@ const PanelUsuario = () => {
       return item;
     });
     setReservaData(updatedData);
+  };
+
+  const handleIrInmuebe = async (inmuebleId: number) => {
+    navigate(`/home/infoInmueble/1/${inmuebleId}`);
   };
 
   const handleReservaByUser = async (reserva:Reserva, status:number) => {
@@ -287,7 +293,7 @@ const PanelUsuario = () => {
         </div>
         <div className="field col-12 lg:col-2 d-flex flex-column justify-content-between">
           <div style={{ marginBottom: '8px' }}>
-            <Button type="submit" className="button-blue" label="Volver a reservar" icon="pi pi-calendar" onClick={() => handleReservaByUser(reserva, 1)}/>
+            <Button type="button" className="button-blue" label="Volver a reservar" icon="pi pi-calendar" onClick={() => handleIrInmuebe(publicacion.InmuebleId)}/>
             <br/><br/>
             <Button type="submit" className="button-blue" severity="danger" label="Cancelar" onClick={() => handleReservaByUser(reserva, 4)} icon="pi pi-times" />
           </div>

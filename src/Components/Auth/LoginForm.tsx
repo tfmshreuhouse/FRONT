@@ -64,6 +64,9 @@ function LoginForm() {
             console.log("Hay errores");
         }
     }
+    function ClickVolver() {
+        navigate(-1);
+    }
 
     const isFormFieldInvalid = (name: any) => !!(formik.touched[name] && formik.errors[name]);
     const getFormErrorMessage = (name: any) => {
@@ -125,6 +128,7 @@ function LoginForm() {
                     </span>
                     {getFormErrorMessage('password')}
                     <Button type='submit' label={t('loginFormText3')} loading={loading} onClick={checkFormikIsValid} className="w-full mt-4" />
+                    <Button type='button' label="Volver" loading={loading} onClick={ClickVolver} className="w-full mt-4" />
                 </div>
             </form>
             {errors ? <div style={{ marginTop: '20px' }} className="card flex justify-content-center">
