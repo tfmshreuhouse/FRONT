@@ -95,7 +95,7 @@ const Home = () => {
   };
 
   const handleBoton1Click = (tipo: string, id: number) => {
-    navigate(`/home/infoInmueble/${tipo}/${id}`);
+    navigate(`/home/infoInmueble/${tipo}/${id}/0`);
   };
 
   const handleVolverClick = () => {
@@ -128,7 +128,7 @@ const Home = () => {
                   tipo="1"
                   id={publicacion.InmuebleId + ""}
                   titulo={publicacion.Inmueble.Nombre} 
-                  precio={publicacion.costo + " para " + publicacion.PAX + " personas"}
+                  precio={publicacion.costo + " para " + publicacion.PAX + ((publicacion.PAX>1)? " personas" : " persona")}
                   direccion={publicacion.Inmueble.Direccion}
                   pais={publicacion.Inmueble.Pais}
                   ciudad={publicacion.Inmueble.Ciudad}

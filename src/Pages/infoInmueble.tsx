@@ -12,11 +12,11 @@ import axios from "axios";
 function InfoInmueble() {
     // Supongamos que recibes la información del inmueble como un objeto JSON
     const [inmuebleInfo, setInmuebleInfo] = useState<any>(null);
-    const { tipo, id } = useParams();
+    const { tipo, id, reservaId } = useParams();
 
     const pathname = window.location.pathname;
     const segments = pathname.split('/');
-    let idInmueble = !isNaN(parseInt(segments[segments.length - 1])) ? parseInt(segments[segments.length - 1]) : 0;
+    let idInmueble = !isNaN(parseInt(id + "")) ? parseInt(id+"") : 0;
 
     const token: string | null = localStorage.getItem('jwt');
 
@@ -70,6 +70,7 @@ function InfoInmueble() {
                     );
 
                     const inmuebleInfo = {
+                        publicacionId: response.data.data.Publicaciones[0].id,
                         id: response.data.data.id,
                         pais: response.data.data.Pais,
                         ciudad: response.data.data.Ciudad,
@@ -128,7 +129,7 @@ function InfoInmueble() {
                             type="button"
                             label="Denunciar"
                             className="button-blue"
-                            onClick={() => window.location.href=`/home/infoInmueble/denuncia/${id}`}
+                            onClick={() => window.location.href=`/home/infoInmueble/denuncia/${inmuebleInfo.publicacionId}`}
                         />
                     </div>
                     <div className="field col-12 lg:col-2">
@@ -136,7 +137,7 @@ function InfoInmueble() {
                             type="button"
                             label="Reseñar"
                             className="button-blue"
-                            onClick={() => window.location.href=`/home/infoInmueble/resena/${id}`}
+                            onClick={() => window.location.href=`/home/infoInmueble/resena/${reservaId}`}
                         />
                     </div>
                     <div className="field col-12 lg:col-2">

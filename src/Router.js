@@ -36,7 +36,7 @@ import PanelAdmin from "./Pages/PanelAdmin";
           exact: true,
         },
         {
-          path: "/home/infoInmueble/:tipo/:id",
+          path: "/home/infoInmueble/:tipo/:id/:reservaId",
           element: <Layout validarInicio={"1"} componentToRender={<InfoInmueble />}></Layout>,
           exact: true,
         },

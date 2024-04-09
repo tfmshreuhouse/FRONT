@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import GeneralSuccessAlert from '../Components/Shared/GeneralSuccessAlert';
 import ErrorAlert from '../Components/Shared/ErrorAlert ';
+import { Message } from 'primereact/message';
 
 const ResenaView = () => {
   const { id } = useParams();
@@ -21,7 +22,10 @@ const ResenaView = () => {
   });
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>) => {
+    setShowAlert(false);
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -30,10 +34,11 @@ const ResenaView = () => {
   };
 
   const handleSuccessAlertClose = () => {
-    navigate('/home/infoInmueble/1/'+id);
+    navigate(-1);
   };
   
   const handleStarClick = (valor: number) => {
+    setShowAlert(false);
     setValorResena(valor);
   };
 
@@ -60,6 +65,11 @@ const ResenaView = () => {
         return;
     }
     
+    if (!formData.rating || !formData.descripcion) {
+      setShowAlert(true);
+      return;
+    }
+
     try {
         debugger;
         const response = await axios.post(
@@ -80,7 +90,7 @@ const ResenaView = () => {
   };
 
   const handleVolverClick = () => {
-    navigate('/home/infoInmueble/1/'+id);
+    navigate(-1);
   };
   const handleErrorAlertClose = () => {
     setFailure(false); 
@@ -116,12 +126,20 @@ const ResenaView = () => {
                 className='text-area-div'
                 placeholder="Ingrese su opinion"
                 onChange={handleChange}
-                required
                 rows={5} 
                 cols={30}
               />
             </div>
             <div className="field col-12 lg:col-2"></div>
+            {showAlert && (
+              <>
+                <div className="field col-12 lg:col-2"></div>
+                <div className="field col-12 lg:col-8">
+                  <Message severity="error" text="Debe completar ambos campos." />
+                </div>
+                <div className="field col-12 lg:col-2"></div>
+              </>
+            )}
             <div className="field col-12 lg:col-2"></div>
             <div className="field col-12 lg:col-4">
               <Button
@@ -132,10 +150,11 @@ const ResenaView = () => {
             </div>
             <div className="field col-12 lg:col-4">
               <Button
-                type="button"
-                icon="pi pi-angle-left"
-                label="Volver"
-                className="button-red"
+                type="submit"
+                icon="pi pi-times"
+                severity="danger"
+                label="Cancelar"
+                className="button-blue"
                 onClick={handleVolverClick}
               />
             </div>

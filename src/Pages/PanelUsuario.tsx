@@ -129,7 +129,7 @@ const PanelUsuario = () => {
   };
 
   const handleIrInmuebe = async (inmuebleId: number) => {
-    navigate(`/home/infoInmueble/1/${inmuebleId}`);
+    navigate(`/home/infoInmueble/1/${inmuebleId}/0`);
   };
 
   const handleReservaByUser = async (reserva:Reserva, status:number) => {

@@ -147,24 +147,6 @@ body {
   box-sizing: border-box; /* Asegura que el padding se incluya en el tamaño total */
 }
 
-.button-container {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.estrellas {
-  display: flex;
-  gap: 5px;
-}
-
-.estrella {
-  cursor: pointer;
-}
-
-.estrella.activa {
-  color: gold;
-}
-
 .vista-azul {
   background-image: url("../public/images/background-sharehouse.jpg");
   color: #0c0848;
@@ -189,129 +171,6 @@ body {
   margin-top: 4%;
   padding: 18px;
   width: 100%;
-}
-
-.div-home{
-  width: 92%;
-  display: inline-flex;
-  padding: 4%;
-  text-align: center;
-}
-
-.input-div{
-  padding: 2%;
-  border-radius: 50px;
-  text-align: center;
-  border: solid #152f4e;
-  margin-top: 9px;
-}
-
-.product-grid-item {
-  width: 100%;
-  margin-bottom: 20px; /* Espacio entre cada elemento */
-}
-
-.text-area-div{
-  padding: 2%;
-  border-radius: 50px;
-  text-align: center;
-  border: solid #152f4e;
-  margin-top: 9px;
-}
-
-.select-div{
-  padding: 2%;
-  border-radius: 50px;
-  text-align: center;
-  border: solid #152f4e;
-  margin-top: 9px;
-}
-
-.button-home{
-  padding: 3%;
-  background-color: #152f4e;
-  border-radius: 23px;
-  margin: 0px auto;
-}
-.recuadro-filtro{
-  display: grid; 
-  background-color: #152f4e;
-  border: solid 0px;
-  border-radius: 15px;
-  padding: 15px;
-}
-.recuadro{
-  display: flex;
-  padding: 0px 7%;
-}
-.div-card{
-  width: 60%;
-  margin: 0px 20px;
-  display: flex;
-}
-.card-home{
-  width: 50%;
-  margin: 0px 30px;
-  display: grid;
-}
-.imagen{
-  width: 60%;
-  margin: 0px auto;
-}
-
-.my-button {
-  /* padding: 10px 20px; */
-  background-color: #152f4e;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.image-container{
-  width: 100%;
-  border: solid green;
-}
-
-.infoPrincipal-box {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.title-box,
-.description-box {
-  width: calc(50% - 20px);
-  margin-top: 20px;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.title-box {
-  text-align: center;
-  border: solid #0F1C65;
-  border-radius: 20px;
-}
-
-.description-box {
-  text-align: center;
-  border: solid #0F1C65;
-  border-radius: 20px;
-  background-color: #94A0E3;
-}
-
-.details-box {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%; /* Ajuste para que los elementos ocupen todo el ancho */
-}
-
-.details-box > p {
-  flex-basis: calc(50% - 20px); /* Ajuste para dejar espacio entre los elementos */
-  padding: 10px; /* Añade un espacio interior para separar el contenido del borde */
-  box-sizing: border-box; /* Asegura que el padding se incluya en el tamaño total */
 }
 
 .button-container {
@@ -359,4 +218,8 @@ body {
   .submit {
     width: 80%;
   }
+}
+
+.card {
+  margin-bottom: 20px;
 }

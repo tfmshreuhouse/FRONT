@@ -52,8 +52,8 @@ const MisReservas = () => {
 
     fetchData();
   }, []);
-  const handleBoton1Click = (tipo: string, id: string) => {
-    navigate(`/home/infoInmueble/${tipo}/${id}`);
+  const handleBoton1Click = (tipo: string, id: string, reservaId: string) => {
+    navigate(`/home/infoInmueble/${tipo}/${id}/${reservaId}`);
   };
   const handleVolverClick = () => {
     navigate('/perfil');
@@ -87,7 +87,7 @@ const MisReservas = () => {
               {reservas.map((reserva, index) => (
                 <Card
                   key={index}
-                  onBoton1Click={() => handleBoton1Click('1',reserva.inmuebleId)}
+                  onBoton1Click={() => handleBoton1Click('1',reserva.inmuebleId, reserva.reservaId)}
               imageUrl={reserva.Url} 
                   buttonText="Ver detalles"
                   className="col-md-4 col-sm-12"

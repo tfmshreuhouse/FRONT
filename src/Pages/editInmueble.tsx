@@ -144,7 +144,7 @@ function EditInmueble() {
     }, []);
 
     const handleVolverClick = () => {
-        navigate('/home/infoInmueble/2/' + idInmueble);
+        navigate('/home/infoInmueble/2/' + idInmueble + "/0");
       };
 
       useEffect(() => {

@@ -9,11 +9,22 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import GeneralSuccessAlert from '../Components/Shared/GeneralSuccessAlert';
 import ErrorAlert from '../Components/Shared/ErrorAlert ';
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+
+interface ErrorData {
+  error: {message:string;};
+  success: boolean;
+}
+
+interface ErrorResponse {
+  data : ErrorData;
+  code: string;
+  message: string;
+}
 
 function NuevaReserva() {
   const { t } = useTranslation();
-  const [FechaInicio, setDateInicio] = useState<Date | Date[] | null>(null);
+  const [FechaInicio, setDateInicio] = useState<Date | undefined>(undefined);
   const [FechaFin, setDateFin] = useState<Date | Date[] | null>(null);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const token: string | null = localStorage.getItem('jwt');
@@ -30,6 +41,7 @@ function NuevaReserva() {
   const [idpublicacion, setIdPublicacion] = useState<number | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
+  const [errorAlertText, setErrorAlertText] = useState<string>("");
   const [formData, setFormData] = useState({
     status: 1,
     PublicacioneId: '',
@@ -103,7 +115,7 @@ function NuevaReserva() {
 
 
   const ChangeInicio = (e: CalendarChangeEvent) => {
-    setDateInicio(e.value as Date | Date[]);
+    setDateInicio(e.value as Date);
   };
 
   const ChangeFin = (e: CalendarChangeEvent) => {
@@ -166,8 +178,26 @@ function NuevaReserva() {
         setSuccess(true);
         return responsePublicaion;
     } catch (error) {
+      let textError = "Por favor, verifique que todos los campos requeridos estén completos y vuelva a intentarlo más tarde";
+        if (axios.isAxiosError(error)) {
+          // Verificar si el error es un error de Axios
+          const axiosError = error as AxiosError;
+          if (axiosError.response) {
+            console.log('Error de servidor:', axiosError.response.data);
+            let errorData = axiosError.response.data as ErrorData;
+            textError = errorData.error.message;
+          } else if (axiosError.request) {
+            // La solicitud se hizo pero no se recibió una respuesta
+            textError = 'No hay respuesta del servidor';
+          } else {
+            textError = 'Error al enviar la solicitud, vuelva a intentarlo más tarde';
+          }
+        } else {
+          // Manejar otros tipos de errores
+          console.log('Otro tipo de error:', error);
+        }
         setFailure(true);
-        console.error('Error al enviar los datos de la reseña: ', error);
+        setErrorAlertText(textError);
     }
   };
 
@@ -201,17 +231,17 @@ function NuevaReserva() {
                 <div className="field col-12 lg:col-12"></div>
                 <div className="field col-12 lg:col-6">
                   <span className="p-float-label">
-                    <Calendar value={FechaInicio} onChange={ChangeInicio} />
+                    <Calendar value={FechaInicio} onChange={ChangeInicio} dateFormat="dd/mm/yy" minDate={new Date()}/>
                     <label htmlFor="inicio">Fecha inicio</label>
                   </span>
                 </div>
                 <div className="field col-12 lg:col-6">
                   <span className="p-float-label">
-                    <Calendar value={FechaFin} onChange={ChangeFin} />
+                    <Calendar value={FechaFin} onChange={ChangeFin} dateFormat="dd/mm/yy" minDate={FechaInicio}/>
                     <label htmlFor="inicio">Fecha fin</label>
                   </span>
                 </div>
-                <div className="field col-12 lg:col-4"></div>
+                <div className="field col-12 lg:col-2"></div>
                 <div className="field col-12 lg:col-4">
                   <Button
                     type="submit"
@@ -219,30 +249,30 @@ function NuevaReserva() {
                     icon="pi pi-check"
                   />
                 </div>
+                <div className="field col-12 lg:col-4">
+                  <Button
+                    type="submit"
+                    icon="pi pi-times"
+                    severity="danger"
+                    label="Cancelar"
+                    className="button-blue"
+                    onClick={handleVolverClick}
+                  />
+                </div>
+                <div className="field col-12 lg:col-2"></div>
               </div>
             </form>
             {showAlert && (
               <Message severity="error" text="Debe seleccionar ambas fechas." />
             )}
           </div>
-          <div className="field col-12 lg:col-1"></div>
-          <div className="field col-12 lg:col-5"></div>
-          <div className="field col-12 lg:col-2">
-            <Button
-              type="button"
-              icon="pi pi-angle-left"
-              label="Volver"
-              className="button-red"
-              onClick={handleVolverClick}
-            />
-          </div>
         </div>
       </Fieldset>
-      {success ? <GeneralSuccessAlert header="Creacion de reseña" text='La reseña fue creada exitosamente' onClose={handleSuccessAlertClose}/> : <div></div>}
+      {success ? <GeneralSuccessAlert header="Creacion de reserva" text='La reserva fue creada exitosamente' onClose={handleSuccessAlertClose}/> : <div></div>}
       {failure && (
         <ErrorAlert
-          header="Error al guardar reseña"
-          text="Por favor, complete todos los campos requeridos y vuelva a intentarlo mas tarde"
+          header="Error al guardar la reserva"
+          text={errorAlertText}
           onClose={handleErrorAlertClose}
         />
       )}

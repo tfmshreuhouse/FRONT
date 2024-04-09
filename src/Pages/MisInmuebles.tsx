@@ -20,7 +20,7 @@ const MisInmuebles = () => {
     imagen: string;
   }
   const handleBoton1Click = (tipo: string, id: string) => {
-    navigate(`/home/infoInmueble/${tipo}/${id}`);
+    navigate(`/home/infoInmueble/${tipo}/${id}/0`);
   };
   const handleBoton2Click = () => {
     navigate(`/home/infoInmueble/crear`);

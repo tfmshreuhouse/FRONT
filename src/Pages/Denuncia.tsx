@@ -9,6 +9,7 @@ import { Dropdown } from 'primereact/dropdown';
 import axios from 'axios';
 import GeneralSuccessAlert from '../Components/Shared/GeneralSuccessAlert';
 import ErrorAlert from '../Components/Shared/ErrorAlert ';
+import { Message } from 'primereact/message';
 
 const DenunciaView = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const DenunciaView = () => {
     PublicacioneId: 1,
     UserId: 1
   });
+  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [publicacionId, setPublicacionId] = useState<number | 0>(0);
 
   const token: string | null = localStorage.getItem('jwt');
@@ -34,6 +36,7 @@ const DenunciaView = () => {
   }, [location.pathname]);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>) => {
+    setShowAlert(false);
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -53,6 +56,11 @@ const DenunciaView = () => {
         return;
     }
     
+    if (!formData.motivo || !formData.justificacion) {
+      setShowAlert(true);
+      return;
+    }
+
     try {
         debugger;
         const response = await axios.post(
@@ -90,7 +98,7 @@ const DenunciaView = () => {
   };
 
   const handleVolverClick = () => {
-    navigate('/home/infoInmueble/1/'+id);
+    navigate(-1);
   };
 
   const handleErrorAlertClose = () => {
@@ -105,6 +113,7 @@ const DenunciaView = () => {
       justificacion: ''
     });
     setSelectedOption('');
+    navigate(-1);
   };
 
   const [selectedOption, setSelectedOption] = useState<string | ''>('');
@@ -121,12 +130,13 @@ const DenunciaView = () => {
               <Dropdown
                 value={selectedOption} // Establece el valor seleccionado
                 options={options}     // Establece las opciones
-                onChange={(e) => setSelectedOption(e.value)}
+                onChange={(e) => {setSelectedOption(e.value); setShowAlert(false);}}
                 optionLabel="label"
                 placeholder="Selecione el motivo"
               />
             </div>
             <div className="field col-12 lg:col-2"></div>
+
             <div className="field col-12 lg:col-2"></div>
             <div className="field col-12 lg:col-4">
                 <label htmlFor="justificacion" className="label-style">Justificación de la Denuncia</label>
@@ -138,12 +148,21 @@ const DenunciaView = () => {
                   placeholder="Ingrese justificación"
                   value={formData.justificacion}
                   onChange={handleChange}
-                  required
                   rows={5} 
                   cols={30}
                 />
             </div>
             <div className="field col-12 lg:col-2"></div>
+            {showAlert && (
+              <>
+                <div className="field col-12 lg:col-2"></div>
+                <div className="field col-12 lg:col-8">
+                  <Message severity="error" text="Debe completar ambos campos." />
+                </div>
+                <div className="field col-12 lg:col-2"></div>
+              </>
+            )}
+
             <div className="field col-12 lg:col-2"></div>
             <div className="field col-12 lg:col-4">
                 <Button
@@ -154,10 +173,11 @@ const DenunciaView = () => {
             </div>
             <div className="field col-12 lg:col-4">
                 <Button
-                  type="button"
-                  icon="pi pi-angle-left"
-                  label="Volver"
-                  className="button-red"
+                  type="submit"
+                  icon="pi pi-times"
+                  severity="danger"
+                  label="Cancelar"
+                  className="button-blue"
                   onClick={handleVolverClick}
                 />
             </div>
