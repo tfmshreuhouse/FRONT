@@ -55,7 +55,6 @@ function Auth() {
           {islogin ? <LoginForm></LoginForm> : <RegisterForm isLoginHandler={isLoginHandler}></RegisterForm>}
         </div>
       </div>
-      {data ? data.map((user) => { return <li key={user.id}>{user.nombres}</li> }) : <div></div>}      
     </Fragment>
   );
 }
