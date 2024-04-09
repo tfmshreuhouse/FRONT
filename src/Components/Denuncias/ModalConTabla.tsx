@@ -67,6 +67,7 @@ const ModalConTabla:React.FC<ChildProps> = ({ visible, onHide, data, columns, he
             icon={button.icon}
             onClick={() => button.onClick(rowData)}
             className={button.className}
+            style={{ marginRight: '5px' }}
           />
         ))}
       </div>

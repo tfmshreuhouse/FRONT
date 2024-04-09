@@ -24,7 +24,7 @@ const Card: React.FC<CardProps> = ({ onBoton1Click, imageUrl, buttonText, classN
 
   return (
     <div className={`p-col ${className}`}>
-      <div className="card">
+      <div className="card cards-publicaciones">
         <img className="imagen" src={imageUrl} alt="Propiedad" style={cardStyle}/>
         <div className="card-body">
           <p className="card-text">{titulo}</p>

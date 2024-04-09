@@ -220,6 +220,10 @@ body {
   }
 }
 
-.card {
+.cards-publicaciones {
   margin-bottom: 20px;
+}
+
+.buttons-denuncias {
+  margin-right: 5px important!;
 }
