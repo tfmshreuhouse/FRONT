@@ -36,10 +36,6 @@ function InfoInmueble() {
             if (idInmueble != 0) {
                 
                 try {
-                    if (!token) {
-                        console.error('Token de autorización no encontrado en el localStorage');
-                        return;
-                    }
     
                     const response = await axios.get<{ success: boolean; data: any }>(
                         process.env.REACT_APP_API_URL + "/rest/inmuebles/"+ idInmueble,
