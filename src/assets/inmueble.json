@@ -1,0 +1,24 @@
+{
+    "title": "Título del Inmueble",
+    "description": "Descripción del Inmueble",
+    "pisos": 3,
+    "habitaciones": 4,
+    "banosCompletos": 2,
+    "banosMedios": 1,
+    "cocina": 1,
+    "lavado": 1,
+    "patio": 1,
+    "balcon": 1,
+    "estacionamiento": 2,
+    "elevador": 1,
+    "piscina": 1,
+    "areasPublicas": 1,
+    "fumar": 0,
+    "mascotas": 1,
+    "reuniones": 1,
+    "descripcion": "Descripción detallada del inmueble.",
+    "indicaciones": "Indicaciones para llegar al inmueble.",
+    "status": 1,
+    "precio": 1500000
+  }
+  
