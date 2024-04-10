@@ -207,16 +207,10 @@ const RegisterForm:React.FC<ChildProps> = ({ isLoginHandler }) => {
                         <label htmlFor="confirm-password">{t('loginRegisterText41')}</label>
                     </span>
                     {!samePass ? <small className="p-error">Las contrasenas no coinciden</small> : <div/>}
-                    <div className="flex align-items-center justify-content-between mb-6 mt-4">
-                        <div className="flex align-items-center">
-                            <Checkbox onChange={e => setChecked(true)} checked={checked} className="mr-2"></Checkbox>
-                            <label htmlFor="rememberme">Remember me</label>
-                        </div>
-                        <p className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Olvidaste tu contrasena?</p>
-                    </div>
-                    <Button type='submit' label={t('loginRegisterText5')} loading={loading} disabled={!samePass}
+                    <Button type='submit' label="Confirmar" loading={loading} disabled={!samePass}
                     onClick={checkFormikIsValid} className="w-full mt-4" />
-                    <Button type='button' label="Volver" loading={loading} onClick={isLoginHandler} className="w-full mt-4" />
+                    <Button type="button" icon="pi pi-times" severity="danger" label="Cancelar" className="button-blue w-full mt-4"
+                        onClick={isLoginHandler} />
                 </div>
             </form>
             {errors ? <div style={{ marginTop: '20px' }} className="card flex justify-content-center">

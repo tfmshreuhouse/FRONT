@@ -30,6 +30,7 @@ interface Publicaciones {
   id: number,
   indicaciones: string;
   costo: number;
+  moneda: string;
   PAX: number;
   descripcion: string;
   image: string;
@@ -256,7 +257,7 @@ const PanelUsuario = () => {
       <div className="field col-12 lg:col-8">        
         <div className="publicacion-name">{publicacion.indicaciones}</div>
         <div className="publicacion-description"><b>PAX: </b> {publicacion.PAX}</div>
-        <p><i className="pi pi-dollar" /><span className="publicacion-category">{publicacion.costo}</span></p>
+        <p><i className="pi pi-dollar" /><span className="publicacion-category">{publicacion.costo + " " + publicacion.moneda}</span></p>
         <p><i className="pi pi-calendar" /><span className="publicacion-category"><b> Cantidad de reservas: </b>{publicacion.Reservas.length}</span></p>
       </div>
       <div className="field col-12 lg:col-2 d-flex flex-column justify-content-between">

@@ -65,7 +65,7 @@ function LoginForm() {
         }
     }
     function ClickVolver() {
-        navigate(-1);
+        navigate("/");
     }
 
     const isFormFieldInvalid = (name: any) => !!(formik.touched[name] && formik.errors[name]);
@@ -127,8 +127,9 @@ function LoginForm() {
                         <label htmlFor="password">{t('loginFormText2')}</label>
                     </span>
                     {getFormErrorMessage('password')}
-                    <Button type='submit' label={t('loginFormText3')} loading={loading} onClick={checkFormikIsValid} className="w-full mt-4" />
-                    <Button type='button' label="Volver" loading={loading} onClick={ClickVolver} className="w-full mt-4" />
+                    <Button type='submit' icon='pi pi-sign-in' label="Ingresar" loading={loading} onClick={checkFormikIsValid} className="w-full mt-4" />
+                    <Button type="button" icon="pi pi-times" severity="danger" label="Cancelar" className="button-blue w-full mt-4"
+                        onClick={ClickVolver} />
                 </div>
             </form>
             {errors ? <div style={{ marginTop: '20px' }} className="card flex justify-content-center">

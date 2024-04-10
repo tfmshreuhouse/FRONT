@@ -21,6 +21,7 @@ const MisReservas = () => {
     ciudad: string;
     nombreInmueble: string;
     Url: string;
+    moneda: string;
   }
   
   const [reservas, setReservas] = useState<Reserva[]>([]);
@@ -88,14 +89,14 @@ const MisReservas = () => {
                 <Card
                   key={index}
                   onBoton1Click={() => handleBoton1Click('1',reserva.inmuebleId, reserva.reservaId)}
-              imageUrl={reserva.Url} 
+                  imageUrl={reserva.Url} 
                   buttonText="Ver detalles"
                   className="col-md-4 col-sm-12"
                   tipo="1"
                   id={reserva.inmuebleId}
                   titulo={reserva.nombreInmueble} 
-                  precio={reserva.costo}
-                  direccion={reserva.direccion}
+                  precio={reserva.fechaInicio + " / " + reserva.fechaFin}
+                  direccion={reserva.costo + " " + reserva.moneda}
                   pais={reserva.pais}
                   ciudad={reserva.ciudad}
                 />

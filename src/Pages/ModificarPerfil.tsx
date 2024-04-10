@@ -1,12 +1,17 @@
 import React, { useState, FormEvent, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { InputText } from 'primereact/inputtext';
 import { Fieldset } from 'primereact/fieldset';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
 import GeneralSuccessAlert from '../Components/Shared/GeneralSuccessAlert';
 import ErrorAlert from '../Components/Shared/ErrorAlert ';
+import * as yup from "yup";
+import { useTranslation } from 'react-i18next';
+
 const ModificarDatosForm: React.FC = () => {
+
+  const { t } = useTranslation();
   
   interface User {
     nombres: string;
@@ -23,10 +28,16 @@ const ModificarDatosForm: React.FC = () => {
     correo: string;
     UserId:number;
   }
+
+  interface ErrorData {
+    error: {message:string;};
+    success: boolean;
+  }
+
   const navigate = useNavigate();
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
-  const [failureA, setFailureA] = useState<boolean>(false);
+  const [errorAlertText, setErrorAlertText] = useState<string>("");
   const [user, setUser] = useState<User>({
     nombres: '',
     apellidos: '',
@@ -42,6 +53,21 @@ const ModificarDatosForm: React.FC = () => {
     UserId: 1
   });
   const token: string | null = localStorage.getItem('jwt');
+  const [loadingPass, setLoadingPass] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<{ [key: string]: string}>({});
+
+  const regexPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/;// min 8 max 15 characters, 1 upper case letter,  1 numeric digit and 1 special.
+
+  const schema = yup.object().shape({
+    password: yup
+        .string()
+        .min(9, "authYupErrorsText5")
+        .max(15, "authYupErrorsText6")
+        .matches(regexPassword, "authYupErrorsText7")
+        .required("authYupErrorsText1")
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -73,17 +99,42 @@ const ModificarDatosForm: React.FC = () => {
     }));
   };
 
-  const handleInputChangePass = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChangePass = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserPass((prevUser) => ({
       ...prevUser,
       [name]: value,
     }));
+
+    let userPassVal = {
+      ...userPass,
+      [name]: value,
+    }
+
+    try {
+      await schema.validate(userPassVal, { abortEarly: false });
+      // Si la validación pasa, continúa con el envío del formulario
+      console.log('Formulario válido, enviando...');
+      setErrors({});
+    } catch (err) {
+      // Si hay errores de validación, actualiza el estado de los errores
+      if (err instanceof yup.ValidationError) {
+        const validationErrors: { [key: string]: string } = {};
+        err.inner.forEach(error => {
+          if (error.path) {
+            validationErrors[error.path] = error.message;
+          }
+        });
+        setErrors(validationErrors);
+      }
+    }
+    
   };
   const handleSuccessAlertClose = () => {
     navigate(-1);
   };
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault();
 
     const axiosTokenInfo = axios.create({
@@ -106,18 +157,28 @@ const ModificarDatosForm: React.FC = () => {
     );
 
       setSuccess(true);
+      setLoading(false);
       return responsePublicaion;
   } catch (error) {
       setFailure(true);
+      setLoading(false);
       console.error('Error al enviar los datos de la reseña: ', error);
   }
   };
   const handleSubmitPass = async (e: FormEvent<HTMLFormElement>) => {
+    setLoadingPass(true);
     e.preventDefault();
-    alert("hola");
     console.log(userPass);
     if (userPass.password !== userPass.passwordConfird) {
-      setFailureA(true);
+      setErrorAlertText("La contraseña nueva no coincide con la contraseña de confirmación")
+      setFailure(true);
+      setLoadingPass(false);
+      return;
+    } else if (Object.keys(errors).length > 0) {
+      setErrorAlertText("Verifique que la nueva contraseña cumpla con los requerimientos establecidos")
+      setFailure(true);
+      setLoadingPass(false);
+      return;
     } else {
       const axiosTokenInfo = axios.create({
       baseURL: process.env.REACT_APP_API_URL,
@@ -126,11 +187,16 @@ const ModificarDatosForm: React.FC = () => {
       const responseAxiosTokenInfo = await axiosTokenInfo.get('/auth/Token/info');
       const tokenInfo = responseAxiosTokenInfo.data.data;
 
-      userPass.UserId = tokenInfo.userID;
+      let userPassData = {
+        id: tokenInfo.userID,
+        oldPassword: userPass.actual,
+        newPassword: userPass.password
+      }
+
       try {
           const responsePublicaion = await axios.put(
           process.env.REACT_APP_API_URL + "/auth/UpdatePass",
-          userPass,
+          userPassData,
           {
               headers: {
                   Authorization: `Bearer ${token}`
@@ -139,10 +205,30 @@ const ModificarDatosForm: React.FC = () => {
       );
 
         setSuccess(true);
+        setLoadingPass(false);
         return responsePublicaion;
     } catch (error) {
+      setLoadingPass(false);
+        let textError = "Por favor, verifique que todos los campos requeridos estén completos y vuelva a intentarlo más tarde";
+        if (axios.isAxiosError(error)) {
+          // Verificar si el error es un error de Axios
+          const axiosError = error as AxiosError;
+          if (axiosError.response) {
+            console.log('Error de servidor:', axiosError.response.data);
+            let errorData = axiosError.response.data as ErrorData;
+            textError = errorData.error.message;
+          } else if (axiosError.request) {
+            // La solicitud se hizo pero no se recibió una respuesta
+            textError = 'No hay respuesta del servidor';
+          } else {
+            textError = 'Error al enviar la solicitud, vuelva a intentarlo más tarde';
+          }
+        } else {
+          // Manejar otros tipos de errores
+          console.log('Otro tipo de error:', error);
+        }
         setFailure(true);
-        console.error('Error al enviar los datos de la reseña: ', error);
+        setErrorAlertText(textError);
     }
   }
   };
@@ -215,6 +301,7 @@ const ModificarDatosForm: React.FC = () => {
                 icon="pi pi-user"
                 label="Actualizar"
                 className="button-green"
+                loading={loading}
               />
               </div>
             <div className="field col-12 lg:col-3">
@@ -259,6 +346,7 @@ const ModificarDatosForm: React.FC = () => {
                   />
                   <label htmlFor="inputtext">Nueva contraseña</label>
                 </span>
+                {errors.password && <small className="p-error">{t(errors.password)}</small>}
               </div>
               <div className="field col-12 lg:col-12">
                 <span className="p-float-label">
@@ -280,6 +368,7 @@ const ModificarDatosForm: React.FC = () => {
                 icon="pi pi-home"
                 label="Guardar"
                 className="button-green"
+                loading={loadingPass}
               />
               </div>
             <div className="field col-12 lg:col-3">
@@ -299,14 +388,7 @@ const ModificarDatosForm: React.FC = () => {
       {failure && (
         <ErrorAlert
           header="Error al actualizar datos"
-          text="Por favor intentelo nuevamente"
-          onClose={handleErrorAlertClose}
-        />
-      )}
-      {failureA && (
-        <ErrorAlert
-          header="Error al actualizar datos"
-          text="Las contraseñas no coniciden"
+          text={errorAlertText}
           onClose={handleErrorAlertClose}
         />
       )}

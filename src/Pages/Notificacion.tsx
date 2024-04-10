@@ -50,7 +50,10 @@ const Notificacion = () => {
     fetchData();
   }, []);
   const handleVolverClick = () => {
-    navigate(-1);
+    navigate("/perfil/panel");
+  };
+  const handlePanelClick = () => {
+    navigate("/perfil/panel");
   };
   return (
     <div className="container">
@@ -107,9 +110,9 @@ const Notificacion = () => {
                 <Button
                   type="button"
                   icon="pi pi-angle-left"
-                  label="Volver"
+                  label="Panel de control"
                   className="button-red"
-                  onClick={handleVolverClick}
+                  onClick={handlePanelClick}
                 />
               </div>
             </div>

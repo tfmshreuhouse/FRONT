@@ -32,7 +32,7 @@ function NuevaReserva() {
   const { id } = useParams();
 
   const [Nombre, setNombre] = useState('');
-  const [Precio, setPrecio] = useState<number>(0);
+  const [Precio, setPrecio] = useState<string>("");
   const [tipoInmueble, setTipoInmueble] = useState(null);
   const [datosUserName, setDatosUserName] = useState(null);
   const [datosUserApellido, setDatosUserApellido] = useState(null);
@@ -123,7 +123,7 @@ function NuevaReserva() {
           }
         );
 
-        setPrecio(responsePubc.data.data.costo);
+        setPrecio(responsePubc.data.data.costo + " " + responsePubc.data.data.moneda);
         setIdPublicacion(responsePubc.data.data.id);
       } catch (error) {
         console.error('Error al cargar tipos de inmueble:', error);
@@ -248,7 +248,7 @@ function NuevaReserva() {
               <div className="card-body">
                 <p className="card-text">{Nombre}</p>
                 <p className="card-text">{tipoInmueble}</p>
-                <p className="card-text">{Precio} COP</p>
+                <p className="card-text">{Precio}</p>
                 <p className="card-text">{Direccion}</p>
                 <p className="card-text">{selectedCountry}, {selectedCity}</p>
               </div>

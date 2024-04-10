@@ -27,6 +27,7 @@ interface Publicaciones {
   id: number,
   indicaciones: string;
   costo: number;
+  moneda: string;
   PAX: number;
   descripcion: string;
   image: string;
@@ -53,6 +54,7 @@ interface Filtros {
   pais: string | undefined;
   ciudad: string | undefined;
   PAX: number | null;
+  moneda: string | undefined;
 }
 
 const Home = () => {
@@ -60,7 +62,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const [filtros, setFiltros] = useState<Filtros>({pais:undefined, ciudad:undefined, PAX: null, tipoInmueble: undefined,
-                                                    costoMaximo: null, costoMinimo: null});
+                                                    costoMaximo: null, costoMinimo: null, moneda: undefined});
   const [publicaciones, setPublicaciones] = useState<Publicaciones[]>([]);
   const [failure, setFailure] = useState<boolean>(false);
 
@@ -128,7 +130,7 @@ const Home = () => {
                   tipo="1"
                   id={publicacion.InmuebleId + ""}
                   titulo={publicacion.Inmueble.Nombre} 
-                  precio={publicacion.costo + " para " + publicacion.PAX + ((publicacion.PAX>1)? " personas" : " persona")}
+                  precio={publicacion.costo + " " + publicacion.moneda + " para " + publicacion.PAX + ((publicacion.PAX>1)? " personas" : " persona")}
                   direccion={publicacion.Inmueble.Direccion}
                   pais={publicacion.Inmueble.Pais}
                   ciudad={publicacion.Inmueble.Ciudad}

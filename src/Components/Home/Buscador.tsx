@@ -8,6 +8,7 @@ import { InputNumber } from 'primereact/inputnumber';
 interface Filtros {
   costoMinimo: number | null;
   costoMaximo: number | null;
+  moneda: string | undefined;
   tipoInmueble: number | undefined;
   pais: string | undefined;
   ciudad: string | undefined;
@@ -23,7 +24,7 @@ const DivHome:React.FC<ChildProps> = ({fetchPublicacionesFilter}) => {
   const [tipoInmuebleOptions, setTipoInmuebleOptions] = useState<{ value: number; label: string }[]>([]);
   const token: string | null = localStorage.getItem('jwt');
   const [filtros, setFiltros] = useState<Filtros>({pais:undefined, ciudad:undefined, PAX: null, tipoInmueble: undefined,
-                                                    costoMaximo: null, costoMinimo: null});
+                                                    costoMaximo: null, costoMinimo: null, moneda: undefined});
 
   useEffect(() => { 
     cargarTipoInmueble();
@@ -97,7 +98,7 @@ const DivHome:React.FC<ChildProps> = ({fetchPublicacionesFilter}) => {
               />
           </span>
       </div>
-      <div className="field col-12 lg:col-4">
+      <div className="field col-12 lg:col-3">
           <span className="p-field p-grid">
           <label htmlFor="precio_minimo" className="p-col-fixed" style={{ width: '100%' }}>PRECIO MINIMO</label>
             <InputNumber
@@ -113,7 +114,7 @@ const DivHome:React.FC<ChildProps> = ({fetchPublicacionesFilter}) => {
             />
           </span>
       </div>
-      <div className="field col-12 lg:col-4">
+      <div className="field col-12 lg:col-3">
       <span className="p-field p-grid">
           <label htmlFor="precio_maximo" className="p-col-fixed" style={{ width: '100%' }}>PRECIO MAXIMO</label>
           <InputNumber 
@@ -127,9 +128,23 @@ const DivHome:React.FC<ChildProps> = ({fetchPublicacionesFilter}) => {
           />
       </span>
       </div>
-      <div className="field col-12 lg:col-4">
+      <div className="field col-12 lg:col-3">
           <span className="p-field p-grid">
-          <label htmlFor="precio_maximo" className="p-col-fixed" style={{ width: '100%' }}>CANTIDAD DE PERSONAS</label>
+          <label htmlFor="moneda" className="p-col-fixed" style={{ width: '100%' }}>MONEDA</label>   
+            <InputText
+              id="moneda"
+              name="moneda"
+              value={filtros.moneda}
+              onChange={(e) => {
+                setFiltros({...filtros, moneda: e.target.value});
+                fetchPublicacionesFilter({...filtros, moneda: e.target.value})
+              }}
+            />
+          </span>
+      </div>
+      <div className="field col-12 lg:col-3">
+          <span className="p-field p-grid">
+          <label htmlFor="pax" className="p-col-fixed" style={{ width: '100%' }}>CANTIDAD DE PERSONAS</label>
             <InputNumber
               id="PAX"
               name="PAX"

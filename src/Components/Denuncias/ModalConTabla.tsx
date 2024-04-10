@@ -96,7 +96,11 @@ const ModalConTabla:React.FC<ChildProps> = ({ visible, onHide, data, columns, he
             style={{ whiteSpace: 'normal', wordWrap: 'break-word' }} 
           />
         ))}
-        <Column header="Acciones" body={renderActionButtons} />
+        {actionButtons.length > 0 ?
+          <Column header="Acciones" body={renderActionButtons} />
+          : <></>
+        }
+        
       </DataTable>
     </Dialog>
   );

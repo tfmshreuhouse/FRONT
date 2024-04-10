@@ -28,6 +28,7 @@ interface Publicaciones {
   id: number,
   indicaciones: string;
   costo: number;
+  moneda: string;
   PAX: number;
   descripcion: string;
   image: string;
@@ -224,7 +225,7 @@ const PanelAdmin = () => {
       <div className="field col-12 lg:col-7">        
         <div className="publicacion-name">{publicacion.indicaciones}</div>
         <div className="publicacion-description"><b>PAX: </b> {publicacion.PAX}</div>
-        <p><i className="pi pi-dollar" /><span className="publicacion-category">{publicacion.costo}</span></p>
+        <p><i className="pi pi-dollar" /><span className="publicacion-category">{publicacion.costo + " " + publicacion.moneda}</span></p>
         <p><i className="pi pi-flag-fill" /><span className="publicacion-category"><b> Cantidad de denuncias: </b>{publicacion.cantidadDenuncias}</span></p>
         <p><i className="pi pi-users" /><span className="publicacion-category"><b> Cantidad de usuarios denunciantes: </b>{publicacion.cantidadUsuarios}</span></p>
       </div>
