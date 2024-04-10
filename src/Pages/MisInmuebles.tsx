@@ -61,7 +61,7 @@ const MisInmuebles = () => {
           ciudad: inmueble.Ciudad,
           direccion: inmueble.Direccion,
           tipoInmueble: inmueble.TiposInmueble ? inmueble.TiposInmueble.tipo : '',
-          imagen: inmueble.ImagnenesInmuebles[0]?.URL
+          imagen: inmueble.ImagnenesInmuebles?.[0]?.URL
         }));  
   
         setInmuebles(inmueblesTransformados);

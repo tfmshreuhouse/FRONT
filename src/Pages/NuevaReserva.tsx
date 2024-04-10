@@ -244,7 +244,7 @@ function NuevaReserva() {
           <div className="field col-12 lg:col-1"></div>
           <div className="field col-12 lg:col-4">
             <div className="card">
-              <img className="imagen" src={Images[0]} alt="Propiedad" style={cardStyle} />
+              <img className="imagen" src={Images?.[0]} alt="Propiedad" style={cardStyle} />
               <div className="card-body">
                 <p className="card-text">{Nombre}</p>
                 <p className="card-text">{tipoInmueble}</p>

@@ -128,10 +128,10 @@ function EditInmueble() {
                     setImages(images);
                     setImagePreviews(images);
 
-                    setPrecio(response.data.data.Publicaciones[0].costo);
-                    setCapacidad(response.data.data.Publicaciones[0].PAX);
-                    setIdPublicacion(response.data.data.Publicaciones[0].id);
-                    setMoneda(response.data.data.Publicaciones[0].moneda);
+                    setPrecio(response.data.data.Publicaciones?.[0]?.costo);
+                    setCapacidad(response.data.data.Publicaciones?.[0]?.PAX);
+                    setIdPublicacion(response.data.data.Publicaciones?.[0]?.id);
+                    setMoneda(response.data.data.Publicaciones?.[0]?.moneda);
 
                 } catch (error) {
                     console.error('Error al cargar tipos de inmueble:', error);

@@ -70,7 +70,7 @@ function InfoInmueble() {
                     );
 
                     const inmuebleInfo = {
-                        publicacionId: response.data.data.Publicaciones[0].id,
+                        publicacionId: response.data.data.Publicaciones?.[0]?.id,
                         id: response.data.data.id,
                         pais: response.data.data.Pais,
                         ciudad: response.data.data.Ciudad,

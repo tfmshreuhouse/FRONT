@@ -249,7 +249,7 @@ const PanelUsuario = () => {
       <h3>{publicacion.descripcion}</h3>
       <div className="field col-12 lg:col-2" style={{ marginTop: '12px', height:'150px' }}>
         <img 
-          src={`${publicacion.Inmueble.ImagnenesInmuebles[0].URL}`} 
+          src={`${publicacion.Inmueble.ImagnenesInmuebles?.[0]?.URL}`} 
           alt={publicacion.Inmueble.Nombre} 
           style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
         />
@@ -275,7 +275,7 @@ const PanelUsuario = () => {
         <h3>{publicacion.descripcion}</h3>
         <div className="field col-12 lg:col-2" style={{ marginTop: '12px', height:'150px' }}>
           <img 
-            src={`${publicacion.Inmueble.ImagnenesInmuebles[0].URL}`} 
+            src={`${publicacion.Inmueble.ImagnenesInmuebles?.[0]?.URL}`} 
             alt={publicacion.Inmueble.Nombre} 
             style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
           />

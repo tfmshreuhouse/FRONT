@@ -124,7 +124,7 @@ const Home = () => {
                 <Card
                   key={index}
                   onBoton1Click={() => handleBoton1Click('1',publicacion.InmuebleId)}
-                  imageUrl={publicacion.Inmueble.ImagnenesInmuebles[0].URL} 
+                  imageUrl={publicacion.Inmueble.ImagnenesInmuebles?.[0]?.URL} 
                   buttonText="Ver detalles"
                   className="col-md-4 col-sm-12"
                   tipo="1"
