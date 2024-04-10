@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react';
+import { Fragment, useRef, useEffect, useState  } from 'react';
 
 import { Menubar } from 'primereact/menubar';
 import { MenuItem } from 'primereact/menuitem';
@@ -7,7 +7,8 @@ import { Menu } from 'primereact/menu';
 import { MX, US, FR } from 'country-flag-icons/react/3x2'
 import { HiOutlineHome } from "react-icons/hi";
 import { BiSolidDashboard } from "react-icons/bi";
-import { BsJournalBookmark, BsSortDownAlt, BsFillCalendar2WeekFill, BsBellFill } from "react-icons/bs"
+import { TieredMenu } from "primereact/tieredmenu";
+import { BsJournalBookmark, BsSortDownAlt, BsFillCalendar2WeekFill, BsCheck2Circle } from "react-icons/bs"
 import { FaScaleBalanced, FaMagnifyingGlass, FaChair, FaToggleOn } from "react-icons/fa6";
 import { TbPlayerTrackNextFilled, TbPlayerTrackPrevFilled } from "react-icons/tb"
 
@@ -18,7 +19,7 @@ import { useTranslation } from "react-i18next";
 
 const Navbar = (props: any) => {
     const { t } = useTranslation();
-
+    const [numeroNotificacionesActivas, setNumeroNotificacionesActivas] = useState(0);
     const navigate = useNavigate();
     const handleLogoClick = () => {
         navigate('/');
@@ -42,10 +43,59 @@ const Navbar = (props: any) => {
             console.log(error.response.data);
         }
     };
+    const menu = useRef(null);
     const menuRight: any = useRef(null);
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
     const token = localStorage.getItem('jwt');
     let items: MenuItem[] = [];
     let end: JSX.Element;
+    useEffect(() => {
+        if (token) {
+          const fetchData = async () => {
+            try {
+              const token = localStorage.getItem("jwt");
+    
+              const axiosTokenInfo = axios.create({
+                baseURL: process.env.REACT_APP_API_URL,
+                params: { token: token },
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+              const responseAxiosTokenInfo = await axiosTokenInfo.get(
+                "/auth/Token/info"
+              );
+              const userId = responseAxiosTokenInfo.data.data;
+              const responseAxiosReservaInfo = await axiosTokenInfo.get(
+                `/rest/notificaciones/${userId.userID}`
+              );
+              const notificaciones = responseAxiosReservaInfo.data.data;
+    
+              const notificacionesActivas = notificaciones.filter(
+                (notificacion: any) => notificacion.estado === 1
+              );
+              const numeroNotificacionesActivas = notificacionesActivas.length;
+              const menuItemsData: MenuItem[] = notificaciones.map(
+                (notificacion: any) => ({
+                  label: notificacion.titulo,
+                  style: {
+                    backgroundColor: notificacion.estado === 1 ? 'lightblue' : 'inherit',
+                    fontSize: '18px', // Cambiar el tamaño de fuente del texto
+                    fontFamily: 'Arial, sans-serif' // Cambiar el tipo de fuente
+                  },
+                  command: () => navigate(`/notificacion/${notificacion.id}`)
+                })
+              );
+              setNumeroNotificacionesActivas(numeroNotificacionesActivas);
+              setMenuItems(menuItemsData);
+            } catch (error) {
+              console.error("Error fetching user data:", error);
+            }
+          };
+    
+          fetchData();
+        }
+      }, []);
     if (token) {
         items = [
             {
@@ -87,29 +137,63 @@ const Navbar = (props: any) => {
             }
         ];
 
-        end = <Fragment>
-                        <div className="card flex justify-content-center">
-                            <Button 
-                            label="Cerrar sesion" 
-                            icon="pi pi-power-off" 
-                            className="mr-2" 
-                            aria-label="User" 
-                            onClick={logoutHandler} 
-                            aria-controls="popup_menu_right" 
-                            aria-haspopup />
-                        </div>
-                    </Fragment>
+        const renderMenu = menuItems.length > 0;
+    const badgeStyle: React.CSSProperties = {
+      position: "absolute",
+      top: "-1px",
+      right: "-1px",
+      backgroundColor: "red",
+      color: "white",
+      borderRadius: "50%",
+      padding: "5px",
+      fontSize: "15px",
+      minWidth: "20px",
+      height: "20px",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    };
+    end = (
+      <Fragment>
+        <div style={{ display: "inline-flex" }}>
+          <div style={{ marginRight: "10px" }}>
+            {renderMenu && <TieredMenu model={menuItems} popup ref={menu} style={{ width: '30%', maxHeight: '500px', overflowY: 'auto' }}/>}
+            <Button
+              className="mr-2"
+              onClick={(e) => (menu.current as any)?.toggle(e)}
+              title="Notificaciones"
+            >
+              <i className="pi pi-bell" style={{ fontSize: "24px" }}></i>
+              <span style={badgeStyle}>{numeroNotificacionesActivas}</span>
+            </Button>
+          </div>
+          <div>
+            <Button
+              className="mr-2"
+              title="Cerrar Sesion"
+              aria-label="User"
+              onClick={logoutHandler}
+              aria-controls="popup_menu_right"
+              aria-haspopup
+            >
+              <i className="pi pi-power-off" style={{ fontSize: "24px" }}></i>
+            </Button>
+          </div>
+        </div>
+      </Fragment>
+    );
     }else{
         end = <Fragment>
-                        <div className="card flex justify-content-center">
+                        <div>
                             <Button 
-                            label="Iniciar Sesion" 
-                            icon="pi pi-user" 
+                            title="Iniciar Sesion" 
                             className="mr-2" 
                             aria-label="User" 
                             onClick={logoInHandler} 
                             aria-controls="popup_menu_right" 
-                            aria-haspopup />
+                            aria-haspopup >
+                            <i className="pi pi-user" style={{ fontSize: "24px" }}></i>
+                            </Button>
                         </div>
                     </Fragment>
     }

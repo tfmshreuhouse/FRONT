@@ -34,6 +34,9 @@ function NuevaReserva() {
   const [Nombre, setNombre] = useState('');
   const [Precio, setPrecio] = useState<number>(0);
   const [tipoInmueble, setTipoInmueble] = useState(null);
+  const [datosUserName, setDatosUserName] = useState(null);
+  const [datosUserApellido, setDatosUserApellido] = useState(null);
+  const [datosUserId, setDatosUserId] = useState(null);
   const [Direccion, setDireccion] = useState('');
   const [Images, setImages] = useState<any[]>([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -49,6 +52,19 @@ function NuevaReserva() {
     fechaInicio: '',
     fechaFin: ''
   });
+  const currentDate: Date = new Date();
+  const [formNotificacion, setFormNotificacion] = useState<{
+    text: string;
+    UserId: number | null; 
+    titulo: string;
+    fecha: string;
+  }>({
+    text: '',
+    UserId: 1,
+    titulo: 'Uno de tus inmuebles tiene una nueva reserva',
+    fecha: currentDate.toISOString() 
+  });
+  
   const [formDataPublicacion, setFormDataPublicacion] = useState({
     status: 2,
     id: '',
@@ -82,9 +98,12 @@ function NuevaReserva() {
 
         setNombre(response.data.data.Nombre);
         setDireccion(response.data.data.Direccion);
-        setTipoInmueble(response.data.data.TiposInmueble.id);
+        setTipoInmueble(response.data.data.TiposInmueble.tipo);
         setSelectedCountry(response.data.data.Pais);
         setSelectedCity(response.data.data.Ciudad);
+        setDatosUserName(response.data.data.User.nombres);
+        setDatosUserApellido(response.data.data.User.apellidos);
+        setDatosUserId(response.data.data.UserId);
         const responseimg = await axiosTokenInfo.get("/rest/ImagnenesInmuebles/" + id,
           {
             headers: {
@@ -143,7 +162,9 @@ function NuevaReserva() {
     formData.fechaInicio =  FechaInicio.toString();
     formData.fechaFin =  FechaFin.toString();
     formDataPublicacion.id = idpublicacion ? idpublicacion.toString() : '';
-
+    formNotificacion.UserId=datosUserId;
+    formNotificacion.fecha= currentDate.toISOString() ;
+    formNotificacion.text=datosUserName+' '+datosUserApellido+' tienes una reserva en tu '+ tipoInmueble+ ' '+Nombre+', puedes aceptarla o rechazarla.';
     createReserva(formData); 
   };
 
@@ -174,7 +195,15 @@ function NuevaReserva() {
               }
           }
       );
-
+      const notificacion = await axios.post(
+        process.env.REACT_APP_API_URL + "/rest/notificaciones",
+        formNotificacion,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+      );
         setSuccess(true);
         return responsePublicaion;
     } catch (error) {

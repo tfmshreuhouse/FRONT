@@ -15,6 +15,7 @@ import Reservar from "./Pages/MiReservas";
 import PanelUsuario from "./Pages/PanelUsuario";
 import EditInmueble from "./Pages/editInmueble";
 import PanelAdmin from "./Pages/PanelAdmin";
+import Notificacion from "./Pages/Notificacion";
 
     const router = createBrowserRouter([
         {
@@ -49,6 +50,11 @@ import PanelAdmin from "./Pages/PanelAdmin";
         {
           path: "/home/infoInmueble/editar/:id",
           element: <Layout componentToRender={<EditInmueble />}></Layout>,
+          exact: true,
+        },
+        {
+          path: "/notificacion/:id",
+          element: <Layout componentToRender={<Notificacion />}></Layout>,
           exact: true,
         },
         {
