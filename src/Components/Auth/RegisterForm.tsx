@@ -98,7 +98,7 @@ const RegisterForm:React.FC<ChildProps> = ({ isLoginHandler }) => {
                 apellidos,
                 correo,
                 password,
-                perfil: "Super",
+                perfil: "arrendador",
                 telefono,
                 status: 1
             }

@@ -7,38 +7,55 @@ import { Galleria } from 'primereact/galleria';
 import { data } from '../assets/data';
 import { Fieldset } from 'primereact/fieldset';
 import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { Rating } from 'primereact/rating';
 import axios from "axios";
 
 function InfoInmueble() {
     // Supongamos que recibes la información del inmueble como un objeto JSON
     const [inmuebleInfo, setInmuebleInfo] = useState<any>(null);
     const { tipo, id, reservaId } = useParams();
+    const [data, setData] = useState<any[]>([]);
 
     const pathname = window.location.pathname;
     const segments = pathname.split('/');
-    let idInmueble = !isNaN(parseInt(id + "")) ? parseInt(id+"") : 0;
+    let idInmueble = !isNaN(parseInt(id + "")) ? parseInt(id + "") : 0;
 
     const token: string | null = localStorage.getItem('jwt');
 
     const [Images, setImages] = useState<any[]>([]);
 
-      const itemTemplate = (item: any) => {
-        return (
-          <div className="custom-item">
-            <img src={item} />
-          </div>
-        );
-      };
+    const cardHeader = (
+        <>
+        </>
+    );
+    const cardFooter = (
+        <>
+        </>
+    );
+    const [rating, setRating]: any = useState(5);
 
-      useEffect(() => {
-        const obtenerDatosTipoInmueble = async () => {            
-            
+    const itemTemplate = (item: any) => {
+        return (
+            <div className="custom-item">
+                <img src={item} />
+            </div>
+        );
+    };
+
+    useEffect(() => {
+        const obtenerDatosTipoInmueble = async () => {
+
             if (idInmueble != 0) {
-                
+
                 try {
-    
+                    if (!token) {
+                        console.error('Token de autorización no encontrado en el localStorage');
+                        return;
+                    }
+
                     const response = await axios.get<{ success: boolean; data: any }>(
-                        process.env.REACT_APP_API_URL + "/rest/inmuebles/"+ idInmueble,
+                        process.env.REACT_APP_API_URL + "/rest/inmuebles/" + idInmueble,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`
@@ -49,19 +66,37 @@ function InfoInmueble() {
                     console.log(response);
 
                     const responseimg = await axios.get<{ success: boolean; data: any }>(
-                        process.env.REACT_APP_API_URL + "/rest/ImagnenesInmuebles/"+ idInmueble,
+                        process.env.REACT_APP_API_URL + "/rest/ImagnenesInmuebles/" + idInmueble,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`
                             }
                         }
-                    );              
-                    
+                    );
+
+                    const queryParams = {
+                        userId: response.data.data.UserId,
+                        inmuebleId: response.data.data.id
+                    };
+
+                    const response2 = await axios.get<{ success: boolean; data: any }>(
+                        process.env.REACT_APP_API_URL + "/rest/reservas/reservas-en-mis-inmuebles2",
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            },
+                            params: queryParams
+                        }
+                    );
+
+                    console.log(response2.data);
+                    setData(response2.data.data);
+
                     const images = responseimg.data.data.map((image: any) => image.URL);
                     setImages(images);
 
                     const responsePubc = await axios.get<{ success: boolean; data: any }>(
-                        process.env.REACT_APP_API_URL + "/rest/publicacion/"+ idInmueble,
+                        process.env.REACT_APP_API_URL + "/rest/publicacion/" + idInmueble,
                         {
                             headers: {
                                 Authorization: `Bearer ${token}`
@@ -70,7 +105,6 @@ function InfoInmueble() {
                     );
 
                     const inmuebleInfo = {
-                        publicacionId: response.data.data.Publicaciones?.[0]?.id,
                         id: response.data.data.id,
                         pais: response.data.data.Pais,
                         ciudad: response.data.data.Ciudad,
@@ -95,10 +129,11 @@ function InfoInmueble() {
                         Direccion: response.data.data.Direccion,
                         Nombre: response.data.data.Nombre,
                         costo: responsePubc.data.data.costo,
-                        capacidad: responsePubc.data.data.PAX
+                        capacidad: responsePubc.data.data.PAX,
+                        UserId: response.data.data.UserId
 
                     };
-    
+
 
                     setInmuebleInfo(inmuebleInfo);
 
@@ -109,13 +144,14 @@ function InfoInmueble() {
         };
 
         obtenerDatosTipoInmueble();
+
     }, []);
 
     const renderButtons = () => {
         if (inmuebleInfo && tipo === '1') {
             return (
                 <Fragment>
-                    {(reservaId === '0') ? 
+                    {(reservaId === '0') ?
                         <>
                             <div className="field col-12 lg:col-3"></div>
                             <div className="field col-12 lg:col-3">
@@ -123,7 +159,7 @@ function InfoInmueble() {
                                     type="button"
                                     label="Reservar"
                                     className="button-blue"
-                                    onClick={() => window.location.href=`/home/infoInmueble/nuevaReserva/${id}`}
+                                    onClick={() => window.location.href = `/home/infoInmueble/nuevaReserva/${id}`}
                                 />
                             </div>
                             <div className="field col-12 lg:col-3">
@@ -131,45 +167,45 @@ function InfoInmueble() {
                                     type="button"
                                     label="Volver"
                                     className="button-blue"
-                                    onClick={() => window.location.href=`/home`}
+                                    onClick={() => window.location.href = `/home`}
                                 />
                             </div>
                         </> :
                         <>
-                        <div className="field col-12 lg:col-2"></div>
-                        <div className="field col-12 lg:col-2">
-                            <Button
-                                type="button"
-                                label="Reservar"
-                                className="button-blue"
-                                onClick={() => window.location.href=`/home/infoInmueble/nuevaReserva/${id}`}
-                            />
-                        </div>
-                        <div className="field col-12 lg:col-2">
-                            <Button
-                                type="button"
-                                label="Reseñar"
-                                className="button-blue"
-                                onClick={() => window.location.href=`/home/infoInmueble/resena/${reservaId}`}
-                            />
-                        </div>
-                        <div className="field col-12 lg:col-2">
-                            <Button
-                                type="button"
-                                label="Denunciar"
-                                className="button-blue"
-                                onClick={() => window.location.href=`/home/infoInmueble/denuncia/${inmuebleInfo.publicacionId}`}
-                            />
-                        </div>
-                        <div className="field col-12 lg:col-3">
-                            <Button
-                                type="button"
-                                label="Volver"
-                                className="button-blue"
-                                onClick={() => window.location.href=`/home`}
-                            />
-                        </div>
-                        </> 
+                            <div className="field col-12 lg:col-2"></div>
+                            <div className="field col-12 lg:col-2">
+                                <Button
+                                    type="button"
+                                    label="Reservar"
+                                    className="button-blue"
+                                    onClick={() => window.location.href = `/home/infoInmueble/nuevaReserva/${id}`}
+                                />
+                            </div>
+                            <div className="field col-12 lg:col-2">
+                                <Button
+                                    type="button"
+                                    label="Reseñar"
+                                    className="button-blue"
+                                    onClick={() => window.location.href = `/home/infoInmueble/resena/${reservaId}`}
+                                />
+                            </div>
+                            <div className="field col-12 lg:col-2">
+                                <Button
+                                    type="button"
+                                    label="Denunciar"
+                                    className="button-blue"
+                                    onClick={() => window.location.href = `/home/infoInmueble/denuncia/${inmuebleInfo.publicacionId}`}
+                                />
+                            </div>
+                            <div className="field col-12 lg:col-3">
+                                <Button
+                                    type="button"
+                                    label="Volver"
+                                    className="button-blue"
+                                    onClick={() => window.location.href = `/home`}
+                                />
+                            </div>
+                        </>
                     }
                 </Fragment>
             );
@@ -182,15 +218,15 @@ function InfoInmueble() {
                             type="button"
                             label="Editar inmueble"
                             className="button-blue"
-                            onClick={() => window.location.href=`/home/infoInmueble/editar/${id}`}
+                            onClick={() => window.location.href = `/home/infoInmueble/editar/${id}`}
                         />
                     </div>
                     <div className="field col-12 lg:col-4">
-                    <Button
+                        <Button
                             type="button"
                             label="Volver"
                             className="button-blue"
-                            onClick={() => window.location.href=`/perfil/historialPublicaciones/`}
+                            onClick={() => window.location.href = `/perfil/historialPublicaciones/`}
                         />
                     </div>
                 </Fragment>
@@ -201,81 +237,94 @@ function InfoInmueble() {
     };
 
     return (
-            <div className="main-container">
-                <Fieldset legend="Detalles del inmueble">
-                    <div className="p-fluid grid">
-                        <div className="field col-12 lg:col-1"></div>
-                        <div className="field col-12 lg:col-10">
-                            <div className="image-container">
-                                {inmuebleInfo && (
-                                    <Galleria
-                                    value={Images} 
-                                    style={{ maxWidth: '100%', height: 'auto' }}  
-                                    showThumbnails={false} 
-                                    showIndicators 
-                                    item={itemTemplate} 
+        <div className="main-container">
+            <Fieldset legend="Detalles del inmueble">
+                <div className="p-fluid grid">
+                    <div className="field col-12 lg:col-1"></div>
+                    <div className="field col-12 lg:col-10">
+                        <div className="image-container">
+                            {inmuebleInfo && (
+                                <Galleria
+                                    value={Images}
+                                    style={{ maxWidth: '100%', height: 'auto' }}
+                                    showThumbnails={false}
+                                    showIndicators
+                                    item={itemTemplate}
                                     className="galleria-container"
-                                    />
-                                )}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className="field col-12 lg:col-1"></div>
+
+                    <div className="field col-12 lg:col-1"></div>
+                    <div className="field col-12 lg:col-10">
+                        <div className="infoPrincipal-box">
+                            {inmuebleInfo && (
+                                <div className="title-box">
+                                    <h2>{inmuebleInfo.Nombre}</h2>
+                                    <p>{inmuebleInfo.ciudad}, {inmuebleInfo.pais}</p>
+                                </div>
+                            )}
+                            {inmuebleInfo && (
+                                <div className="description-box">
+                                    <h2>Descripcion</h2>
+                                    <p>{inmuebleInfo.descripcion}</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    <div className="field col-12 lg:col-1"></div>
+
+                    <div className="field col-12 lg:col-1"></div>
+                    <div className="field col-12 lg:col-10">
+                        <Fieldset legend="Especificaciones">
+                            {inmuebleInfo && (
+                                <div className="details-box">
+                                    <p>Pisos: {inmuebleInfo.pisos}</p>
+                                    <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
+                                    <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
+                                    <p>Baños Medios: {inmuebleInfo.banosMedios}</p>
+                                    <p>Cocina: {inmuebleInfo.cocina === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Lavado: {inmuebleInfo.lavado === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Patio: {inmuebleInfo.patio === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Balcón: {inmuebleInfo.balcon === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Estacionamiento: {inmuebleInfo.estacionamiento === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Elevador: {inmuebleInfo.elevador === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Piscina: {inmuebleInfo.piscina === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Áreas Públicas: {inmuebleInfo.areasPublicas === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Fumar: {inmuebleInfo.fumar === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>
+                                    <p>Status: {inmuebleInfo.status === 1 ? 'Disponible' : 'No Disponible'}</p>
+                                    <p>Costo: {inmuebleInfo.costo}</p>
+                                    <p>Capacidad: {inmuebleInfo.capacidad}</p>
+                                </div>
+                            )}
+                            <div className="button-container">
+                                <div className="p-fluid grid">
+                                    {renderButtons()}
+                                </div>
+                            </div>
+                        </Fieldset>
+                    </div>
+
+                </div>
+                <div className="grid">
+                    {data ? data.map((resena) => {
+                        return <div key={resena.id} className="col-6 md:col-6 lg:col-4">
+                            <div className="card flex justify-content-center">
+                                <Card title={resena.UserId} subTitle={<Rating value={resena.rating} readOnly cancel={false}></Rating>} footer={cardFooter} header={cardHeader}>
+                                    <p className="m-0">{resena.descripcion}</p>
+                                </Card>
                             </div>
                         </div>
-                        <div className="field col-12 lg:col-1"></div>
-
-                        <div className="field col-12 lg:col-1"></div>
-                        <div className="field col-12 lg:col-10">
-                            <div className="infoPrincipal-box">
-                                {inmuebleInfo && (
-                                    <div className="title-box">
-                                        <h2>{inmuebleInfo.Nombre}</h2>
-                                        <p>{inmuebleInfo.ciudad}, {inmuebleInfo.pais}</p>
-                                    </div>
-                                )}
-                                {inmuebleInfo && (
-                                    <div className="description-box">
-                                        <h2>Descripcion</h2>
-                                        <p>{inmuebleInfo.descripcion}</p>
-                                    </div>
-                                )}
-                            </div>
-                         </div>
-                         <div className="field col-12 lg:col-1"></div>
-
-                         <div className="field col-12 lg:col-1"></div>
-                         <div className="field col-12 lg:col-10">
-                            <Fieldset legend="Especificaciones">
-                                {inmuebleInfo && (  
-                                    <div className="details-box">
-                                        <p>Pisos: {inmuebleInfo.pisos}</p>
-                                        <p>Habitaciones: {inmuebleInfo.habitaciones}</p>
-                                        <p>Baños Completos: {inmuebleInfo.banosCompletos}</p>
-                                        <p>Baños Medios: {inmuebleInfo.banosMedios}</p>
-                                        <p>Cocina: {inmuebleInfo.cocina === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Lavado: {inmuebleInfo.lavado === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Patio: {inmuebleInfo.patio === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Balcón: {inmuebleInfo.balcon === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Estacionamiento: {inmuebleInfo.estacionamiento === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Elevador: {inmuebleInfo.elevador === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Piscina: {inmuebleInfo.piscina === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Áreas Públicas: {inmuebleInfo.areasPublicas === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Fumar: {inmuebleInfo.fumar === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Mascotas: {inmuebleInfo.mascotas === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Reuniones: {inmuebleInfo.reuniones === 1 ? 'Sí' : 'No'}</p>
-                                        <p>Status: {inmuebleInfo.status === 1 ? 'Disponible' : 'No Disponible'}</p>
-                                        <p>Costo: {inmuebleInfo.costo}</p>
-                                        <p>Capacidad: {inmuebleInfo.capacidad}</p>
-                                    </div>
-                                )}
-                                <div className="button-container">
-                                    <div className="p-fluid grid">
-                                        {renderButtons()}
-                                    </div>
-                                </div>
-                            </Fieldset>
-                        </div>   
-                        
-                    </div>
-                </Fieldset>
-            </div>
+                    })
+                        : <div></div>
+                    }
+                </div>
+            </Fieldset>
+        </div>
     );
 }
 

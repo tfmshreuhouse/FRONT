@@ -117,7 +117,7 @@ const Navbar = (props: any) => {
                     }
                 ]
             },
-            {
+            /* {
                 label: t('navbarText6'),
                 icon: <BsSortDownAlt />,
                 items: [
@@ -134,7 +134,7 @@ const Navbar = (props: any) => {
                         icon: <FaMagnifyingGlass />,
                     },
                 ]
-            }
+            } */
         ];
 
         const renderMenu = menuItems.length > 0;
