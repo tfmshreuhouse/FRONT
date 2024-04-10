@@ -63,6 +63,8 @@ function EditInmueble() {
 
     const [success, setSuccess] = useState<boolean>(false);
     const [failure, setFailure] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [userId, setUserId] = useState(0);
 
     const optionsStatus = [
         {label: 'Oculto', value: 0},
@@ -141,10 +143,23 @@ function EditInmueble() {
 
         cargarTipoInmueble();
         obtenerDatosTipoInmueble();
+        fetchUserId();
     }, []);
 
+    const fetchUserId = async () => {
+        const axiosTokenInfo = axios.create({
+            baseURL: process.env.REACT_APP_API_URL,
+            params: { token: localStorage.getItem('jwt') }
+        });
+
+        const responseAxiosTokenInfo = await axiosTokenInfo.get('/auth/Token/info');
+        const userId = responseAxiosTokenInfo.data.data;
+        setUserId(userId.userID);
+        return userId.userID;
+    };
+
     const handleVolverClick = () => {
-        navigate('/home/infoInmueble/2/' + idInmueble + "/0");
+        navigate(-1);
       };
 
       useEffect(() => {
@@ -225,6 +240,7 @@ function EditInmueble() {
             console.error('Token de autorización no encontrado en el localStorage');
             return;
         }
+        setLoading(true);
 
         e.preventDefault();
 
@@ -284,7 +300,7 @@ function EditInmueble() {
                     Direccion: Direccion,
                     TiposInmuebleId: tipoInmueble,
                     DetallesInmuebles: idDetalle,
-                    UserId: 1
+                    UserId: userId
                 };
 
                 const responseInmueble = await axios.patch(
@@ -378,10 +394,12 @@ function EditInmueble() {
                         );
                     }
                 }
+                setLoading(false);
                 setSuccess(true);
             } catch (error) {
                 console.log(error);
                 setFailure(true);
+                setLoading(false);
             }
         }
         else
@@ -434,7 +452,7 @@ function EditInmueble() {
                     Direccion: Direccion,
                     TiposInmuebleId: tipoInmueble,
                     DetallesInmuebles: response.data.data.id,
-                    UserId: 1
+                    UserId: userId
                 };
 
                 const responseInmueble = await axios.post(
@@ -490,10 +508,12 @@ function EditInmueble() {
                         }
                     );
                 }
+                setLoading(false);
                 setSuccess(true);
             }catch(err){
                 alert.call(err);
                 setFailure(true);
+                setLoading(false);
             }
         }
         
@@ -563,7 +583,7 @@ function EditInmueble() {
     };
 
     const handleSuccessAlertClose = () => {
-        navigate('/home/infoInmueble/1/'+Id);
+        navigate(-1);
       };
         
     return (
@@ -1023,6 +1043,7 @@ function EditInmueble() {
                                     label="Guardar" 
                                     icon="pi pi-check"
                                     disabled={!formCompleted}
+                                    loading={loading}
                                 />
                             </div>                            
                             <div className="field col-12 lg:col-4">

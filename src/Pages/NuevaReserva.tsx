@@ -44,6 +44,7 @@ function NuevaReserva() {
   const [idpublicacion, setIdPublicacion] = useState<number | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [errorAlertText, setErrorAlertText] = useState<string>("");
   const [formData, setFormData] = useState({
     status: 1,
@@ -169,12 +170,7 @@ function NuevaReserva() {
   };
 
   const createReserva = async (formData: any) => {
-
-    if (!token) {
-        console.error('Token de autorización no encontrado en el localStorage');
-        return;
-    }
-    
+    setLoading(true);
     try {
         const response = await axios.post(
             process.env.REACT_APP_API_URL + "/rest/reservas",
@@ -205,8 +201,10 @@ function NuevaReserva() {
         }
       );
         setSuccess(true);
+        setLoading(false);
         return responsePublicaion;
     } catch (error) {
+      setLoading(false);
       let textError = "Por favor, verifique que todos los campos requeridos estén completos y vuelva a intentarlo más tarde";
         if (axios.isAxiosError(error)) {
           // Verificar si el error es un error de Axios
@@ -276,6 +274,7 @@ function NuevaReserva() {
                     type="submit"
                     label="Guardar"
                     icon="pi pi-check"
+                    disabled={loading}
                   />
                 </div>
                 <div className="field col-12 lg:col-4">

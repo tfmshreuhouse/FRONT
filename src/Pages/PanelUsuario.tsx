@@ -201,7 +201,7 @@ const PanelUsuario = () => {
     try {
         debugger;
         const response = await axios.put(
-            process.env.REACT_APP_API_URL + "rest/reservas/status?id=" + reservaId + "&status=" + status,
+            process.env.REACT_APP_API_URL + "/rest/reservas/status?id=" + reservaId + "&status=" + status,
             {},
             {
                 headers: {
@@ -272,7 +272,7 @@ const PanelUsuario = () => {
     <div className="field col-12 lg:col-12 publicacion-grid-item border-1 row">
       {publicacion.Reservas.map(reserva => (
       <React.Fragment key={reserva.id}>
-        <h3>{publicacion.descripcion}</h3>
+        <h3>{publicacion.Inmueble.Nombre}</h3>
         <div className="field col-12 lg:col-2" style={{ marginTop: '12px', height:'150px' }}>
           <img 
             src={`${publicacion.Inmueble.ImagnenesInmuebles?.[0]?.URL}`} 
@@ -281,8 +281,8 @@ const PanelUsuario = () => {
           />
         </div>
         <div className="field col-12 lg:col-4">        
-          <div className="publicacion-name">{publicacion.indicaciones}</div>
-          <div className="publicacion-description"><b>PAX: </b> {publicacion.PAX} - <i className="pi pi-dollar" /><span className="publicacion-category">{publicacion.costo}</span></div>
+          <div className="publicacion-name"><p>{publicacion.descripcion}</p></div>
+          <div className="publicacion-description"><p><b>PAX: </b> {publicacion.PAX} - <b>Costo: </b> {publicacion.costo} {publicacion.moneda}</p></div>
           <p><i className="pi pi-user" /><span className="publicacion-category"><b> Arrendador</b> {publicacion.Inmueble.User.nombres} {publicacion.Inmueble.User.apellidos}</span></p>
           <p><i className="pi pi-inbox" /><span className="publicacion-category"><b> Correo del arrendador:</b> {publicacion.Inmueble.User.correo}</span></p>
           <p><i className="pi pi-phone" /><span className="publicacion-category"><b> Telefono del arrendador:</b> {publicacion.Inmueble.User.telefono}</span></p>
@@ -296,7 +296,7 @@ const PanelUsuario = () => {
           <div style={{ marginBottom: '8px' }}>
             <Button type="button" className="button-blue" label="Volver a reservar" icon="pi pi-calendar" onClick={() => handleIrInmuebe(publicacion.InmuebleId)}/>
             <br/><br/>
-            <Button type="submit" className="button-blue" severity="danger" label="Cancelar" onClick={() => handleReservaByUser(reserva, 4)} icon="pi pi-times" />
+            <Button type="submit" className="button-blue" severity="danger" disabled={!(reserva.status === 1)} label="Cancelar" onClick={() => handleReservaByUser(reserva, 4)} icon="pi pi-times" />
           </div>
         </div>
       </React.Fragment>

@@ -28,6 +28,7 @@ const DenunciaView = () => {
 
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const urlParts = location.pathname.split('/');
@@ -60,7 +61,7 @@ const DenunciaView = () => {
       setShowAlert(true);
       return;
     }
-
+    setLoading(true);
     try {
         debugger;
         const response = await axios.post(
@@ -73,9 +74,11 @@ const DenunciaView = () => {
             }
         );
         setSuccess(true);
+        setLoading(false);
         return response;
     } catch (error) {
         setFailure(true);
+        setLoading(false);
         console.error('Error al enviar los datos de la denuncia: ', error);
     }
   };
@@ -169,6 +172,7 @@ const DenunciaView = () => {
                   type="submit"
                   label="Denunciar"
                   className="button-blue"
+                  loading={loading}
                 />
             </div>
             <div className="field col-12 lg:col-4">

@@ -162,7 +162,7 @@ const PanelAdmin = () => {
     try {
         debugger;
         const response = await axios.put(
-            process.env.REACT_APP_API_URL + "rest/publicacion/status?id=" + publicacionId + "&status=0",
+            process.env.REACT_APP_API_URL + "/rest/publicacion/status?id=" + publicacionId + "&status=0",
             {},
             {
                 headers: {

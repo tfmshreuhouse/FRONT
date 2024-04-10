@@ -115,39 +115,62 @@ function InfoInmueble() {
         if (inmuebleInfo && tipo === '1') {
             return (
                 <Fragment>
-                    <div className="field col-12 lg:col-2"></div>
-                    <div className="field col-12 lg:col-2">
-                        <Button
-                            type="button"
-                            label="Reservar"
-                            className="button-blue"
-                            onClick={() => window.location.href=`/home/infoInmueble/nuevaReserva/${id}`}
-                        />
-                    </div>
-                    <div className="field col-12 lg:col-2">
-                        <Button
-                            type="button"
-                            label="Denunciar"
-                            className="button-blue"
-                            onClick={() => window.location.href=`/home/infoInmueble/denuncia/${inmuebleInfo.publicacionId}`}
-                        />
-                    </div>
-                    <div className="field col-12 lg:col-2">
-                        <Button
-                            type="button"
-                            label="Reseñar"
-                            className="button-blue"
-                            onClick={() => window.location.href=`/home/infoInmueble/resena/${reservaId}`}
-                        />
-                    </div>
-                    <div className="field col-12 lg:col-2">
-                        <Button
-                            type="button"
-                            label="Volver"
-                            className="button-blue"
-                            onClick={() => window.location.href=`/home`}
-                        />
-                    </div>
+                    {(reservaId === '0') ? 
+                        <>
+                            <div className="field col-12 lg:col-3"></div>
+                            <div className="field col-12 lg:col-3">
+                                <Button
+                                    type="button"
+                                    label="Reservar"
+                                    className="button-blue"
+                                    onClick={() => window.location.href=`/home/infoInmueble/nuevaReserva/${id}`}
+                                />
+                            </div>
+                            <div className="field col-12 lg:col-3">
+                                <Button
+                                    type="button"
+                                    label="Volver"
+                                    className="button-blue"
+                                    onClick={() => window.location.href=`/home`}
+                                />
+                            </div>
+                        </> :
+                        <>
+                        <div className="field col-12 lg:col-2"></div>
+                        <div className="field col-12 lg:col-2">
+                            <Button
+                                type="button"
+                                label="Reservar"
+                                className="button-blue"
+                                onClick={() => window.location.href=`/home/infoInmueble/nuevaReserva/${id}`}
+                            />
+                        </div>
+                        <div className="field col-12 lg:col-2">
+                            <Button
+                                type="button"
+                                label="Reseñar"
+                                className="button-blue"
+                                onClick={() => window.location.href=`/home/infoInmueble/resena/${reservaId}`}
+                            />
+                        </div>
+                        <div className="field col-12 lg:col-2">
+                            <Button
+                                type="button"
+                                label="Denunciar"
+                                className="button-blue"
+                                onClick={() => window.location.href=`/home/infoInmueble/denuncia/${inmuebleInfo.publicacionId}`}
+                            />
+                        </div>
+                        <div className="field col-12 lg:col-3">
+                            <Button
+                                type="button"
+                                label="Volver"
+                                className="button-blue"
+                                onClick={() => window.location.href=`/home`}
+                            />
+                        </div>
+                        </> 
+                    }
                 </Fragment>
             );
         } else if (inmuebleInfo && tipo === '2') {
