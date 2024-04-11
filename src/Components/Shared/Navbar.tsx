@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import i18next from 'i18next';
 import { useTranslation } from "react-i18next";
+import { AiOutlinePicLeft, AiOutlineUser, AiTwotoneHome, AiTwotoneSchedule, AiTwotoneSetting } from 'react-icons/ai';
 
 const Navbar = (props: any) => {
     const { t } = useTranslation();
@@ -49,7 +50,18 @@ const Navbar = (props: any) => {
     const token = localStorage.getItem('jwt');
     let items: MenuItem[] = [];
     let end: JSX.Element;
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
     useEffect(() => {
+
+        const handleResize = () => {
+          setIsSmallScreen(window.innerWidth < 600);
+        };
+    
+        handleResize(); // Verificar el tamaño inicial al cargar la página
+    
+        // Agregar un event listener para detectar cambios de tamaño de la ventana
+        window.addEventListener('resize', handleResize);
+
         if (token) {
           const fetchData = async () => {
             try {
@@ -95,46 +107,36 @@ const Navbar = (props: any) => {
     
           fetchData();
         }
+        // Limpiar el event listener al desmontar el componente
+      return () => window.removeEventListener('resize', handleResize);
       }, []);
     if (token) {
         items = [
             {
-                label: t('navbarText3'),
-                icon: <HiOutlineHome />,
-                items: [
-                    {
-                        label: "Perfil",
-                        icon: <BiSolidDashboard />,
-                        command: () => { navigate('/perfil'); }
-                    },
-                    {
-                        separator: true
-                    },
-                    {
-                        label: "Panel administrador",
-                        icon: <FaScaleBalanced />,
-                        command: () => { navigate('/panel-administrador'); }
-                    }
-                ]
+              label: " Perfil",
+              icon: <AiOutlineUser />,
+              command: () => { navigate('/perfil'); }
             },
-            /* {
-                label: t('navbarText6'),
-                icon: <BsSortDownAlt />,
-                items: [
-                    {
-                        label: t('navbarText7'),
-                        icon: <BsJournalBookmark />,
-                        command: () => { navigate('/funcsBasicas/nuevaReserva'); }
-                    },
-                    {
-                        separator: true
-                    },
-                    {
-                        label: t('navbarText8'),
-                        icon: <FaMagnifyingGlass />,
-                    },
-                ]
-            } */
+            {
+              label: "Panel",
+              icon: <AiOutlinePicLeft  />,
+              command: () => { navigate('/perfil/panel'); }
+            },
+            {
+              label: "Panel administrador",
+              icon: <AiTwotoneSetting />,
+              command: () => { navigate('/panel-administrador'); }
+            },
+            {
+              label: "Mis Reservas",
+              icon: <AiTwotoneSchedule />,
+              command: () => { navigate('/perfil/historialReservas'); }
+            },
+            {
+              label: "Mis inmuebles",
+              icon: <AiTwotoneHome  />,
+              command: () => { navigate('/perfil/historialPublicaciones'); }
+            }
         ];
 
         const renderMenu = menuItems.length > 0;
@@ -154,36 +156,38 @@ const Navbar = (props: any) => {
       alignItems: "center",
     };
     end = (
-      <Fragment>
-        <div style={{ display: "inline-flex" }}>
-          <div style={{ marginRight: "10px" }}>
-            {renderMenu && <TieredMenu model={menuItems} popup ref={menu} style={{ width: '30%', maxHeight: '500px', overflowY: 'auto' }}/>}
-            <Button
-              className="mr-2"
-              onClick={(e) => (menu.current as any)?.toggle(e)}
-              title="Notificaciones"
-            >
-              <i className="pi pi-bell" style={{ fontSize: "24px" }}></i>
-              <span style={badgeStyle}>{numeroNotificacionesActivas}</span>
-            </Button>
+      <div className="flex align-items-center gap-2">
+        <Fragment>
+          <div style={{ display: "inline-flex", justifyContent: "center" }}>
+            <div style={{ marginRight: "10px" }}>
+              {renderMenu && <TieredMenu model={menuItems} popup ref={menu} style={{ width: '30%', maxHeight: '500px', overflowY: 'auto' }}/>}
+              <Button
+                className="mr-2"
+                onClick={(e) => (menu.current as any)?.toggle(e)}
+                title="Notificaciones"
+              >
+                <i className="pi pi-bell" style={{ fontSize: "24px" }}></i>
+                <span style={badgeStyle}>{numeroNotificacionesActivas}</span>
+              </Button>
+            </div>
+            <div>
+              <Button
+                className="mr-2"
+                title="Cerrar Sesion"
+                aria-label="User"
+                onClick={logoutHandler}
+                aria-controls="popup_menu_right"
+                aria-haspopup
+              >
+                <i className="pi pi-power-off" style={{ fontSize: "24px" }}></i>
+              </Button>
+            </div>
           </div>
-          <div>
-            <Button
-              className="mr-2"
-              title="Cerrar Sesion"
-              aria-label="User"
-              onClick={logoutHandler}
-              aria-controls="popup_menu_right"
-              aria-haspopup
-            >
-              <i className="pi pi-power-off" style={{ fontSize: "24px" }}></i>
-            </Button>
-          </div>
-        </div>
-      </Fragment>
+        </Fragment>
+      </div>
     );
     }else{
-        end = <Fragment>
+        end = <div className="flex align-items-center gap-2"><Fragment>
                         <div>
                             <Button 
                             title="Iniciar Sesion" 
@@ -195,11 +199,11 @@ const Navbar = (props: any) => {
                             <i className="pi pi-user" style={{ fontSize: "24px" }}></i>
                             </Button>
                         </div>
-                    </Fragment>
+                    </Fragment></div>
     }
     const start = <img 
                     alt="logo" 
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxByx-LL6YeQCZP13tRoS2LbcCNQKIgOboNA&usqp=CAU" 
+                    src={isSmallScreen ? "./logo-sharehouse.png" : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxByx-LL6YeQCZP13tRoS2LbcCNQKIgOboNA&usqp=CAU"}
                     height="40" 
                     className="mr-2"
                     onClick={handleLogoClick}

@@ -49,10 +49,6 @@ function InfoInmueble() {
             if (idInmueble != 0) {
 
                 try {
-                    if (!token) {
-                        console.error('Token de autorización no encontrado en el localStorage');
-                        return;
-                    }
 
                     const response = await axios.get<{ success: boolean; data: any }>(
                         process.env.REACT_APP_API_URL + "/rest/inmuebles/" + idInmueble,
@@ -301,27 +297,32 @@ function InfoInmueble() {
                                     <p>Capacidad: {inmuebleInfo.capacidad}</p>
                                 </div>
                             )}
-                            <div className="button-container">
-                                <div className="p-fluid grid">
-                                    {renderButtons()}
-                                </div>
-                            </div>
                         </Fieldset>
-                    </div>
-
-                </div>
-                <div className="grid">
-                    {data ? data.map((resena) => {
-                        return <div key={resena.id} className="col-6 md:col-6 lg:col-4">
-                            <div className="card flex justify-content-center">
-                                <Card title={resena.UserId} subTitle={<Rating value={resena.rating} readOnly cancel={false}></Rating>} footer={cardFooter} header={cardHeader}>
-                                    <p className="m-0">{resena.descripcion}</p>
-                                </Card>
+                        <div className="field col-12 lg:col-1"></div>
+                        <Fieldset legend="Reseñas">
+                        <div className="grid">
+                            {data && data.length > 0 ? data.map((resena) => {
+                                return <div key={resena.id} className="col-6 md:col-6 lg:col-4">
+                                    <div className="card flex justify-content-center">
+                                        <Card title={resena.UserId} subTitle={<Rating value={resena.rating} readOnly cancel={false}></Rating>} footer={cardFooter} header={cardHeader}>
+                                            <p className="m-0">{resena.descripcion}</p>
+                                        </Card>
+                                    </div>
+                                </div>
+                            })
+                                : <>
+                                    <div className="field col-12 lg:col-1"></div>
+                                    <div className="field col-12 lg:col-10" style={{textAlign:'center'}}><h3>Aún no hay reseñas.</h3></div>
+                                  </>
+                            }
+                        </div>
+                        <div className="button-container">
+                            <div className="p-fluid grid">
+                                {renderButtons()}
                             </div>
                         </div>
-                    })
-                        : <div></div>
-                    }
+                        </Fieldset>
+                    </div>
                 </div>
             </Fieldset>
         </div>

@@ -28,8 +28,8 @@ function LoginForm() {
     });
 
     const initialValues = {
-        correo: 'pepe.ramirez@gmail.com',
-        password: 'Pepito2023!',
+        correo: '',
+        password: '',
     }
 
     const formik: any = useFormik({

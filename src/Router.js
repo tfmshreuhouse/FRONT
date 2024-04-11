@@ -99,7 +99,7 @@ import Notificacion from "./Pages/Notificacion";
         },
         {
           path: "/panel-administrador",
-          element: <Layout componentToRender={<PanelAdmin></PanelAdmin>}></Layout>,
+          element: <Layout componentToRender={<PanelAdmin></PanelAdmin>} validarPrograma={true} nombrePrograma="PanelAdmin"></Layout>,
           exact: true,
         }
       ]);
