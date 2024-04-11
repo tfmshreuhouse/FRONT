@@ -23,6 +23,7 @@ const ResenaView = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [failure, setFailure] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>) => {
     setShowAlert(false);
@@ -70,6 +71,8 @@ const ResenaView = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
         debugger;
         const response = await axios.post(
@@ -82,8 +85,10 @@ const ResenaView = () => {
             }
         );
         setSuccess(true);
+        setLoading(false);
         return response;
     } catch (error) {
+         setLoading(false);
         setFailure(true);
         console.error('Error al enviar los datos de la reseña: ', error);
     }
@@ -146,6 +151,7 @@ const ResenaView = () => {
                 type="submit"
                 label="Enviar Reseña"
                 className="button-red"
+                loading={loading}
               />
             </div>
             <div className="field col-12 lg:col-4">
