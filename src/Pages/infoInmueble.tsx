@@ -10,6 +10,7 @@ import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 import { Rating } from 'primereact/rating';
 import axios from "axios";
+import { ProgressBar } from 'primereact/progressbar';
 
 function InfoInmueble() {
     // Supongamos que recibes la información del inmueble como un objeto JSON
@@ -24,6 +25,7 @@ function InfoInmueble() {
     const token: string | null = localStorage.getItem('jwt');
 
     const [Images, setImages] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const cardHeader = (
         <>
@@ -44,6 +46,7 @@ function InfoInmueble() {
     };
 
     useEffect(() => {
+        setLoading(true);
         const obtenerDatosTipoInmueble = async () => {
 
             if (idInmueble != 0) {
@@ -132,6 +135,7 @@ function InfoInmueble() {
 
 
                     setInmuebleInfo(inmuebleInfo);
+                    setLoading(false);
 
                 } catch (error) {
                     console.error('Error al cargar tipos de inmueble:', error);
@@ -234,6 +238,10 @@ function InfoInmueble() {
 
     return (
         <div className="main-container">
+            {loading ? (
+                <ProgressBar mode="indeterminate" style={{ height: '6px' }} />
+            ) : (
+            
             <Fieldset legend="Detalles del inmueble">
                 <div className="p-fluid grid">
                     <div className="field col-12 lg:col-1"></div>
@@ -324,7 +332,7 @@ function InfoInmueble() {
                         </Fieldset>
                     </div>
                 </div>
-            </Fieldset>
+            </Fieldset>)}
         </div>
     );
 }
